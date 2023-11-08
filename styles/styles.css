@@ -49,6 +49,14 @@ body{
 .aboutMe{
     background-color: green;
 }
+
+.contactMe{
+    background-color: pink;
+}
+.myFooter{
+    background-color: purple
+}
+/* section divs ............................... */
 .introText{
     width: 100%;
 }
