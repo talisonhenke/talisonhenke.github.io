@@ -7,8 +7,9 @@ body{
     width: 100%;
     padding: 0;
     margin: 0;
+    background-color: blue;
 }
-.navbar{
+.navbarDiv{
     margin: 0;
     padding: 0;
 }
@@ -45,10 +46,22 @@ body{
     overflow: hidden;
     margin: 0;
 }
+.aboutMe{
+    background-color: green;
+}
 .introText{
     width: 100%;
 }
 img{
     padding: 0;
     margin: 0 0 20px 0;
+}
+
+.social-icons-style{
+    font-size: 30px;
+    color: white;
+}
+
+.social-icons-list{
+    /* margin: 0 auto; */
 }
