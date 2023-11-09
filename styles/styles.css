@@ -12,6 +12,7 @@ body{
 .navbarDiv{
     margin: 0;
     padding: 0;
+    background-color: black;
 }
 .top-nav-menu{
     background-color: black;
@@ -33,6 +34,9 @@ body{
     background-color: rgb(255, 255, 255);
 }
 
+.navbar-toggler-icon{
+    color: blue;
+}
 /* Content ........................................ */
 
 .content{
