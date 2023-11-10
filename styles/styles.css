@@ -12,16 +12,17 @@ body{
 .navbarDiv{
     margin: 0;
     padding: 0;
+    min-height: 100px;
     background-color: black;
 }
-.top-nav-menu{
+/* .top-nav-menu{
     background-color: black;
     height: 100px;
 }
 .top-nav-logo{
     background-color: black;
     height: 100px;
-}
+} */
   
 .nav-item .nav-link{
     color: white;
