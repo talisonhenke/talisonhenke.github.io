@@ -35,18 +35,27 @@ body{
     background-color: rgb(0, 255, 0);
 }
 
-.navbar-toggler .navbar-toggler-icon{
-    background-image: url("../images/icons8-menu.svg");
-
-    box-shadow: 0 0 0 0 rgb(0, 0, 0);
-	animation: pulse 2s infinite;
-}
-/* .navbar-toggler .navbar-toggler-icon{
-    background-image: url("../images/tstl.svg");
+/* .navbar-toggler:not(.collapsed) .navbar-toggler-icon{
+    background-image: url("../images/icons8-excluir.svg");
 
     box-shadow: 0 0 0 0 rgb(0, 0, 0);
 	animation: pulse 2s infinite;
 } */
+
+/* .navbar-toggler .navbar-toggler-icon{
+    background-image: url("../images/icons8-menu.svg");
+
+    box-shadow: 0 0 0 0 rgb(0, 0, 0);
+	animation: pulse 2s infinite;
+} */
+
+.menu-button{
+    box-shadow: 0 0 0 0 rgb(0, 0, 0);
+	animation: pulse 2s infinite;
+    color: rgb(59, 255, 102);
+    font-size: 2rem;
+}
+
 @keyframes pulse {
 	0% {
 		box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7);
