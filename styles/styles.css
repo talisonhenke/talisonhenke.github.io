@@ -23,6 +23,33 @@ p, h1, h2, h3, span{
     color: #62ff88;
 }
 
+.personalSiteText, .companySiteText{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: justify;
+}
+
+.aboutMeText{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.work-title{
+    color: #62ff88;
+    font-size: 1.2rem;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.work-description{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.work-div:hover{
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.aboutMeImage{
+    filter: invert(10%) sepia(50%) saturate(50%) hue-rotate(80deg) brightness(100%) contrast(110%);
+}
+
 .navbarDiv{
     margin: 0;
     padding: 0;
