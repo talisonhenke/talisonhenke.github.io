@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Vendas - Estrutura</title>
+    <title>Página de Vendas - Ebook Receitas Caseiras para Emagrecimento</title>
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -35,6 +35,27 @@
             padding: 50px 0;
             text-align: center;
         }
+        .book-image {
+            max-width: 100%;
+            height: auto;
+        }
+        .cta-button {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 20px 0;
+        }
+        .cta-button:hover {
+            background-color: #218838;
+        }
+        .testimonials img {
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -42,8 +63,8 @@
     <!-- Header Section -->
     <header>
         <div class="container">
-            <h1 class="display-4">Título da Página</h1>
-            <p class="lead">Subtítulo ou Slogan da Página</p>
+            <h1 class="display-4">Descubra o Segredo para Emagrecer Rápido e com Saúde</h1>
+            <p class="lead">Receitas Caseiras e Suplementos Naturais para Transformar Seu Corpo em Apenas 30 Dias!</p>
         </div>
     </header>
 
@@ -52,10 +73,13 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <div class="empty-space">Espaço para Texto</div>
+                    <h2>O Ebook Que Vai Transformar Sua Vida!</h2>
+                    <p>Nosso ebook exclusivo revela uma combinação eficaz de receitas caseiras e suplementos alimentares que vão te ajudar a emagrecer de forma rápida e saudável. Esta fórmula única acelera o metabolismo e promove a queima de gordura de maneira rápida e segura.</p>
+                    <p>Chega de dietas restritivas e métodos que não funcionam. Com este ebook, você poderá emagrecer de forma prática, sem abrir mão de refeições deliciosas!</p>
+                    <a href="#" class="cta-button">Compre Agora e Transforme Seu Corpo!</a>
                 </div>
                 <div class="col-md-6">
-                    <div class="empty-space">Espaço para Imagem/Media</div>
+                    <img src="ebook-cover.jpg" alt="Capa do Ebook Emagrecimento" class="book-image">
                 </div>
             </div>
         </div>
@@ -64,16 +88,19 @@
     <!-- Section 2: Benefícios ou Características -->
     <section class="section">
         <div class="container">
-            <h2 class="mb-5">Título da Seção 2</h2>
+            <h2 class="mb-5">Por Que Este Ebook Funciona?</h2>
             <div class="row">
                 <div class="col-md-4">
-                    <div class="empty-space">Espaço para Benefício 1</div>
+                    <h4>Aceleradores Naturais do Metabolismo</h4>
+                    <p>Descubra como ingredientes naturais como gengibre, canela e limão podem acelerar seu metabolismo de forma eficaz e segura.</p>
                 </div>
                 <div class="col-md-4">
-                    <div class="empty-space">Espaço para Benefício 2</div>
+                    <h4>Suplementos Testados e Aprovados</h4>
+                    <p>Compreenda quais suplementos alimentares são recomendados para potencializar o emagrecimento sem riscos para sua saúde.</p>
                 </div>
                 <div class="col-md-4">
-                    <div class="empty-space">Espaço para Benefício 3</div>
+                    <h4>Receitas Simples e Rápidas</h4>
+                    <p>Aprenda a preparar receitas fáceis e rápidas utilizando os ingredientes que vão te ajudar a perder peso naturalmente.</p>
                 </div>
             </div>
         </div>
@@ -82,45 +109,55 @@
     <!-- Section 3: Testemunhos ou Provas Sociais -->
     <section class="section bg-light">
         <div class="container">
-            <h2 class="mb-5">Título da Seção 3</h2>
+            <h2 class="mb-5">Depoimentos de Sucesso</h2>
             <div class="row">
                 <div class="col-md-4">
-                    <div class="empty-space">Espaço para Testemunho 1</div>
+                    <div class="testimonial text-center">
+                        <img src="testimonial1.jpg" alt="Ana Paula" width="100">
+                        <p><strong>Ana Paula, 32 anos</strong></p>
+                        <blockquote class="blockquote">“Perdi 12kg em 30 dias! Foi incrível ver como meu corpo mudou de forma rápida e saudável.”</blockquote>
+                    </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="empty-space">Espaço para Testemunho 2</div>
+                    <div class="testimonial text-center">
+                        <img src="testimonial2.jpg" alt="Carlos Henrique" width="100">
+                        <p><strong>Carlos Henrique, 45 anos</strong></p>
+                        <blockquote class="blockquote">“Perdi 10kg e minha energia foi lá em cima! As receitas são fáceis de preparar.”</blockquote>
+                    </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="empty-space">Espaço para Testemunho 3</div>
+                    <div class="testimonial text-center">
+                        <img src="testimonial3.jpg" alt="Juliana Costa" width="100">
+                        <p><strong>Juliana Costa, 28 anos</strong></p>
+                        <blockquote class="blockquote">“Emagreci 8kg em 4 semanas! O melhor de tudo foi não precisar me privar de refeições saborosas.”</blockquote>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Section 4: Garantias ou Garantia de Satisfação -->
+    <!-- Section 4: Garantia de Satisfação -->
     <section class="section">
         <div class="container">
-            <h2 class="mb-5">Título da Seção 4</h2>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="empty-space">Espaço para Garantia ou Texto de Confiança</div>
-                </div>
-            </div>
+            <h2 class="mb-5">Garantia Incondicional de 30 Dias</h2>
+            <p>Sabemos que você vai amar este ebook e ver resultados reais. Por isso, oferecemos uma garantia incondicional de 30 dias. Se, por qualquer motivo, você não estiver satisfeita com os resultados, devolvemos 100% do seu dinheiro. Simples assim!</p>
+            <a href="#" class="cta-button">Compre Agora com Garantia de 30 Dias!</a>
         </div>
     </section>
 
     <!-- Section 5: Call to Action -->
     <section class="section bg-light">
         <div class="container">
-            <h2 class="mb-5">Título da Seção 5</h2>
-            <div class="empty-space">Espaço para Call to Action ou Botão</div>
+            <h2 class="mb-5">Não Perca Mais Tempo!</h2>
+            <p>O corpo dos seus sonhos está a um passo de distância. Baixe agora mesmo o ebook e comece sua transformação hoje!</p>
+            <a href="#" class="cta-button">Quero Começar Agora!</a>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2024 Página de Vendas. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Ebook Receitas para Emagrecimento. Todos os direitos reservados.</p>
         </div>
     </footer>
 
