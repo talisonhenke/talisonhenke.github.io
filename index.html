@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ebook Emagrecimento Natural</title>
-    <!-- Bootstrap CSS -->
+    <title>Página de Vendas - Estrutura</title>
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -13,158 +13,118 @@
         header {
             background-color: #28a745;
             color: white;
-            padding: 50px 0;
+            text-align: center;
+            padding: 100px 0;
+        }
+        .section {
+            padding: 100px 0;
             text-align: center;
         }
-        header h1 {
-            font-size: 3rem;
-        }
-        .cta-button {
-            background-color: #28a745;
-            color: white;
-            padding: 15px 30px;
-            font-size: 18px;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            margin: 20px 0;
-        }
-        .cta-button:hover {
-            background-color: #218838;
-        }
-        .book-image {
-            max-width: 100%;
-            height: auto;
-        }
-        .features, .testimonials, .faq, .guarantee {
-            margin: 50px 0;
+        .empty-space {
+            height: 300px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #6c757d;
         }
         footer {
             background-color: #28a745;
             color: white;
+            padding: 50px 0;
             text-align: center;
-            padding: 20px 0;
-            margin-top: 50px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
+    <!-- Header Section -->
     <header>
         <div class="container">
-            <h1>Transforme Seu Corpo em 30 Dias</h1>
-            <p>Mistura poderosa de suplementos e produtos naturais para um emagrecimento rápido e saudável!</p>
+            <h1 class="display-4">Título da Página</h1>
+            <p class="lead">Subtítulo ou Slogan da Página</p>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <div class="container my-5">
-
-        <!-- Product Introduction with Image -->
-        <div class="row align-items-center mb-5">
-            <div class="col-md-6">
-                <h2>Descubra o Segredo do Emagrecimento Natural</h2>
-                <p>Nosso ebook exclusivo revela uma combinação eficaz de suplementos industrializados e ingredientes naturais como gengibre, canela e limão. Esta fórmula única acelera o metabolismo e promove a queima de gordura de maneira rápida e segura.</p>
-                <p>Você poderá emagrecer sem precisar seguir dietas restritivas ou passar horas na academia. Este método foi testado e aprovado por milhares de mulheres que conseguiram alcançar seus objetivos de forma saudável e duradoura.</p>
-                <a href="#" class="cta-button">Compre Agora e Comece a Transformar Seu Corpo!</a>
-            </div>
-            <div class="col-md-6 text-center">
-                <img src="ebook-cover.jpg" alt="Capa do Ebook Emagrecimento Natural" class="book-image">
+    <!-- Section 1: Introdução ou Apresentação -->
+    <section class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="empty-space">Espaço para Texto</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="empty-space">Espaço para Imagem/Media</div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <!-- Key Features Section -->
-        <div class="features text-center">
-            <h2>O que Você Vai Aprender no Ebook</h2>
+    <!-- Section 2: Benefícios ou Características -->
+    <section class="section">
+        <div class="container">
+            <h2 class="mb-5">Título da Seção 2</h2>
             <div class="row">
                 <div class="col-md-4">
-                    <h4>Aceleradores Naturais do Metabolismo</h4>
-                    <p>Descubra como ingredientes naturais como gengibre, canela e limão podem acelerar seu metabolismo de forma eficaz e segura.</p>
+                    <div class="empty-space">Espaço para Benefício 1</div>
                 </div>
                 <div class="col-md-4">
-                    <h4>Suplementos Industrializados Seguros</h4>
-                    <p>Compreenda quais suplementos industrializados são recomendados para potencializar o emagrecimento sem riscos para sua saúde.</p>
+                    <div class="empty-space">Espaço para Benefício 2</div>
                 </div>
                 <div class="col-md-4">
-                    <h4>Receitas Simples e Rápidas</h4>
-                    <p>Aprenda a preparar receitas fáceis e rápidas utilizando os ingredientes que vão te ajudar a perder peso naturalmente.</p>
+                    <div class="empty-space">Espaço para Benefício 3</div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Testimonials Section -->
-        <div class="testimonials text-center">
-            <h2>Depoimentos de Clientes</h2>
+    <!-- Section 3: Testemunhos ou Provas Sociais -->
+    <section class="section bg-light">
+        <div class="container">
+            <h2 class="mb-5">Título da Seção 3</h2>
             <div class="row">
                 <div class="col-md-4">
-                    <blockquote class="blockquote">
-                        <p>"Perdi 8kg em 4 semanas! O método realmente funciona. Me sinto incrível e cheia de energia!"</p>
-                        <footer class="blockquote-footer">Amanda S.</footer>
-                    </blockquote>
+                    <div class="empty-space">Espaço para Testemunho 1</div>
                 </div>
                 <div class="col-md-4">
-                    <blockquote class="blockquote">
-                        <p>"Esse ebook foi o que me ajudou a finalmente emagrecer. As dicas são simples e os resultados são incríveis!"</p>
-                        <footer class="blockquote-footer">Juliana R.</footer>
-                    </blockquote>
+                    <div class="empty-space">Espaço para Testemunho 2</div>
                 </div>
                 <div class="col-md-4">
-                    <blockquote class="blockquote">
-                        <p>"Já estou recomendando para todas as minhas amigas. É fácil de seguir e os resultados aparecem rápido!"</p>
-                        <footer class="blockquote-footer">Carla M.</footer>
-                    </blockquote>
+                    <div class="empty-space">Espaço para Testemunho 3</div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Guarantee Section -->
-        <div class="guarantee text-center">
-            <h2>Garantia Incondicional</h2>
-            <p>Se em até 30 dias você não estiver satisfeita com os resultados, devolvemos 100% do seu dinheiro. Sem perguntas!</p>
-            <a href="#" class="cta-button">Compre Agora com Garantia de 30 Dias!</a>
-        </div>
-
-        <!-- FAQ Section -->
-        <div class="faq">
-            <h2 class="text-center">Perguntas Frequentes (FAQ)</h2>
-            <div class="accordion" id="faqAccordion">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="faq1">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
-                            Quanto tempo leva para ver resultados?
-                        </button>
-                    </h2>
-                    <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            Os primeiros resultados podem ser vistos em até 7 dias, mas o emagrecimento completo depende da consistência.
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="faq2">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                            O método é seguro?
-                        </button>
-                    </h2>
-                    <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            Sim! Utilizamos ingredientes 100% naturais em combinação com suplementos seguros e amplamente testados.
-                        </div>
-                    </div>
+    <!-- Section 4: Garantias ou Garantia de Satisfação -->
+    <section class="section">
+        <div class="container">
+            <h2 class="mb-5">Título da Seção 4</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="empty-space">Espaço para Garantia ou Texto de Confiança</div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Section 5: Call to Action -->
+    <section class="section bg-light">
+        <div class="container">
+            <h2 class="mb-5">Título da Seção 5</h2>
+            <div class="empty-space">Espaço para Call to Action ou Botão</div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer>
         <div class="container">
-            &copy; 2024 Ebook Emagrecimento Natural. Todos os direitos reservados.
+            <p>&copy; 2024 Página de Vendas. Todos os direitos reservados.</p>
         </div>
     </footer>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
