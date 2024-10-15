@@ -7,6 +7,7 @@
   <title>Receitas Saudáveis para Emagrecer</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  
   <style>
     /* Background image */
     .bg-image {
@@ -14,48 +15,41 @@
         background-size: cover;
         background-position: center;
         height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
         color: white;
-        text-align: center;
-        position: relative;
-        padding-top: 100px;
     }
 
-    .bg-overlay {
-        background: rgba(0, 0, 0, 0.7);
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-
-    .container {
-        position: relative;
-        z-index: 2;
-    }
-
-    /* Título principal */
-    .main-title {
-        font-size: 3.5rem;
-        font-weight: bold;
-        background-color: rgba(255, 165, 0, 0.9);
-        padding: 20px;
+    /* Div transparente para destacar o texto */
+    .text-overlay {
+        background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+        padding: 40px;
         border-radius: 15px;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-        color: #fff;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        max-width: 800px;
+        text-align: center;
+    }
+
+    .main-title {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #ffeb3b;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     }
 
     .subtitle {
-        font-size: 1.7rem;
+        font-size: 1.5rem;
+        color: #ffffff;
         margin-top: 20px;
-        color: #ffeb3b;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
     }
 
-    /* Avaliação com estrelas */
+    /* Avaliação de estrelas */
     .stars {
-        margin-top: 20px;
-        font-size: 1.5rem;
+        margin-top: 15px;
+        font-size: 1.4rem;
     }
 
     .stars .text-warning {
@@ -66,22 +60,21 @@
     .timer {
         font-size: 1.3rem;
         font-weight: bold;
-        margin-top: 25px;
-        background-color: rgba(255, 69, 0, 0.8);
+        margin-top: 20px;
+        background-color: #ff4500;
         padding: 15px;
         border-radius: 10px;
         box-shadow: 0 5px 10px rgba(255, 69, 0, 0.5);
         color: white;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     }
 
     /* Botão de compra */
     .buy-btn {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
         padding: 15px 40px;
         background-color: #28a745;
         color: white;
-        margin-top: 40px;
+        margin-top: 30px;
         border-radius: 50px;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
         transition: background-color 0.3s ease, transform 0.3s ease;
@@ -90,17 +83,16 @@
     .buy-btn:hover {
         background-color: #218838;
         transform: scale(1.05);
-        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
     }
 
-    /* Ajustes para telas menores */
+    /* Responsividade */
     @media (max-width: 768px) {
         .main-title {
             font-size: 2.5rem;
         }
 
         .subtitle {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
 
         .timer {
@@ -108,7 +100,7 @@
         }
 
         .buy-btn {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
         }
     }
 </style>
@@ -132,9 +124,6 @@
       background-size: cover;
       background-position: center;
       height: 100vh;
-    }
-    .first-content{
-        background-color: rgba(0, 0, 0, 0.7);
     }
     .main-title {
       background-color: rgba(0, 0, 0, 0.7);
@@ -176,33 +165,6 @@
     .video-bg{
         background-color: rgba(0, 0, 0, 0.3);
     }
-    /* Definindo as imagens quadradas */
-  /* .testimonials img { */
-    border-radius: 10px; /* Torna as bordas levemente arredondadas */
-    /* width: 100px;
-    height: 100px;
-    transition: transform 0.3s ease;
-    margin-bottom: 20px;
-  } */
-
-  /* Definindo a div dos depoimentos */
-  /* .testimonials .testimonial-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 10px;
-    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-  } */
-
-  /* Mudança na div inteira ao passar o mouse */
-  /* .testimonials .testimonial-box:hover { 
-    transform: scale(1.05); /* Expande a div 
-    background-color: #e0ffe0; /* Altera a cor de fundo ao passar o mouse */
-    /*box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);  Adiciona sombra */
-  }
 
     .testimonials .testimonial-box {
       transition: transform 0.3s ease;
@@ -248,6 +210,7 @@
       margin-top: 50px;
     }
   </style>
+
 </head>
 <body>
 
@@ -278,27 +241,28 @@
   </nav>
 
   <!-- Background Image Section -->
-  <div class="bg-image d-flex justify-content-center align-items-center" id="home">
-    <div class="container first-content">
-       <!-- Título principal apelativo -->
-       <h1 class="main-title">Transforme Seu Corpo com Receitas Deliciosas!</h1>
+<div class="bg-image" id="home">
+    <div class="text-overlay">
+        <!-- Título principal apelativo -->
+        <h1 class="main-title">Transforme Seu Corpo com Receitas Deliciosas!</h1>
 
-       <!-- Subtítulo -->
-       <p class="subtitle">Mais de 1.000 pessoas já transformaram suas vidas com essas receitas incríveis!</p>
+        <!-- Subtítulo -->
+        <p class="subtitle">Mais de 1.000 pessoas já transformaram suas vidas com essas receitas incríveis!</p>
 
-       <!-- Avaliação do produto -->
-       <div class="stars">
-           <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9733;</span>
-           <span class="text-muted">4.5/5 (Baseado em avaliações reais)</span>
-       </div>
+        <!-- Avaliação do produto -->
+        <div class="stars">
+            <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+            <span class="text-white">4.5/5 (Baseado em avaliações reais)</span>
+        </div>
 
-       <!-- Timer com contagem regressiva de 7 dias -->
-       <div class="timer" id="countdown">Oferta termina em: 07d 00h 00m 00s</div>
+        <!-- Timer com contagem regressiva de 7 dias -->
+        <div class="timer" id="countdown">Oferta termina em: 07d 00h 00m 00s</div>
 
-       <!-- Botão de compra apelativo -->
-       <a href="#compra" class="btn buy-btn">Compre Agora e Comece a Emagrecer Já!</a>
+        <!-- Botão de compra apelativo -->
+        <a href="#compra" class="btn buy-btn">Compre Agora e Comece a Emagrecer Já!</a>
     </div>
-  </div>
+</div>
+  
 
   <!-- Content Section -->
   <div class="container section-light" id="sobre">
@@ -322,7 +286,7 @@
     </div>
   </div>
 
-  Copy Section
+  <!-- Copy Section -->
   <div class="container section-dark" id="copy">
     <div class="row">
       <div class="col-md-12">
@@ -649,9 +613,6 @@
     <p>Receitas Saudáveis para Emagrecer - Todos os direitos reservados.</p>
   </div>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
   <script>
     // Timer de contagem regressiva de 7 dias
     function startCountdown() {
@@ -683,4 +644,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>
