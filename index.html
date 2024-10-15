@@ -1,167 +1,121 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Vendas - Ebook Receitas Caseiras para Emagrecimento</title>
-    <!-- Bootstrap 5 -->
+    <title>Ebook de Receitas para Emagrecer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f8f9fa;
+        /* Estilos personalizados */
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
         }
-        header {
-            background-color: #28a745;
-            color: white;
-            text-align: center;
-            padding: 100px 0;
-        }
-        .section {
-            padding: 100px 0;
-            text-align: center;
-        }
-        .empty-space {
-            height: 300px;
-            background-color: #e9ecef;
+
+        .hero {
+            background-image: url('url-da-imagem-de-fundo');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            font-size: 1.5rem;
-            color: #6c757d;
-        }
-        footer {
-            background-color: #28a745;
+            align-items: center;
             color: white;
-            padding: 50px 0;
             text-align: center;
         }
-        .book-image {
-            max-width: 100%;
-            height: auto;
-        }
-        .cta-button {
+
+        .btn-cta {
+            font-size: 1.5rem;
+            padding: 15px 30px;
             background-color: #28a745;
             color: white;
-            padding: 15px 30px;
-            font-size: 18px;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-            margin: 20px 0;
+            border: none;
         }
-        .cta-button:hover {
-            background-color: #218838;
-        }
+
         .testimonials img {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            margin-bottom: 15px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* Manter a proporção 16:9 */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
     </style>
 </head>
+
 <body>
 
-    <!-- Header Section -->
-    <header>
+    <!-- Seção Hero / Background -->
+    <section class="hero d-flex align-items-center justify-content-center">
         <div class="container">
-            <h1 class="display-4">Descubra o Segredo para Emagrecer Rápido e com Saúde</h1>
-            <p class="lead">Receitas Caseiras e Suplementos Naturais para Transformar Seu Corpo em Apenas 30 Dias!</p>
+            <h1 class="display-4">Ebook de Receitas para Emagrecer</h1>
+            <p class="lead">Descubra receitas incríveis e saudáveis que ajudam no seu processo de emagrecimento.</p>
+            <a href="#comprar" class="btn btn-cta mt-3">Compre Agora</a>
         </div>
-    </header>
+    </section>
 
-    <!-- Section 1: Introdução ou Apresentação -->
-    <section class="section">
-        <div class="container">
+    <!-- Seção Descrição com Vídeo -->
+    <section class="py-5">
+        <div class="container text-center">
+            <h2 class="mb-4">O que você vai encontrar no ebook</h2>
+            <p>Este ebook contém receitas testadas e aprovadas por nutricionistas, elaboradas para ajudar na perda de peso sem perder o prazer em comer.</p>
+            
+            <!-- Vídeo descritivo -->
+            <div class="video-wrapper my-4">
+                <iframe src="https://www.youtube.com/embed/EXEMPLO_VIDEO" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Depoimentos -->
+    <section class="testimonials py-5 bg-light">
+        <div class="container text-center">
+            <h2 class="mb-4">O que nossos clientes dizem</h2>
             <div class="row">
-                <div class="col-md-6">
-                    <h2>O Ebook Que Vai Transformar Sua Vida!</h2>
-                    <p>Nosso ebook exclusivo revela uma combinação eficaz de receitas caseiras e suplementos alimentares que vão te ajudar a emagrecer de forma rápida e saudável. Esta fórmula única acelera o metabolismo e promove a queima de gordura de maneira rápida e segura.</p>
-                    <p>Chega de dietas restritivas e métodos que não funcionam. Com este ebook, você poderá emagrecer de forma prática, sem abrir mão de refeições deliciosas!</p>
-                    <a href="#" class="cta-button">Compre Agora e Transforme Seu Corpo!</a>
+                <div class="col-lg-4">
+                    <img src="foto-usuario1.jpg" alt="Cliente 1">
+                    <p class="mt-3">"As receitas são fáceis de seguir e realmente funcionam! Estou amando o resultado!"</p>
+                    <h5>Maria Silva</h5>
                 </div>
-                <div class="col-md-6">
-                    <img src="ebook-cover.jpg" alt="Capa do Ebook Emagrecimento" class="book-image">
+                <div class="col-lg-4">
+                    <img src="foto-usuario2.jpg" alt="Cliente 2">
+                    <p class="mt-3">"Em pouco tempo já vi diferença. Recomendo para todos que querem perder peso sem sofrimento."</p>
+                    <h5>João Souza</h5>
+                </div>
+                <div class="col-lg-4">
+                    <img src="foto-usuario3.jpg" alt="Cliente 3">
+                    <p class="mt-3">"As receitas são deliciosas e fáceis de fazer, e os resultados foram rápidos!"</p>
+                    <h5>Ana Pereira</h5>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Section 2: Benefícios ou Características -->
-    <section class="section">
+    <!-- Seção de Compra -->
+    <section id="comprar" class="py-5 text-center">
         <div class="container">
-            <h2 class="mb-5">Por Que Este Ebook Funciona?</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <h4>Aceleradores Naturais do Metabolismo</h4>
-                    <p>Descubra como ingredientes naturais como gengibre, canela e limão podem acelerar seu metabolismo de forma eficaz e segura.</p>
-                </div>
-                <div class="col-md-4">
-                    <h4>Suplementos Testados e Aprovados</h4>
-                    <p>Compreenda quais suplementos alimentares são recomendados para potencializar o emagrecimento sem riscos para sua saúde.</p>
-                </div>
-                <div class="col-md-4">
-                    <h4>Receitas Simples e Rápidas</h4>
-                    <p>Aprenda a preparar receitas fáceis e rápidas utilizando os ingredientes que vão te ajudar a perder peso naturalmente.</p>
-                </div>
-            </div>
+            <h2 class="mb-4">Pronto para transformar sua alimentação?</h2>
+            <a href="#" class="btn btn-cta">Compre Agora</a>
         </div>
     </section>
 
-    <!-- Section 3: Testemunhos ou Provas Sociais -->
-    <section class="section bg-light">
-        <div class="container">
-            <h2 class="mb-5">Depoimentos de Sucesso</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="testimonial text-center">
-                        <img src="testimonial1.jpg" alt="Ana Paula" width="100">
-                        <p><strong>Ana Paula, 32 anos</strong></p>
-                        <blockquote class="blockquote">“Perdi 12kg em 30 dias! Foi incrível ver como meu corpo mudou de forma rápida e saudável.”</blockquote>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="testimonial text-center">
-                        <img src="testimonial2.jpg" alt="Carlos Henrique" width="100">
-                        <p><strong>Carlos Henrique, 45 anos</strong></p>
-                        <blockquote class="blockquote">“Perdi 10kg e minha energia foi lá em cima! As receitas são fáceis de preparar.”</blockquote>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="testimonial text-center">
-                        <img src="testimonial3.jpg" alt="Juliana Costa" width="100">
-                        <p><strong>Juliana Costa, 28 anos</strong></p>
-                        <blockquote class="blockquote">“Emagreci 8kg em 4 semanas! O melhor de tudo foi não precisar me privar de refeições saborosas.”</blockquote>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 4: Garantia de Satisfação -->
-    <section class="section">
-        <div class="container">
-            <h2 class="mb-5">Garantia Incondicional de 30 Dias</h2>
-            <p>Sabemos que você vai amar este ebook e ver resultados reais. Por isso, oferecemos uma garantia incondicional de 30 dias. Se, por qualquer motivo, você não estiver satisfeita com os resultados, devolvemos 100% do seu dinheiro. Simples assim!</p>
-            <a href="#" class="cta-button">Compre Agora com Garantia de 30 Dias!</a>
-        </div>
-    </section>
-
-    <!-- Section 5: Call to Action -->
-    <section class="section bg-light">
-        <div class="container">
-            <h2 class="mb-5">Não Perca Mais Tempo!</h2>
-            <p>O corpo dos seus sonhos está a um passo de distância. Baixe agora mesmo o ebook e comece sua transformação hoje!</p>
-            <a href="#" class="cta-button">Quero Começar Agora!</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Ebook Receitas para Emagrecimento. Todos os direitos reservados.</p>
-        </div>
-    </footer>
-
-    <!-- Bootstrap 5 JS -->
+    <!-- Scripts do Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
