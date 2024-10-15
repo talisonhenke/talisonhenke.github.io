@@ -53,17 +53,49 @@
       border-radius: 10px;
       margin-top: 30px;
     }
-    .testimonials img {
-      border-radius: 50%;
-      width: 80px;
-      height: 80px;
-      transition: transform 0.3s ease;
+    .about-text{
+        font-size: 20px;
+        text-align: justify;
     }
+    .main-text{
+        text-align: justify;
+    }
+    .textdep{
+        font-weight: bold;
+    }
+    /* Definindo as imagens quadradas */
+  .testimonials img {
+    border-radius: 10px; /* Torna as bordas levemente arredondadas */
+    width: 100px;
+    height: 100px;
+    transition: transform 0.3s ease;
+    margin-bottom: 20px;
+  }
+
+  /* Definindo a div dos depoimentos */
+  .testimonials .testimonial-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Mudança na div inteira ao passar o mouse */
+  .testimonials .testimonial-box:hover {
+    transform: scale(1.05); /* Expande a div */
+    background-color: #e0ffe0; /* Altera a cor de fundo ao passar o mouse */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Adiciona sombra */
+  }
+
     .testimonials .testimonial-box {
       transition: transform 0.3s ease;
     }
-    .testimonials .testimonial-box:hover {
-      transform: scale(1.05);
+    .testimonials .testimonial-box:hover img {
+      transform: scale(1.2);
     }
     .purchase-btn {
       display: inline-block;
@@ -143,9 +175,9 @@
   <div class="container section-light" id="sobre">
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <h2>Sobre o Ebook</h2>
-        <p>Descubra receitas incríveis e saudáveis para perder peso de forma saborosa e sustentável. Este ebook contém mais de 50 receitas com baixo teor calórico, ingredientes naturais e fáceis de preparar.</p>
-        <p>Além disso, você aprenderá dicas de como equilibrar sua alimentação e melhorar seu bem-estar.</p>
+        <h2>Sobre o Ebook que vai mudar sua vida:</h2>
+        <p class="about-text">Descubra receitas incríveis e saudáveis para perder peso de forma saborosa e sustentável. Este ebook contém mais de 50 receitas com baixo teor calórico, ingredientes naturais e fáceis de preparar.</p>
+        <p class="about-text">Além disso, você aprenderá dicas de como equilibrar sua alimentação e melhorar seu bem-estar.</p>
       </div>
       <div class="col-lg-6 col-md-12">
         <h2>Assista ao Vídeo de Apresentação</h2>
@@ -166,8 +198,8 @@
     <div class="row">
       <div class="col-md-12">
         <h2 class="text-center">Guia Completo para Perda de Peso – Por Apenas R$15!</h2>
-        <p>Você está cansada de dietas que não funcionam? Já tentou de tudo e nunca consegue manter o peso? Que tal mudar isso de uma vez por todas com um plano simples, acessível e comprovado?</p>
-        <p>Apresento a você o <strong>Guia Completo para Perda de Peso: Dietas Saudáveis e Resultados Garantidos</strong>, criado para quem quer <strong>emagrecer de verdade</strong> e sem passar fome. Esqueça as dietas malucas e milagrosas. Este eBook vai te ensinar:</p>
+        <p class="main-text">Você está cansada de dietas que não funcionam? Já tentou de tudo e nunca consegue manter o peso? Que tal mudar isso de uma vez por todas com um plano simples, acessível e comprovado?</p>
+        <p class="main-text">Apresento a você o <strong>Guia Completo para Perda de Peso: Dietas Saudáveis e Resultados Garantidos</strong>, criado para quem quer <strong>emagrecer de verdade</strong> e sem passar fome. Esqueça as dietas malucas e milagrosas. Este eBook vai te ensinar:</p>
         <ul>
           <li>As melhores estratégias para perder peso com saúde;</li>
           <li>Como montar uma dieta personalizada de acordo com o seu corpo e suas necessidades;</li>
@@ -177,14 +209,14 @@
         </ul>
 
         <!-- Purchase Button -->
-        <div class="purchase-btn-container">
+        <div class="purchase-btn-container mb-4">
           <a href="#compra" class="purchase-btn">Garanta Seus Resultados Hoje!</a>
         </div>
 
         <h3 class="text-center">Bônus Exclusivo: eBook de Receitas Saudáveis!</h3>
         <p>Comprando hoje, você ainda ganha um bônus EXCLUSIVO: <strong>eBook com as Melhores Receitas Fit e Saudáveis</strong>, criado para facilitar sua vida e fazer da sua dieta algo saboroso e prazeroso!</p>
         <h3 class="text-center">Garantia Total de 7 Dias!</h3>
-        <p>E para garantir que você faça essa compra <strong>com total segurança</strong>, oferecemos uma <strong>garantia de 7 dias</strong>. Se dentro desse período você não estiver satisfeita com o eBook, devolvemos 100% do seu dinheiro. Sem perguntas, sem complicações. Ou você emagrece ou recebe seu dinheiro de volta!</p>
+        <p>E para garantir que você faça essa compra <strong>com total segurança</strong>, oferecemos uma <strong>garantia de 7 dias</strong>. Se dentro desse período você não estiver satisfeito com o eBook, devolvemos 100% do seu dinheiro. Sem perguntas, sem complicações. Ou você emagrece ou recebe seu dinheiro de volta!</p>
 
         <!-- Purchase Button -->
         <div class="purchase-btn-container">
@@ -195,5 +227,58 @@
   </div>
 
   <!-- Testimonials Section -->
-  <div class="container section-colored" id="testimonials">
-    <div class
+<div class="container section-colored" id="testimonials">
+    <div class="row testimonials">
+      <h2 class="text-center">O que nossos clientes dizem</h2>
+  
+      <!-- Depoimentos -->
+      <div class="col-md-4 text-center mt-4 testimonial-box">
+        <img src="https://via.placeholder.com/80" alt="Cliente 1">
+        <p class="textdep">"Essas receitas mudaram minha vida! Perdi 10kg em 3 meses comendo de forma saudável e saborosa!"</p>
+        <h5>- Ana Clara</h5>
+      </div>
+      <div class="col-md-4 text-center mt-4 testimonial-box">
+        <img src="https://via.placeholder.com/80" alt="Cliente 2">
+        <p class="textdep">"Simplesmente amei! As receitas são fáceis e os resultados aparecem rapidamente. Recomendo a todos!"</p>
+        <h5>- João Pedro</h5>
+      </div>
+      <div class="col-md-4 text-center mt-4 testimonial-box">
+        <img src="https://via.placeholder.com/80" alt="Cliente 3">
+        <p class="textdep">"Este ebook me ensinou a comer melhor e ainda perder peso! As receitas são práticas e deliciosas."</p>
+        <h5>- Marina Lopes</h5>
+      </div>
+      <div class="col-md-4 text-center mt-4 testimonial-box">
+        <img src="https://via.placeholder.com/80" alt="Cliente 4">
+        <p class="textdep">"Nunca pensei que emagrecer poderia ser tão gostoso! Já perdi 7kg comendo de forma saudável!"</p>
+        <h5>- Carlos Andrade</h5>
+      </div>
+      <div class="col-md-4 text-center mt-4 testimonial-box">
+        <img src="https://via.placeholder.com/80" alt="Cliente 5">
+        <p class="textdep">"Recomendo demais! Esse ebook fez a diferença na minha vida, me ajudou a alcançar meu objetivo de maneira saudável."</p>
+        <h5>- Renata Souza</h5>
+      </div>
+      <div class="col-md-4 text-center mt-4 testimonial-box">
+        <img src="https://via.placeholder.com/80" alt="Cliente 6">
+        <p class="textdep">"Além de perder peso, consegui aprender a comer melhor e manter minha saúde em dia! Ótimo conteúdo!"</p>
+        <h5>- Lucas Silva</h5>
+      </div>
+    </div>
+  </div>
+  
+
+    <!-- Purchase Button -->
+    <div class="purchase-btn-container">
+      <a href="#compra" class="purchase-btn">Compre Agora e Comece a Transformar sua Vida!</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Receitas Saudáveis para Emagrecer - Todos os direitos reservados.</p>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
