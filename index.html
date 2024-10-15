@@ -8,6 +8,111 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
   <style>
+    /* Background image */
+    .bg-image {
+        background-image: url('https://cdn.pixabay.com/photo/2016/03/05/19/02/salad-1238242_1280.jpg');
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        color: white;
+        text-align: center;
+        position: relative;
+        padding-top: 100px;
+    }
+
+    .bg-overlay {
+        background: rgba(0, 0, 0, 0.7);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Título principal */
+    .main-title {
+        font-size: 3.5rem;
+        font-weight: bold;
+        background-color: rgba(255, 165, 0, 0.9);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        color: #fff;
+    }
+
+    .subtitle {
+        font-size: 1.7rem;
+        margin-top: 20px;
+        color: #ffeb3b;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Avaliação com estrelas */
+    .stars {
+        margin-top: 20px;
+        font-size: 1.5rem;
+    }
+
+    .stars .text-warning {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Timer */
+    .timer {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-top: 25px;
+        background-color: rgba(255, 69, 0, 0.8);
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 5px 10px rgba(255, 69, 0, 0.5);
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Botão de compra */
+    .buy-btn {
+        font-size: 1.8rem;
+        padding: 15px 40px;
+        background-color: #28a745;
+        color: white;
+        margin-top: 40px;
+        border-radius: 50px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .buy-btn:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Ajustes para telas menores */
+    @media (max-width: 768px) {
+        .main-title {
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+        }
+
+        .timer {
+            font-size: 1.1rem;
+        }
+
+        .buy-btn {
+            font-size: 1.4rem;
+        }
+    }
+</style>
+  <style>
     body, html {
       height: 100%;
       margin: 0;
@@ -27,6 +132,9 @@
       background-size: cover;
       background-position: center;
       height: 100vh;
+    }
+    .first-content{
+        background-color: rgba(0, 0, 0, 0.7);
     }
     .main-title {
       background-color: rgba(0, 0, 0, 0.7);
@@ -171,8 +279,24 @@
 
   <!-- Background Image Section -->
   <div class="bg-image d-flex justify-content-center align-items-center" id="home">
-    <div class="container">
-      <h1 class="main-title">Ebook: Receitas Saudáveis para Emagrecer</h1>
+    <div class="container first-content">
+       <!-- Título principal apelativo -->
+       <h1 class="main-title">Transforme Seu Corpo com Receitas Deliciosas!</h1>
+
+       <!-- Subtítulo -->
+       <p class="subtitle">Mais de 1.000 pessoas já transformaram suas vidas com essas receitas incríveis!</p>
+
+       <!-- Avaliação do produto -->
+       <div class="stars">
+           <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+           <span class="text-muted">4.5/5 (Baseado em avaliações reais)</span>
+       </div>
+
+       <!-- Timer com contagem regressiva de 7 dias -->
+       <div class="timer" id="countdown">Oferta termina em: 07d 00h 00m 00s</div>
+
+       <!-- Botão de compra apelativo -->
+       <a href="#compra" class="btn buy-btn">Compre Agora e Comece a Emagrecer Já!</a>
     </div>
   </div>
 
@@ -527,6 +651,36 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Timer de contagem regressiva de 7 dias
+    function startCountdown() {
+        const endDate = new Date().getTime() + (7 * 24 * 60 * 60 * 1000); // 7 dias a partir de agora
+
+        const countdownElement = document.getElementById('countdown');
+
+        const timerInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = endDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownElement.innerHTML = `Oferta termina em: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            if (distance < 0) {
+                clearInterval(timerInterval);
+                countdownElement.innerHTML = "Oferta Expirada";
+            }
+        }, 1000);
+    }
+
+    startCountdown();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
