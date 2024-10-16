@@ -12,7 +12,7 @@
   
   <style>
     /* Background image */
-    .bg-image {
+    /* .bg-image {
         background-image: url('https://cdn.pixabay.com/photo/2016/03/05/19/02/salad-1238242_1280.jpg');
         background-size: cover;
         background-position: center;
@@ -22,7 +22,7 @@
         justify-content: center;
         position: relative;
         color: white;
-    }
+    } */
 
     /* Div transparente para destacar o texto */
     .text-overlay {
@@ -30,8 +30,9 @@
         padding: 40px;
         border-radius: 15px;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-        max-width: 800px;
+        /* max-width: 800px; */
         text-align: center;
+        /* margin: 0 auto; */
     }
 
     .main-title {
@@ -88,7 +89,12 @@
     }
 
     /* Responsividade */
-    @media (max-width: 768px) {
+    @media only screen and (min-width: 768px) {
+      .image-shadow{
+          bottom: -20px;
+      }
+    }
+    @media only screen and (max-width: 768px) {
         .main-title {
             font-size: 2.5rem;
         }
@@ -129,6 +135,7 @@
       background-size: cover;
       background-position: center;
       height: 100vh;
+      position: relative;
     }
     .main-title {
       background-color: rgba(0, 0, 0, 0.7);
@@ -138,7 +145,7 @@
       text-align: center;
     }
     .section-light {
-      background-color: #f4f4f4;
+      background-color: #0f0f0f;
       padding: 50px;
       border-radius: 10px;
       margin-top: 30px;
@@ -179,14 +186,15 @@
     }
     .purchase-btn {
       display: inline-block;
-      background-color: #32cd32;
-      color: white;
+      background-color: #00FF7F;
+      color: black;
       padding: 15px 30px;
       text-align: center;
       border: none;
       font-size: 1.5rem;
       border-radius: 5px;
       transition: all 0.3s ease;
+      text-decoration: none;
     }
     .purchase-btn:hover {
       background-color: #28a428;
@@ -197,21 +205,27 @@
       margin-top: 30px;
     }
     .navbar {
-      background-color: #32cd32;
+      /* background-color: #32cd32; */
+      background-color: #00FF7F;
     }
     .navbar-nav .nav-link {
-      color: white !important;
+      color: black !important;
       font-size: 1rem;
       font-weight: 600;
     }
     .navbar-toggler {
-      background-color: white;
+      background-color: black;
+    }
+    .navbar-brand{
+      color: black;
+      font-weight: bold;
     }
     .footer {
-      background-color: #32cd32;
+      /* background-color: #32cd32; */
+      background-color: #00FF7F;
       padding: 20px;
       text-align: center;
-      color: white;
+      color: black;
       margin-top: 50px;
     }
   </style>
@@ -220,14 +234,14 @@
 <body>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark"> <!-- REMOVED fixed-top-->
     <div class="container">
       <a class="navbar-brand" href="#">Meu eBook</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav ms-auto mt-2">
           <li class="nav-item">
             <a class="nav-link" href="#sobre">Sobre</a>
           </li>
@@ -247,7 +261,7 @@
 
   <!-- Background Image Section -->
 <div class="bg-image" id="home">
-    <div class="text-overlay">
+    <div class="text-overlay mx-auto col-sm-12 col-md-10">
         <!-- Título principal apelativo -->
         <h1 class="main-title">Transforme Seu Corpo com Receitas Deliciosas!</h1>
 
@@ -270,7 +284,7 @@
   
 
   <!-- Content Section -->
-  <div class="container section-light" id="sobre">
+  <div class="section-light mx-auto col-sm-12 col-md-10" id="sobre">
     <div class="row">
       <div class="col-lg-12 col-md-12">
         <h2>Sobre o Ebook que vai mudar sua vida:</h2>
@@ -287,7 +301,7 @@
     
     <!-- Purchase Button -->
     <div class="purchase-btn-container">
-      <a href="#compra" class="purchase-btn">Comece Sua Transformação Agora!</a>
+      <a href="#compra" class="btn">Comece Sua Transformação Agora!</a>
     </div>
   </div>
 
@@ -297,7 +311,7 @@
       font-family: 'Poppins', sans-serif;
       background-color: #2b2b2b;
       color: #ffffff;
-      padding: 20px;
+      /* padding: 20px; */
       text-align: center;
     }
     
@@ -331,10 +345,6 @@
       margin-bottom: 10px;
     }
 
-    .btn-garanta{
-        background-color: #000;
-    }
-
    .texto_copy{
     font-size: 1.4rem;
    }
@@ -360,7 +370,7 @@
     .btn:hover {
       background-color: #00cc6e;
       color: #000000;
-      transform: scale(1.05);
+      transform: scale(1.07);
     }
     
     .highlight {
@@ -380,7 +390,7 @@
 </head>
 <body>
 
-  <div class="section col-md-10 mt-4 container">
+  <div class="section mx-auto col-sm-12 col-md-10 mt-4">
     <h1>Guia Completo para Perda de Peso – Por Apenas R$15!</h1>
     
     <p class="texto_copy">Você está cansada de dietas que não funcionam? Já tentou de tudo e nunca consegue manter o peso? Que tal mudar isso de uma vez por todas com um plano simples, acessível e comprovado?</p>
@@ -408,7 +418,7 @@
 
 
   <!-- FAQ Section -->
-<div class="container section-faq mt-5">
+<div class="mx-auto col-sm-12 col-md-10 section-faq mt-5">
     <h2 class="text-center mb-4" style="color: #fff;">Perguntas Frequentes</h2>
     
     <div class="accordion" id="faqAccordion">
@@ -512,7 +522,7 @@
   </style>
 
 <!-- Testimonials Section -->
-<div class="container section-colored d-flex flex-column flex-lg-row" id="testimonials">
+<div class="mx-auto col-sm-12 col-md-10 section-colored d-flex flex-column flex-md-row flex-lg-row" id="testimonials">
     <!-- Texto "Depoimentos dos Membros" -->
     <div class="testimonial-heading" style="flex: 1; text-align: left;">
       <h2 class="text-left" style="font-size: 2.5rem; color: #fff;">Depoimentos dos Membros</h2>
@@ -606,9 +616,11 @@
     }
   
     /* Adjusting the title style */
+
     .testimonial-heading{
-        TODO: centralizar depoimento
+      align-content: center;
     }
+
     .testimonial-heading h2 {
       color: #1DB954;
       font-weight: bold;
@@ -639,7 +651,7 @@
       /* Ajustar o posicionamento da imagem no mobile */
       .testimonial-image img {
         position: static;
-        margin-bottom: 20px;
+        /* margin-bottom: 20px; */
         box-shadow: none;
       }
   
@@ -655,7 +667,7 @@
 
     <!-- Purchase Button -->
     <div class="purchase-btn-container">
-      <a href="#compra" class="purchase-btn">Compre Agora e Comece a Transformar sua Vida!</a>
+      <a href="#compra" class="btn">Compre Agora e Comece a Transformar sua Vida!</a>
     </div>
   </div>
 
