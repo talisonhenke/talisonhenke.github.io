@@ -169,6 +169,136 @@
         }
     }
 </style>
+
+<style>
+  /* Background color of the testimonial section */
+  .section-colored {
+    background-color: #0F0F0F; /* Dark background */
+    padding: 50px;
+    margin-top: 30px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Ensures responsive behavior */
+  }
+
+  /* General style for the testimonial boxes */
+  .testimonial-box {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff; /* White background for the comment */
+    padding: 20px;
+    border-radius: 15px;
+    color: #000000;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  .testimonial-box-sm {
+    display: none;
+    align-items: center;
+    background-color: #ffffff; /* White background for the comment */
+    padding: 20px;
+    border-radius: 15px;
+    color: #000000;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  /* Testimonials expand effect */
+  .testimonial-box:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .testimonial-box-sm:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Quadrada com sombra externa para as imagens */
+  .testimonial-image img {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px; /* Imagem quadrada com cantos levemente arredondados */
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5); /* Sombra saindo da imagem */
+    position: absolute;
+    right: -20px; /* Leve sobreposição para fora da caixa */
+  }
+
+  /* Text inside testimonials */
+  .testimonial-content {
+    flex: 1;
+    margin-right: 70px; /* Ajustado para a imagem fora da div */
+    color: #000000;
+  }
+
+  /* Adjusting the title style */
+
+  .testimonial-heading{
+    align-content: center;
+  }
+
+  .testimonial-heading h2 {
+    color: #1DB954;
+    font-size: 2.3rem;
+    font-weight: bold;
+  }
+
+  /* Highlighting testimonial text */
+  p {
+    font-size: 1rem;
+    font-style: italic;
+  }
+
+  /* Forcing testimonials to align on the right, with fixed width */
+  .testimonial-container {
+    max-width: 50%;
+  }
+
+  /* Responsividade para telas menores (celulares/tablets) */
+  @media (max-width: 576px) {
+    .testimonial-box {
+      display: none;
+    }
+    .testimonial-box-sm {
+      display: block;
+    }
+  }
+  @media (max-width: 991px) {
+    .testimonial-container {
+      margin: 0 auto;
+      max-width: 90%;
+    }
+
+    /* Empilhar depoimentos e título no mobile */
+    .section-colored {
+      padding: 0;
+      flex-direction: column;
+    }
+
+    /* Ajustar o posicionamento da imagem no mobile */
+    .testimonial-image img {
+      position: static;
+      /* margin-bottom: 20px; */
+      box-shadow: none;
+    }
+
+    .testimonial-content {
+      margin-right: 0;
+    }
+
+    .testimonial-heading h2 {
+      font-size: 2.0rem;
+      text-align: center;
+    }
+  }
+</style>
+
   <style>
     body, html {
       height: 100%;
@@ -204,6 +334,9 @@
       .btn {
           font-size: 1rem;
       }
+      .testimonial-heaading h2{
+        font-size: 1.5rem;
+      }
     }
     .section-light {
       background-color: #0f0f0f;
@@ -218,12 +351,11 @@
       border-radius: 10px;
       margin-top: 30px;
     }
-    .section-colored {
+    /* .section-colored {
       background-color: #ffefd5;
       padding: 50px;
       border-radius: 10px;
-      margin-top: 30px;
-    }
+    } */
     .about-text{
         font-size: 20px;
         text-align: justify;
@@ -244,6 +376,14 @@
     }
     .testimonials .testimonial-box:hover img {
       transform: scale(1.2);
+    }
+    /* sm */
+    .testimonials .testimonial-box-sm {
+      transition: transform 0.3s ease;
+    }
+    .testimonials .testimonial-box-sm img {
+      width: 150px;
+      height: 150px;
     }
     .purchase-btn {
       display: inline-block;
@@ -290,6 +430,44 @@
       margin-top: 50px;
     }
   </style>
+
+<style>
+  /* Background and container for FAQ section */
+  .section-faq {
+    background-color: #0F0F0F;
+    padding: 50px 5px;
+    border-radius: 10px;
+  }
+
+  /* Accordion item style */
+  .accordion-button {
+    background-color: #1c1c1c;
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .accordion-button:not(.collapsed) {
+    background-color: #1DB954;
+    color: #fff;
+  }
+
+  .accordion-item {
+    background-color: #1c1c1c;
+    border: none;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+
+  .accordion-body {
+    background-color: #fff;
+    color: #000;
+  }
+
+  h2 {
+    color: #1DB954;
+  }
+</style>
 
 </head>
 <body>
@@ -463,56 +641,19 @@
   <!-- Bootstrap JS for accordion -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
   
-  <style>
-    /* Background and container for FAQ section */
-    .section-faq {
-      background-color: #0F0F0F;
-      padding: 50px;
-      border-radius: 10px;
-    }
-  
-    /* Accordion item style */
-    .accordion-button {
-      background-color: #1c1c1c;
-      color: #fff;
-      font-size: 1.2rem;
-      font-weight: bold;
-    }
-  
-    .accordion-button:not(.collapsed) {
-      background-color: #1DB954;
-      color: #fff;
-    }
-  
-    .accordion-item {
-      background-color: #1c1c1c;
-      border: none;
-      margin-bottom: 10px;
-      color: #fff;
-    }
-  
-    .accordion-body {
-      background-color: #fff;
-      color: #000;
-    }
-  
-    h2 {
-      color: #1DB954;
-    }
-  </style>
 
 <!-- Testimonials Section -->
-<div class="mx-auto col-sm-12 col-md-10 section-colored d-flex flex-column flex-md-row flex-lg-row" id="testimonials">
+<div class="mx-auto col-sm-12 col-md-10 section-colored d-flex flex-column flex-lg-row" id="testimonials">
     <!-- Texto "Depoimentos dos Membros" -->
     <div class="testimonial-heading" style="flex: 1; text-align: left;">
-      <h2 class="text-left" style="font-size: 2.5rem; color: #fff;">Depoimentos dos Membros</h2>
+      <h2 class="testimonial-title">Depoimentos dos Membros</h2>
     </div>
     
     <!-- Abas de Comentários (lado direito) -->
     <div class="testimonial-container" style="flex: 1;">
       <div class="row testimonials">
         <!-- Depoimento 1 -->
-        <div class="col-md-12 d-flex align-items-center testimonial-box">
+        <div class="col-md-12 align-items-center testimonial-box"> <!-- d-flex REMOVED> -->
           <div class="testimonial-content p-1" style="flex: 1;">
             <p>"Incrível! O que acontecia de manhã no Facebook, à noite o ebook trazia a solução, e com isso eu consegui vender MUITO e hoje já faturei mais de 9 dígitos, e é por conta das dicas dele."</p>
             <h5>- Rennan Rebouças</h5>
@@ -523,7 +664,7 @@
         </div>
   
         <!-- Depoimento 2 -->
-        <div class="col-md-12 d-flex align-items-center testimonial-box mt-4">
+        <div class="col-md-12  align-items-center testimonial-box mt-4"> <!-- d-flex REMOVED> -->
           <div class="testimonial-content p-1" style="flex: 1;">
             <p>"Entrei no Close Friends do ebook há 1 ano e o mês passado renovei por mais 1 ano. Vale muito a pena entrar!"</p>
             <h5>- Marcelo Manzano</h5>
@@ -534,7 +675,7 @@
         </div>
   
         <!-- Depoimento 3 -->
-        <div class="col-md-12 d-flex align-items-center testimonial-box mt-4">
+        <div class="col-md-12 align-items-center testimonial-box mt-4"> <!-- d-flex REMOVED> -->
           <div class="testimonial-content p-1" style="flex: 1;">
             <p>"Véio, o conhecimento que ele passa lá não é coisinha teórica não... Se você quer crescer no mercado, entre agora!"</p>
             <h5>- Breno Marchesini</h5>
@@ -543,103 +684,43 @@
             <img src="https://via.placeholder.com/80" alt="Cliente 3" class="image-shadow">
           </div>
         </div>
+        <!-- DEPOIMETOS TELA DE CELULAR -->
+         <!-- Depoimento 1 -->
+        <div class="col-md-12 align-items-center testimonial-box-sm"> <!-- d-flex REMOVED> -->
+          <div class="testimonial-image">
+            <img src="https://via.placeholder.com/80" alt="Cliente 1" class="image-shadow">
+          </div>
+          <div class="testimonial-content p-1" style="flex: 1;">
+            <p>"Incrível! O que acontecia de manhã no Facebook, à noite o ebook trazia a solução, e com isso eu consegui vender MUITO e hoje já faturei mais de 9 dígitos, e é por conta das dicas dele."</p>
+            <h5>- Rennan Rebouças</h5>
+          </div>
+        </div>
+  
+        <!-- Depoimento 2 -->
+        <div class="col-md-12  align-items-center testimonial-box-sm mt-4"> <!-- d-flex REMOVED> -->
+          <div class="testimonial-image">
+            <img src="https://via.placeholder.com/80" alt="Cliente 2" class="image-shadow">
+          </div>
+          <div class="testimonial-content p-1" style="flex: 1;">
+            <p>"Entrei no Close Friends do ebook há 1 ano e o mês passado renovei por mais 1 ano. Vale muito a pena entrar!"</p>
+            <h5>- Marcelo Manzano</h5>
+          </div>
+        </div>
+  
+        <!-- Depoimento 3 -->
+        <div class="col-md-12 align-items-center testimonial-box-sm mt-4"> <!-- d-flex REMOVED> -->
+          <div class="testimonial-image">
+            <img src="https://via.placeholder.com/80" alt="Cliente 3" class="image-shadow">
+          </div>
+          <div class="testimonial-content p-1" style="flex: 1;">
+            <p>"Véio, o conhecimento que ele passa lá não é coisinha teórica não... Se você quer crescer no mercado, entre agora!"</p>
+            <h5>- Breno Marchesini</h5>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  
-  <style>
-    /* Background color of the testimonial section */
-    .section-colored {
-      background-color: #0F0F0F; /* Dark background */
-      padding: 50px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap; /* Ensures responsive behavior */
-    }
-  
-    /* General style for the testimonial boxes */
-    .testimonial-box {
-      display: flex;
-      align-items: center;
-      background-color: #ffffff; /* White background for the comment */
-      padding: 20px;
-      border-radius: 15px;
-      color: #000000;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      position: relative;
-      transition: transform 0.3s ease, background-color 0.3s ease;
-    }
-  
-    /* Testimonials expand effect */
-    .testimonial-box:hover {
-      transform: scale(1.03);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    }
-  
-    /* Quadrada com sombra externa para as imagens */
-    .testimonial-image img {
-      width: 100px;
-      height: 100px;
-      border-radius: 10px; /* Imagem quadrada com cantos levemente arredondados */
-      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5); /* Sombra saindo da imagem */
-      position: absolute;
-      right: -20px; /* Leve sobreposição para fora da caixa */
-    }
-  
-    /* Text inside testimonials */
-    .testimonial-content {
-      flex: 1;
-      margin-right: 70px; /* Ajustado para a imagem fora da div */
-      color: #000000;
-    }
-  
-    /* Adjusting the title style */
 
-    .testimonial-heading{
-      align-content: center;
-    }
-
-    .testimonial-heading h2 {
-      color: #1DB954;
-      font-weight: bold;
-    }
-  
-    /* Highlighting testimonial text */
-    p {
-      font-size: 1rem;
-      font-style: italic;
-    }
-  
-    /* Forcing testimonials to align on the right, with fixed width */
-    .testimonial-container {
-      max-width: 50%;
-    }
-  
-    /* Responsividade para telas menores (celulares/tablets) */
-    @media (max-width: 768px) {
-      .testimonial-container {
-        max-width: 100%;
-      }
-  
-      /* Empilhar depoimentos e título no mobile */
-      .section-colored {
-        flex-direction: column;
-      }
-  
-      /* Ajustar o posicionamento da imagem no mobile */
-      .testimonial-image img {
-        position: static;
-        /* margin-bottom: 20px; */
-        box-shadow: none;
-      }
-  
-      .testimonial-content {
-        margin-right: 0;
-      }
-    }
-  </style>
   <div class="mx-auto col-sm-10 col-md-10">
       <!-- Purchase Button -->
       <div class="purchase-btn-container">
