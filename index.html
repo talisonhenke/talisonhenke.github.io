@@ -386,31 +386,9 @@
       /* position: relative; */
     }
 
-    /* fontes mobile */
-    @media only screen and (max-width: 576px) {
-      .main-title{
-          font-size: 1.2rem;
-      }
-      .btn {
-          font-size: 1rem;
-      }
-      .testimonial-heaading h2{
-        font-size: 1.5rem;
-      }
-      .final-button{
-        width: 80%;
-      }
-    }
     .section-light {
       background-color: #0f0f0f;
       padding: 50px 15px;
-      border-radius: 10px;
-      margin-top: 30px;
-    }
-    .section-dark {
-      background-color: #2b2b2b;
-      color: white;
-      padding: 50px;
       border-radius: 10px;
       margin-top: 30px;
     }
@@ -508,6 +486,34 @@
   h2 {
     color: #1DB954;
   }
+ /* Change accordion icon color */
+  .accordion {
+            --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+            --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='black'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+  }
+  /* fontes mobile */
+  @media only screen and (max-width: 576px) {
+      .main-title{
+          font-size: 1.2rem;
+      }
+      .btn {
+          font-size: 1rem;
+      }
+      .testimonial-heaading h2{
+        font-size: 1.5rem;
+      }
+      .final-button{
+        width: 80%;
+      }
+      body, html {
+      background-size: 800px 820px;
+
+    }
+    /* radius remove on small screens */
+    .text-overlay, .section-light, .section, .section-faq, .section-colored {
+        border-radius: 0;
+    }
+    }
 </style>
 
 </head>
@@ -717,7 +723,7 @@
             <h5>- BranKERIA</h5>
           </div>
           <div class="testimonial-image">
-            <img src="images/perfil melhorado2.jpg" alt="Cliente 2" class="image-shadow">
+            <img src="images/perfil melhorado3.jpg" alt="Cliente 2" class="image-shadow">
           </div>
         </div>
   
@@ -746,7 +752,7 @@
         <!-- Depoimento 2 -->
         <div class="col-md-12  align-items-center testimonial-box-sm mt-4"> <!-- d-flex REMOVED> -->
           <div class="testimonial-image">
-            <img src="images/perfil melhorado2.jpg" alt="Cliente 2" class="image-shadow">
+            <img src="images/perfil melhorado3.jpg" alt="Cliente 2" class="image-shadow">
           </div>
           <div class="testimonial-content p-1" style="flex: 1;">
             <p>"Entrei no Close Friends do ebook há 1 ano e o mês passado renovei por mais 1 ano. Vale muito a pena entrar!"</p>
