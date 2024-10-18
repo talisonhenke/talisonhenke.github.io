@@ -3,7 +3,9 @@ body, html {
     height: 100%;
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    background-image: url('images/bgtest4.jpg');
+    color: #ffffff;
+    text-align: center;
+    background-image: url('../images/bgtest4.jpg');
     background-repeat: repeat-y;
     background-size: 105vw 100vh;
 
@@ -15,68 +17,8 @@ body, html {
   p, ul {
     font-family: 'Poppins', sans-serif;
     font-weight: 300;
-  }
-
-/* Copy section ------------------------------------------  */
- .texto_copy{
-  font-size: 1.4rem;
- }
-
- .lista_copy{
-  font-size: 1.4rem;
- }
-
- /* Navbar --------------------------------------------------- */
-.navbar {
-    background-color: #00FF7F;
-}
-.foot_nav{
-    background-color: #000000;
-}
-.navbar-brand {
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-}
-.navbar-brand:hover {
-    color: rgb(0, 0, 0);
-    text-shadow: 1px 1px rgba(0, 0, 0, 0.9);
-}
-.navbar-nav{
-    min-width: 100%;;
-    width: 100%;
-}
-.nav-item{  
-    margin: 0;
-    padding: 0;
-}
-.nav-item:hover{  
-        background-color: #000;
-}
-.nav-link{
-    padding: 10px 0;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    display: block;
-}
-.navbar-toggler {
-    border-color: rgb(0, 0, 0);
-}
-.navbar-toggler-icon {
-    color: rgb(0, 0, 0);
-}
-.menu-button{  /* small screens menu button color */
-    animation: pulse 2s infinite;
-    color: rgb(0, 0, 0);
-    font-size: 2rem;
-}
-  /* FOOTER NAVBAR ------------------ */
-.foot_item .nav-link{
     color: #ffffff;
-    width: 100%;
-}
-.foot_item:hover .nav-link{
-    color:#00FF7F;
-}
+  }
 
 /* MAIN BUTTON ------------ */
 
@@ -131,8 +73,79 @@ body, html {
 
 .btn-container {
     text-align: center;
-    margin-top: 30px;
-  }
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 0;
+}
+
+
+/* Copy section ------------------------------------------  */
+.copy-section h1, .copy-section h2 {
+    color: #1DB954;
+    margin: 10px 0;
+}
+.copy-section ul {
+    margin: 25px 0;
+}
+.texto_copy{
+    font-size: 1.4rem;
+}
+
+ .lista_copy{
+    text-align: left;
+    font-size: 1.4rem;
+ }
+
+ /* Navbar --------------------------------------------------- */
+.navbar {
+    background-color: #00FF7F;
+}
+.foot_nav{
+    background-color: #000000;
+}
+.navbar-brand {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+.navbar-brand:hover {
+    color: rgb(0, 0, 0);
+    text-shadow: 1px 1px rgba(0, 0, 0, 0.9);
+}
+.navbar-nav{
+    min-width: 100%;;
+    width: 100%;
+}
+.nav-item{  
+    margin: 0;
+    padding: 0;
+}
+.nav-item:hover{  
+        background-color: #000;
+}
+.nav-link{
+    padding: 10px 0;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    display: block;
+}
+.navbar-toggler {
+    border-color: rgb(0, 0, 0);
+}
+.navbar-toggler-icon {
+    color: rgb(0, 0, 0);
+}
+.menu-button{  /* small screens menu button color */
+    /* animation: pulse-btn 2s infinite; */
+    color: rgb(0, 0, 0);
+    font-size: 2rem;
+}
+  /* FOOTER NAVBAR ------------------ */
+.foot_item .nav-link{
+    color: #ffffff;
+    width: 100%;
+}
+.foot_item:hover .nav-link{
+    color:#00FF7F;
+}
 
 /* BANNER SECTION ----------------------------------- */
 
@@ -347,6 +360,10 @@ body, html {
     margin-right: 70px; /* Ajustado para a imagem fora da div */
     color: #000000;
 }
+.testimonial-content p{
+    color: #000;
+    font-weight: bold;
+}
 
 /* Adjusting the title style */
 
@@ -477,13 +494,13 @@ h2 {
         font-size: 1.5rem;
     }
     .final-button{
-        width: 80%;
+        width: 100%;
     }
     body, html {
         background-size: 800px 820px;
     }
     /* radius remove on small screens */
-    .text-overlay, .description-section, .section, .section-faq, .section-colored {
+    .text-overlay, .description-section, .section, .section-faq, .section-colored, .btn-container {
         border-radius: 0;
     }
 }
