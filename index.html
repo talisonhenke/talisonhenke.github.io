@@ -185,7 +185,7 @@
       font-weight: bold;
     }
     
-    .section {
+    .copy-section {
       /* max-width: 800px; */
       /* margin: 0 auto; */
       padding: 20px;
@@ -450,7 +450,7 @@
       /* position: relative; */
     }
 
-    .section-light {
+    .description-section {
       background-color: #0f0f0f;
       padding: 50px 15px;
       border-radius: 10px;
@@ -471,37 +471,15 @@
         background-color: rgba(0, 0, 0, 0.3);
     }
 
-    .testimonials .testimonial-box {
-      transition: transform 0.3s ease;
-    }
     .testimonials .testimonial-box:hover img {
       transform: scale(1.2);
     }
     /* sm */
-    .testimonials .testimonial-box-sm {
-      transition: transform 0.3s ease;
-    }
     .testimonials .testimonial-box-sm img {
       width: 150px;
       height: 150px;
     }
-    .purchase-btn {
-      display: inline-block;
-      background-color: #00FF7F;
-      color: black;
-      padding: 15px 30px;
-      text-align: center;
-      border: none;
-      font-size: 1.5rem;
-      border-radius: 5px;
-      transition: all 0.3s ease;
-      text-decoration: none;
-    }
-    .purchase-btn:hover {
-      background-color: #28a428;
-      transform: scale(1.05);
-    }
-    .purchase-btn-container {
+    .btn-container {
       text-align: center;
       margin-top: 30px;
     }
@@ -511,9 +489,6 @@
       text-align: center;
       color: #fff;
       margin-top: 50px;
-    }
-    .footer {
-
     }
   </style>
 
@@ -577,8 +552,7 @@
       background-size: 800px 820px;
 
     }
-    /* radius remove on small screens */
-    .text-overlay, .section-light, .section, .section-faq, .section-colored {
+    .text-overlay, .description-section, .section, .section-faq, .section-colored {
         border-radius: 0;
     }
     }
@@ -644,7 +618,7 @@
   
 
   <!-- Content Section -->
-  <div class="section-light mx-auto col-sm-12 col-md-10" id="sobre">
+  <div class="description-section mx-auto col-sm-12 col-md-10" id="sobre">
     <div class="row content-section">
       <div class="col-lg-12 col-md-12">
         <h2>Sobre o Ebook que vai mudar sua vida:</h2>
@@ -660,7 +634,7 @@
     </div>
     
     <!-- Purchase Button -->
-    <div class="purchase-btn-container">
+    <div class="btn-container">
       <a href="#compra" class="btn">Comece Sua Transformação Agora!</a>
     </div>
   </div>
@@ -669,7 +643,7 @@
 </head>
 <body>
 
-  <div class="section mx-auto col-sm-12 col-md-10 mt-4" id="copy">
+  <div class="copy-section mx-auto col-sm-12 col-md-10 mt-4" id="copy">
     <h1>Guia Completo para Perda de Peso – Por Apenas R$15!</h1>
     
     <p class="texto_copy">Você está cansada de dietas que não funcionam? Já tentou de tudo e nunca consegue manter o peso? Que tal mudar isso de uma vez por todas com um plano simples, acessível e comprovado?</p>
@@ -844,7 +818,7 @@
 
   <div class="final-button mx-auto col-sm-10 col-md-10" id="purchase">
       <!-- Purchase Button -->
-      <div class="purchase-btn-container">
+      <div class="btn-container">
         <a href="#compra" class="btn">Compre Agora e Comece a Transformar sua Vida!</a>
        </div>
   </div>
