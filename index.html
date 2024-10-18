@@ -61,9 +61,16 @@
         .navbar {
             background-color: #00FF7F;
         }
+        .foot_nav{
+          background-color: #000000;
+        }
         .navbar-brand {
             color: rgb(0, 0, 0);
             font-weight: bold;
+        }
+        .navbar-brand:hover {
+            color: rgb(0, 0, 0);
+            text-shadow: 1px 1px rgba(0, 0, 0, 0.9);
         }
         .navbar-collapse{
           /* background-color: #ff4500; */
@@ -75,17 +82,26 @@
           /* padding: 0;
           margin: 0; */
         }
-        .nav-link{
-          margin-top: 10px;
-          color: rgb(0, 0, 0);
-          font-weight: bold;
-          /* margin: 0;
-          padding: 0; */
-        }
         .nav-item{  
           margin: 0;
-          padding: 0%;
-          /* width: 25%; */
+          padding: 0;
+        }
+        .nav-item:hover{  
+          background-color: #000;
+          /* color: #fff; */
+        }
+        .nav-link{
+          padding: 10px 0;
+          color: rgb(0, 0, 0);
+          font-weight: bold;
+          display: block;
+        }
+        .foot_item .nav-link{
+          color: #ffffff;
+          width: 100%;
+        }
+        .foot_item:hover .nav-link{
+          color:#00FF7F;
         }
         .navbar-toggler {
             border-color: rgb(0, 0, 0);
@@ -93,29 +109,55 @@
         .navbar-toggler-icon {
             color: rgb(0, 0, 0);
       }
-      /* .navbarDiv{
-        width: 100%;
-      } */
-
-  /* .menu-button{
-	    animation: pulse 2s infinite;
-      color: rgb(59, 255, 102);
-      font-size: 2rem;
-    }
-    @keyframes pulse {
+      /* small screens menu button color */
+      .menu-button{
+        animation: pulse 2s infinite;
+        color: rgb(0, 0, 0);
+        font-size: 2rem;
+      }
+      /* @keyframes pulse {
       0% {
-            color: rgb(59, 255, 102);
+            color: rgb(0, 0, 0);
       }
 
       70% {
-        color: rgba(255, 255, 255);
+        color: rgb(255, 115, 0);
       }
 
       100% {
-          color: rgba(59, 255, 102);
+          color: rgb(0, 0, 0);
       }
     } */
-    
+      /* .navbarDiv{
+        width: 100%;
+      } */
+    @keyframes pulse-btn {
+      0% {
+        transform: scale(1.00);
+      }
+
+      70% {
+        transform: scale(1.03);
+      }
+
+      100% {
+        transform: scale(1.00);
+      }
+    }
+    @keyframes pulse-btn-hover {
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.0);
+      }
+
+      30% {
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.0);
+      }
+    }
+
     .btn {
       display: inline-block;
       font-size: 1.6rem;
@@ -128,11 +170,13 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       margin: 20px 0;
       transition: background-color 0.3s ease, transform 0.3s ease;
+      animation: pulse-btn 5s infinite;
     }
     
     .btn:hover {
       background-color: #00cc6e;
       color: #000000;
+      animation: pulse-btn-hover 1s infinite;
       transform: scale(1.07);
     }
     
@@ -176,10 +220,11 @@
     }
 
     .subtitle {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         /* color: #ffffff; */
         color: #ffeb3b;
         margin-top: 20px;
+        font-weight: bold;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
     }
 
@@ -218,6 +263,25 @@
 
         .subtitle {
             font-size: 1.2rem;
+        }
+
+        .timer {
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            font-size: 1.2rem;
+        }
+    }
+    /* Responsividade < 576px */
+
+    @media only screen and (max-width: 576px) {
+        .main-title {
+            font-size: 2.6rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
         }
 
         .timer {
@@ -442,11 +506,14 @@
       margin-top: 30px;
     }
     .footer {
-      background-color: #00FF7F;
+      background-color: #000;
       padding: 20px;
       text-align: center;
-      color: black;
+      color: #fff;
       margin-top: 50px;
+    }
+    .footer {
+
     }
   </style>
 
@@ -486,6 +553,7 @@
   h2 {
     color: #1DB954;
   }
+
  /* Change accordion icon color */
   .accordion {
             --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
@@ -525,7 +593,7 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Meu Ebook</a>
         <button class="navbar-toggler" type="button" id="menuToggle">
-            <span class="navbar-toggler-icon"></span>
+            <span class="bi bi-list menu-button"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarMenu">
             <ul class="navbar-nav mb-lg-0 justify-content-end pe-4 text-center">
@@ -782,9 +850,31 @@
   </div>
 
   <!-- Footer -->
-  <div class="footer">
-    <p class="fw-bold">Receitas Saudáveis para Emagrecer - Todos os direitos reservados.</p>
+<footer class="footer text-light py-4">
+  <div class="container">
+    <h5 class="fw-bold mb-4">Navegue por aqui</h5>
+    <nav class="navbar foot_nav">
+      <ul class="navbar-nav w-100 flex-column flex-md-row justify-content-between text-center">
+        <li class="nav-item foot_item">
+          <a class="nav-link" href="#sobre">Sobre</a>
+        </li>
+        <li class="nav-item foot_item">
+          <a class="nav-link" href="#copy">Guia completo</a>
+        </li>
+        <li class="nav-item foot_item">
+          <a class="nav-link" href="#faq-section">Perguntas frequentes</a>
+        </li>
+        <li class="nav-item foot_item">
+          <a class="nav-link" href="#testimonials">Depoimentos</a>
+        </li>
+        <li class="nav-item foot_item">
+          <a class="nav-link" href="#purchase">Comprar</a>
+        </li>
+      </ul>
+    </nav>
+    <p class="text-center mt-3">Receitas Saudáveis para Emagrecer - Todos os direitos reservados.</p>
   </div>
+</footer>
 
   <script>
     // Timer de contagem regressiva de 7 dias
@@ -820,8 +910,12 @@
         const menu = document.getElementById('navbarMenu');
         if (menu.classList.contains('collapse')) {
             menu.classList.remove('collapse');
+            document.querySelector('.navbar-toggler .menu-button').classList.remove('bi-list');
+            document.querySelector('.navbar-toggler .menu-button').classList.add('bi-x');
         } else {
             menu.classList.add('collapse');
+            document.querySelector('.navbar-toggler .menu-button').classList.add('bi-list');
+            document.querySelector('.navbar-toggler .menu-button').classList.remove('bi-x');
         }
     });
 </script>
