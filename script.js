@@ -84,31 +84,44 @@ function formatCurrency(value) {
     const entradaPadraoCorretor = (valorReal - financiamento) + totalDocPadrao;
   
     const tabelaCorretor = `
-      <h5>${nomeCliente} - CONDIÇÃO DE FINANCIAMENTO FACILITADA</h5>
-      <table class="table table-bordered">
-        <tr class="table-light"><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
-        <tr class="table-secondary"><th>Documentação</th><td>${formatCurrency(totalDocOver)}</td></tr>
-        <tr class="table-secondary"><th>Dif. imposto terreno</th><td>${formatCurrency(ValorDifImposto)}</td></tr>
-        <tr class="table-light"><th>Entrada</th><td>${formatCurrency(valorReal)} (Construção) - ${formatCurrency(recursoTotal)} (Financiamento) + ${formatCurrency(valorAba)} (Aba) = ${formatCurrency((valorReal - recursoTotal) + valorAba)} (Total)</td></tr>
-        <tr class="table-secondary"><th>Parcelas</th><td>${formatCurrency(parcelasOver)}</td></tr>
-        ${(jurosOver && parseFloat(jurosOver) !== 0) ? `
-          <tr class="table-light">
-            <th>Taxa de Juros</th>
-            <td>${parseFloat(jurosOver).toFixed(2)}% A.A</td>
-        </tr>` : ""}
-      </table>
-      <h5>${nomeCliente} - CONDIÇÃO DE FINANCIAMENTO PADRÃO</h5>
-      <table class="table table-bordered">
-        <tr class="table-light"><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
-        <tr class="table-secondary"><th>Documentação</th><td>${formatCurrency(totalDocPadrao)}</td></tr>
-        <tr class="table-light"><th>Entrada</th><td>${formatCurrency(valorReal)} (Construção) - ${formatCurrency(financiamento)} (Financiamento) - ${formatCurrency(subsidio)} (Subsídio)  = ${formatCurrency((valorReal - financiamento) - subsidio)} (Total)</td></tr>
-        ${(jurosPadrao && parseFloat(jurosPadrao) !== 0) ? `
-          <tr class="table-light">
-            <th>Taxa de Juros</th>
-            <td>${parseFloat(jurosPadrao).toFixed(2)}% A.A</td>
-          </tr>` : ""}
-      </table>
-    `;
+  <h5>${nomeCliente} - CONDIÇÃO DE FINANCIAMENTO FACILITADA</h5>
+  <table class="table table-bordered" id="tabelaFacilitadaCorretor">
+    <tr class="table-light"><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
+    <tr class="table-secondary"><th>Documentação</th><td>${formatCurrency(totalDocOver)}</td></tr>
+    <tr class="table-secondary"><th>Dif. imposto terreno</th><td>${formatCurrency(ValorDifImposto)}</td></tr>
+    <tr class="table-light"><th>Entrada</th><td>${formatCurrency(valorReal)} (Construção) - ${formatCurrency(recursoTotal)} (Financiamento) + ${formatCurrency(valorAba)} (Aba) = ${formatCurrency((valorReal - recursoTotal) + valorAba)} (Total)</td></tr>
+    <tr class="table-secondary"><th>Parcelas</th><td>${formatCurrency(parcelasOver)}</td></tr>
+    ${(jurosOver && parseFloat(jurosOver) !== 0) ? `
+      <tr class="table-light">
+        <th>Taxa de Juros</th>
+        <td>${parseFloat(jurosOver).toFixed(2)}% A.A</td>
+      </tr>` : ""}
+  </table>
+
+  <h5 class="mt-4">${nomeCliente} - CONDIÇÃO DE FINANCIAMENTO PADRÃO</h5>
+  <table class="table table-bordered" id="tabelaPadraoCorretor">
+    <tr class="table-light"><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
+    <tr class="table-secondary"><th>Documentação</th><td>${formatCurrency(totalDocPadrao)}</td></tr>
+    <tr class="table-light"><th>Entrada</th><td>${formatCurrency(valorReal)} (Construção) - ${formatCurrency(financiamento)} (Financiamento) - ${formatCurrency(subsidio)} (Subsídio) = ${formatCurrency((valorReal - financiamento) - subsidio)} (Total)</td></tr>
+    <tr class="table-secondary"><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)}</td></tr>
+    ${(jurosPadrao && parseFloat(jurosPadrao) !== 0) ? `
+      <tr class="table-light">
+        <th>Taxa de Juros</th>
+        <td>${parseFloat(jurosPadrao).toFixed(2)}% A.A</td>
+      </tr>` : ""}
+  </table>
+  <div class="d-flex flex-column flex-sm-row justify-content-center gap-2 mt-2">
+  <button class="btn btn-outline-primary" onclick="copiarTabelaFacilitada('tabelaFacilitadaCorretor')">
+    Copiar Tabela Facilitada Corretor
+  </button>
+  <button class="btn btn-outline-primary" onclick="copiarTabelaPadrao('tabelaPadraoCorretor')">
+    Copiar Tabela Padrão Corretor
+  </button>
+</div>
+
+`;
+
+
   
     document.getElementById("tabelaCorretor").innerHTML = tabelaCorretor;
   
@@ -126,7 +139,7 @@ function formatCurrency(value) {
   
     const tabelaCliente = `
       <h5>${nomeCliente} - CONDIÇÃO DE FINANCIAMENTO FACILITADA</h5>
-      <table class="table table-bordered">
+      <table class="table table-bordered" id="tabelaFacilitadaCliente">
         <tr class="table-light"><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
         <tr class="table-secondary"><th>Entrada</th><td>${formatCurrency(entradaFacilitadaCliente)}</td></tr>
         <tr class="table-light"><th>Parcelas</th><td>${formatCurrency(parcelasOver)}</td></tr>
@@ -137,7 +150,7 @@ function formatCurrency(value) {
         </tr>` : ""}
       </table>
       <h5>${nomeCliente} - CONDIÇÃO DE FINANCIAMENTO PADRÃO</h5>
-      <table class="table table-bordered">
+      <table class="table table-bordered" id="tabelaPadraoCliente">
         <tr class="table-light"><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
         <tr class="table-secondary"><th>Entrada</th><td>${formatCurrency(entradaPadraoCliente)}</td></tr>
         <tr class="table-light"><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)}</td></tr>
@@ -147,12 +160,71 @@ function formatCurrency(value) {
             <td>${parseFloat(jurosPadrao).toFixed(2)}% A.A</td>
           </tr>` : ""}
       </table>
+      <div class="d-flex flex-column flex-sm-row justify-content-center gap-2 mt-2">
+        <button class="btn btn-outline-primary" onclick="copiarTabelaFacilitada('tabelaFacilitadaCliente')">
+          Copiar Tabela Facilitada Cliente
+        </button>
+        <button class="btn btn-outline-primary" onclick="copiarTabelaPadrao('tabelaPadraoCliente')">
+          Copiar Tabela Padrão Cliente
+        </button>
+      </div>
+
     `;
   
     document.getElementById("tabelaCliente").innerHTML = tabelaCliente;
   } 
+
+  // explicação dos campos
+  document.addEventListener('DOMContentLoaded', function () {
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltipTriggerList.forEach(tooltipTriggerEl => {
+      new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  });
   
   // Você pode adicionar listeners aqui para formatar os campos conforme o usuário digita (como máscaras).
+
+
+  function copiarTabelaFacilitada(idTabela) {
+    const tabela = document.getElementById(idTabela);
+    const nomeCliente = document.getElementById("nomeCliente").value; 
+    if (!tabela) return;
+  
+    let texto = `*Condição facilitada - ${nomeCliente}* \n\n`;
+    const linhas = tabela.querySelectorAll("tr");
+    linhas.forEach((linha) => {
+      const th = linha.querySelector("th")?.innerText || "";
+      const td = linha.querySelector("td")?.innerText || "";
+      texto += `*${th}:* ${td}\n`;
+    });
+  
+    navigator.clipboard.writeText(texto).then(() => {
+      alert("Tabela copiada para a área de transferência!");
+    }).catch(err => {
+      alert("Erro ao copiar: " + err);
+    });
+  }
+
+  function copiarTabelaPadrao(idTabela) {
+    const tabela = document.getElementById(idTabela);
+    const nomeCliente = document.getElementById("nomeCliente").value; 
+    if (!tabela) return;
+  
+    let texto = `*Condição padrão - ${nomeCliente}* \n\n`;
+    const linhas = tabela.querySelectorAll("tr");
+    linhas.forEach((linha) => {
+      const th = linha.querySelector("th")?.innerText || "";
+      const td = linha.querySelector("td")?.innerText || "";
+      texto += `*${th}:* ${td}\n`;
+    });
+  
+    navigator.clipboard.writeText(texto).then(() => {
+      alert("Tabela copiada para a área de transferência!");
+    }).catch(err => {
+      alert("Erro ao copiar: " + err);
+    });
+  }
+  
 
   //Mostrar quantidade de parcelas
   //<tr class="table-light"><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)} (${qtdParcelas} vezes)</td></tr>

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Financiamento de Aquisição de Terreno + Construção</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -19,22 +20,54 @@
       <div class="section-title">Valores Padrão</div>
       <form id="formPadrao">
         <div class="mb-3">
-          <label for="valorTerrenoPadrao" class="form-label">Valor do Terreno</label>
+          <label for="valorTerrenoPadrao" class="form-label">
+            Valor do Terreno
+            <i class="bi bi-question-circle-fill text-primary"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               title="Informe o valor total do terreno que será financiado.">
+            </i>
+          </label>
           <input type="text" class="form-control money" id="valorTerrenoPadrao">
         </div>
+      
         <div class="mb-3">
-          <label for="valorM2Padrao" class="form-label">Valor m²</label>
+          <label for="valorM2Padrao" class="form-label">
+            Valor m²
+            <i class="bi bi-question-circle-fill text-primary"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               title="Informe o custo estimado por metro quadrado da construção.">
+            </i>
+          </label>
           <input type="text" class="form-control money" id="valorM2Padrao">
         </div>
+      
         <div class="mb-3">
-          <label for="qtdM2Padrao" class="form-label">Tamanho da construção (m²)</label>
+          <label for="qtdM2Padrao" class="form-label">
+            Tamanho da construção (m²)
+            <i class="bi bi-question-circle-fill text-primary"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               title="Informe a metragem da obra, excluindo áreas extras.">
+            </i>
+          </label>
           <input type="text" class="form-control" id="qtdM2Padrao">
         </div>
+      
         <div class="mb-3">
-          <label for="porcentagemDifImposto" class="form-label">% Dif. Imposto Terreno</label>
+          <label for="porcentagemDifImposto" class="form-label">
+            % Dif. Imposto Terreno
+            <i class="bi bi-question-circle-fill text-primary"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               title="A diferença percentual usada para ajustes de imposto sobre o terreno.">
+            </i>
+          </label>
           <input type="text" class="form-control" id="porcentagemDifImposto" value="15">
         </div>
       </form>
+      
     </div>
 
     <!-- Valores Overpricing -->
@@ -42,26 +75,56 @@
       <div class="section-title">Valores Overpricing</div>
       <form id="formOverpricing">
         <div class="mb-3">
-          <label for="valorTerrenoOver" class="form-label">Valor do Terreno</label>
+          <label for="valorTerrenoOver" class="form-label">
+            Valor do Terreno
+            <span data-bs-toggle="tooltip" title="Informe o valor do terreno em reais.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control money" id="valorTerrenoOver">
         </div>
+      
         <div class="mb-3">
-          <label for="valorM2Over" class="form-label">Valor m²</label>
+          <label for="valorM2Over" class="form-label">
+            Valor m²
+            <span data-bs-toggle="tooltip" title="Informe o valor do metro quadrado para a construção.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control money" id="valorM2Over">
         </div>
+      
         <div class="mb-3">
-          <label for="qtdM2Over" class="form-label">Tamanho da construção (m²)</label>
+          <label for="qtdM2Over" class="form-label">
+            Tamanho da construção (m²)
+            <span data-bs-toggle="tooltip" title="Área principal da construção, sem considerar acréscimos.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control" id="qtdM2Over">
         </div>
+      
         <div class="mb-3">
-          <label for="medidaAba" class="form-label">Medida aba (m²)</label>
+          <label for="medidaAba" class="form-label">
+            Medida aba (m²)
+            <span data-bs-toggle="tooltip" title="Área adicional da construção usada para simular aumento da obra.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control" id="medidaAba">
         </div>
+      
         <div class="mb-3">
-          <label for="valorAba" class="form-label">Valor aba</label>
+          <label for="valorAba" class="form-label">
+            Valor aba
+            <span data-bs-toggle="tooltip" title="Valor fixo adicionado ao total na simulação facilitada.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control money" id="valorAba" value="R$ 3.000,00">
         </div>
       </form>
+      
     </div>
   </div>
 
@@ -72,38 +135,85 @@
       <div class="section-title">Dados do Cliente</div>
       <form id="formCliente">
         <div class="mb-3">
-          <label for="nomeCliente" class="form-label">Nome do cliente</label>
+          <label for="nomeCliente" class="form-label">
+            Nome do cliente
+            <span data-bs-toggle="tooltip" title="Nome completo do cliente para identificar a simulação.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control" id="nomeCliente">
         </div>
+      
         <div class="mb-3">
-          <label for="creditoMaximo" class="form-label">Crédito máximo</label>
+          <label for="creditoMaximo" class="form-label">
+            Crédito máximo
+            <span data-bs-toggle="tooltip" title="Limite de crédito que o cliente pode financiar.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control money" id="creditoMaximo">
         </div>
+      
         <div class="mb-3">
-          <label for="subsidio" class="form-label">Subsídio</label>
+          <label for="subsidio" class="form-label">
+            Subsídio
+            <span data-bs-toggle="tooltip" title="Valor do subsídio do governo a ser abatido do valor total.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control money" id="subsidio">
         </div>
+      
         <div class="mb-3">
-          <label for="parcelasPadrao" class="form-label">Parcelas padrão</label>
+          <label for="parcelasPadrao" class="form-label">
+            Parcelas padrão
+            <span data-bs-toggle="tooltip" title="Valor mensal das parcelas para o financiamento padrão.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control money" id="parcelasPadrao">
         </div>
+      
         <div class="mb-3">
-          <label for="parcelasOver" class="form-label">Parcelas overprice</label>
+          <label for="parcelasOver" class="form-label">
+            Parcelas overprice
+            <span data-bs-toggle="tooltip" title="Valor mensal das parcelas considerando o acréscimo simulado.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control money" id="parcelasOver">
         </div>
+      
         <div class="mb-3">
-          <label for="qtdParcelas" class="form-label">Quantidade de parcelas</label>
+          <label for="qtdParcelas" class="form-label">
+            Quantidade de parcelas
+            <span data-bs-toggle="tooltip" title="Número total de parcelas a serem pagas no financiamento.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control" id="qtdParcelas">
         </div>
+      
         <div class="mb-3">
-          <label for="jurosPadrao" class="form-label">Taxa de juros padrão</label>
+          <label for="jurosPadrao" class="form-label">
+            Taxa de juros padrão
+            <span data-bs-toggle="tooltip" title="Taxa de juros anual aplicada no financiamento padrão.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control" id="jurosPadrao">
         </div>
+      
         <div class="mb-3">
-          <label for="jurosOver" class="form-label">Taxa de juros overprice</label>
+          <label for="jurosOver" class="form-label">
+            Taxa de juros overprice
+            <span data-bs-toggle="tooltip" title="Taxa de juros anual aplicada na simulação overprice.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control" id="jurosOver">
         </div>
-      </form>
+      </form>      
     </div>
 
     <!-- Documentação -->
@@ -111,22 +221,45 @@
       <div class="section-title">Documentação</div>
       <form id="formDocumentacao">
         <div class="mb-3">
-          <label for="registroImoveis" class="form-label">Registro de imóveis</label>
+          <label for="registroImoveis" class="form-label">
+            Registro de imóveis
+            <span data-bs-toggle="tooltip" title="Valor estimado para o registro do imóvel no cartório.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control" id="registroImoveis" value="R$ 1.200,00">
         </div>
+      
         <div class="mb-3">
-          <label for="taxasCaixa" class="form-label">Taxas da CAIXA</label>
+          <label for="taxasCaixa" class="form-label">
+            Taxas da CAIXA
+            <span data-bs-toggle="tooltip" title="Taxas cobradas pela CAIXA para análise, avaliação e contratação do financiamento.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control" id="taxasCaixa" value="R$ 3.000,00">
         </div>
+      
         <div class="mb-3">
-          <label for="porcentagemEntradaItbi" class="form-label">% Entrada ITBI</label>
+          <label for="porcentagemEntradaItbi" class="form-label">
+            % Entrada ITBI
+            <span data-bs-toggle="tooltip" title="Percentual de ITBI cobrado sobre o valor de entrada.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control" id="porcentagemEntradaItbi" value="3">
         </div>
+      
         <div class="mb-3">
-          <label for="porcentagemFinanciamentoItbi" class="form-label">% Financiamento ITBI</label>
+          <label for="porcentagemFinanciamentoItbi" class="form-label">
+            % Financiamento ITBI
+            <span data-bs-toggle="tooltip" title="Percentual de ITBI cobrado sobre o valor financiado.">
+              <i class="bi bi-question-circle-fill text-primary"></i>
+            </span>
+          </label>
           <input type="text" class="form-control" id="porcentagemFinanciamentoItbi" value="0.5">
         </div>
-      </form>
+      </form>      
     </div>
   </div>
 
