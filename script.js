@@ -190,18 +190,18 @@ function formatCurrency(value) {
     const nomeCliente = document.getElementById("nomeCliente").value; 
     if (!tabela) return;
   
-    let texto = `*Condição facilitada - ${nomeCliente}* \n\n`;
+    let texto = `*Condição facilitada* *- ${nomeCliente}* \n`;
     const linhas = tabela.querySelectorAll("tr");
     linhas.forEach((linha) => {
       const th = linha.querySelector("th")?.innerText || "";
       const td = linha.querySelector("td")?.innerText || "";
-      texto += `*${th}:* ${td}\n`;
+      texto += `\n*${th}:* ${td}`;
     });
-  
+    
     navigator.clipboard.writeText(texto).then(() => {
-      alert("Tabela copiada para a área de transferência!");
+      mostrarToast("Tabela copiada para a área de transferência!");
     }).catch(err => {
-      alert("Erro ao copiar: " + err);
+      mostrarToast("Erro ao copiar: " + err, true);
     });
   }
 
@@ -210,21 +210,34 @@ function formatCurrency(value) {
     const nomeCliente = document.getElementById("nomeCliente").value; 
     if (!tabela) return;
   
-    let texto = `*Condição padrão - ${nomeCliente}* \n\n`;
+    let texto = `*Condição padrão* *- ${nomeCliente}* \n`;
     const linhas = tabela.querySelectorAll("tr");
     linhas.forEach((linha) => {
       const th = linha.querySelector("th")?.innerText || "";
       const td = linha.querySelector("td")?.innerText || "";
-      texto += `*${th}:* ${td}\n`;
+      texto += `\n*${th}:* ${td}`;
     });
   
     navigator.clipboard.writeText(texto).then(() => {
-      alert("Tabela copiada para a área de transferência!");
+      mostrarToast("Tabela copiada para a área de transferência!");
     }).catch(err => {
-      alert("Erro ao copiar: " + err);
+      mostrarToast("Erro ao copiar: " + err, true);
     });
   }
   
+  function mostrarToast(mensagem, erro = false) {
+    const toastEl = document.getElementById("toastMensagem");
+    const toastBody = toastEl.querySelector(".toast-body");
+  
+    // Atualiza mensagem e cor
+    toastBody.textContent = mensagem;
+    toastEl.classList.remove("text-bg-primary", "text-bg-danger");
+    toastEl.classList.add(erro ? "text-bg-danger" : "text-bg-primary");
+  
+    // Mostra o toast
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
+  }
 
   //Mostrar quantidade de parcelas
   //<tr class="table-light"><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)} (${qtdParcelas} vezes)</td></tr>
