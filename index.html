@@ -278,22 +278,40 @@
         </div>
       </form>      
     </div>
-    <div class="col-md-12 clientInfo">
-      <div class="section-title text-center">Informações para o cliente</div>
+    <div class="col-md-12 clientInfo text-center fw-bold">
+      <div class="section-title text-center my-1">Informações para o cliente</div>
+    
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="checkbox" id="mostrarDocCliente">
-        <label class="form-check-label" for="mostrarDocCliente">Mostrar Documentação</label>
+        <label class="form-check-label" for="mostrarDocCliente">
+          Mostrar Documentação
+          <span data-bs-toggle="tooltip" title="Adiciona uma linha à tabela do cliente com os custos de documentação.">
+            <i class="bi bi-question-circle-fill text-primary ms-1"></i>
+          </span>
+        </label>
       </div>
+    
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="checkbox" id="mostrarParcelasCliente">
-        <label class="form-check-label" for="mostrarParcelasCliente">Mostrar Nº de parcelas</label>
+        <label class="form-check-label" for="mostrarParcelasCliente">
+          Mostrar Nº de parcelas
+          <span data-bs-toggle="tooltip" title="Mostra a quantidade de parcelas (prazo do financiamento).">
+            <i class="bi bi-question-circle-fill text-primary ms-1"></i>
+          </span>
+        </label>
       </div>
+    
       <div class="form-check form-check-inline">
         <input class="form-check-input" type="checkbox" id="mostrarDifImpostoCliente">
-        <label class="form-check-label" for="mostrarDifImpostoCliente">Mostrar Dif. Imposto</label>
+        <label class="form-check-label" for="mostrarDifImpostoCliente">
+          Mostrar Dif. Imposto
+          <span data-bs-toggle="tooltip" title="Soma o valor da diferença de imposto ao total da entrada do cliente.">
+            <i class="bi bi-question-circle-fill text-primary ms-1"></i>
+          </span>
+        </label>
       </div>
-      
     </div>
+    
   </div>
 
   <!-- Botão Calcular -->
