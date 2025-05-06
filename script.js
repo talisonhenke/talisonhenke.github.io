@@ -78,6 +78,7 @@ function formatCurrency(value) {
   
     const totalDocPadrao = itbiPadrao + registroImoveis + taxasCaixa;
     const totalDocOver = itbiOver + registroImoveis + taxasCaixa;
+
   
     // ===== Tabelas do Corretor =====
     const entradaFacilitadaCorretor = (valorReal - recursoTotal) + valorAba + totalDocOver;
@@ -85,27 +86,27 @@ function formatCurrency(value) {
   
     const tabelaCorretor = `
   <h5>${nomeCliente} - CONDIÇÃO DE FINANCIAMENTO FACILITADA</h5>
-  <table class="table table-bordered" id="tabelaFacilitadaCorretor">
-    <tr class="table-light"><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
-    <tr class="table-secondary"><th>Documentação</th><td>${formatCurrency(totalDocOver)}</td></tr>
-    <tr class="table-secondary"><th>Dif. imposto terreno</th><td>${formatCurrency(ValorDifImposto)}</td></tr>
-    <tr class="table-light"><th>Entrada</th><td>${formatCurrency(valorReal)} (Construção) - ${formatCurrency(recursoTotal)} (Financiamento) + ${formatCurrency(valorAba)} (Aba) = ${formatCurrency((valorReal - recursoTotal) + valorAba)} (Total)</td></tr>
-    <tr class="table-secondary"><th>Parcelas</th><td>${formatCurrency(parcelasOver)}</td></tr>
+  <table class="table table-bordered tabela-zebrada" id="tabelaFacilitadaCorretor">
+    <tr><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
+    <tr><th>Documentação</th><td>${formatCurrency(totalDocOver)}</td></tr>
+    <tr><th>Dif. imposto terreno</th><td>${formatCurrency(ValorDifImposto)}</td></tr>
+    <tr><th>Entrada</th><td>${formatCurrency(valorReal)} (Construção) - ${formatCurrency(recursoTotal)} (Financiamento) + ${formatCurrency(valorAba)} (Aba) = ${formatCurrency((valorReal - recursoTotal) + valorAba)} (Total)</td></tr>
+    <tr><th>Parcelas</th><td>${formatCurrency(parcelasOver)}</td></tr>
     ${(jurosOver && parseFloat(jurosOver) !== 0) ? `
-      <tr class="table-light">
+      <tr>
         <th>Taxa de Juros</th>
         <td>${parseFloat(jurosOver).toFixed(2)}% A.A</td>
       </tr>` : ""}
   </table>
 
   <h5 class="mt-4">${nomeCliente} - CONDIÇÃO DE FINANCIAMENTO PADRÃO</h5>
-  <table class="table table-bordered" id="tabelaPadraoCorretor">
-    <tr class="table-light"><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
-    <tr class="table-secondary"><th>Documentação</th><td>${formatCurrency(totalDocPadrao)}</td></tr>
-    <tr class="table-light"><th>Entrada</th><td>${formatCurrency(valorReal)} (Construção) - ${formatCurrency(financiamento)} (Financiamento) - ${formatCurrency(subsidio)} (Subsídio) = ${formatCurrency((valorReal - financiamento) - subsidio)} (Total)</td></tr>
-    <tr class="table-secondary"><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)}</td></tr>
+  <table class="table table-bordered tabela-zebrada" id="tabelaPadraoCorretor">
+    <tr><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
+    <tr><th>Documentação</th><td>${formatCurrency(totalDocPadrao)}</td></tr>
+    <tr><th>Entrada</th><td>${formatCurrency(valorReal)} (Construção) - ${formatCurrency(financiamento)} (Financiamento) - ${formatCurrency(subsidio)} (Subsídio) = ${formatCurrency((valorReal - financiamento) - subsidio)} (Total)</td></tr>
+    <tr><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)}</td></tr>
     ${(jurosPadrao && parseFloat(jurosPadrao) !== 0) ? `
-      <tr class="table-light">
+      <tr>
         <th>Taxa de Juros</th>
         <td>${parseFloat(jurosPadrao).toFixed(2)}% A.A</td>
       </tr>` : ""}
@@ -124,38 +125,46 @@ function formatCurrency(value) {
 
   
     document.getElementById("tabelaCorretor").innerHTML = tabelaCorretor;
+
+    // ===== Mostrar informações extras para o cliente =====
+    const mostrarDocCliente = document.getElementById("mostrarDocCliente").checked;
+    const mostrarParcelasCliente = document.getElementById("mostrarParcelasCliente").checked;
+    const mostrarDifImpostoCliente = document.getElementById("mostrarDifImpostoCliente").checked;
   
     // ===== Tabelas do Cliente =====
-    const entradaFacilitadaCliente = (valorReal - recursoTotal + valorAba);
-    const entradaPadraoCliente = ((valorReal - financiamento) - subsidio);
+    const entradaFacilitadaCliente = mostrarDifImpostoCliente
+    ? ((valorReal - recursoTotal + valorAba) + ValorDifImposto) : (valorReal - recursoTotal + valorAba);
+    
+    const entradaPadraoCliente = mostrarDifImpostoCliente
+    ? (((valorReal - financiamento) - subsidio) + ValorDifImposto) : ((valorReal - financiamento) - subsidio);
 
     //Entrada + Documentação
     // const entradaFacilitadaCliente = (valorReal - recursoTotal + valorAba) + totalDocOver;
     // const entradaPadraoCliente = ((valorReal - financiamento) - subsidio) + totalDocPadrao;
 
     //Juros campo padrão
-    // <tr class="table-secondary"><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)}</td></tr>
-    // <tr class="table-light"><th>Taxa de Juros</th><td>${jurosOver.toFixed(2)}% A.A</td></tr>
+    // <tr><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)}</td></tr>
+    // <tr><th>Taxa de Juros</th><td>${jurosOver.toFixed(2)}% A.A</td></tr>
   
     const tabelaCliente = `
       <h5>${nomeCliente} - CONDIÇÃO DE FINANCIAMENTO FACILITADA</h5>
-      <table class="table table-bordered" id="tabelaFacilitadaCliente">
-        <tr class="table-light"><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
-        <tr class="table-secondary"><th>Entrada</th><td>${formatCurrency(entradaFacilitadaCliente)}</td></tr>
-        <tr class="table-light"><th>Parcelas</th><td>${formatCurrency(parcelasOver)}</td></tr>
+      <table class="table table-bordered tabela-zebrada" id="tabelaFacilitadaCliente">
+        <tr><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
+        <tr><th>Entrada</th><td>${formatCurrency(entradaFacilitadaCliente)}</td></tr>
+        <tr><th>Parcelas</th><td>${formatCurrency(parcelasOver)}</td></tr>
         ${(jurosOver && parseFloat(jurosOver) !== 0) ? `
-          <tr class="table-light">
+          <tr>
             <th>Taxa de Juros</th>
             <td>${parseFloat(jurosOver).toFixed(2)}% A.A</td>
         </tr>` : ""}
       </table>
       <h5>${nomeCliente} - CONDIÇÃO DE FINANCIAMENTO PADRÃO</h5>
-      <table class="table table-bordered" id="tabelaPadraoCliente">
-        <tr class="table-light"><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
-        <tr class="table-secondary"><th>Entrada</th><td>${formatCurrency(entradaPadraoCliente)}</td></tr>
-        <tr class="table-light"><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)}</td></tr>
+      <table class="table table-bordered tabela-zebrada" id="tabelaPadraoCliente">
+        <tr><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
+        <tr><th>Entrada</th><td>${formatCurrency(entradaPadraoCliente)}</td></tr>
+        <tr><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)}</td></tr>
         ${(jurosPadrao && parseFloat(jurosPadrao) !== 0) ? `
-          <tr class="table-light">
+          <tr>
             <th>Taxa de Juros</th>
             <td>${parseFloat(jurosPadrao).toFixed(2)}% A.A</td>
           </tr>` : ""}
@@ -240,4 +249,4 @@ function formatCurrency(value) {
   }
 
   //Mostrar quantidade de parcelas
-  //<tr class="table-light"><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)} (${qtdParcelas} vezes)</td></tr>
+  //<tr><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)} (${qtdParcelas} vezes)</td></tr>

@@ -10,6 +10,18 @@
   .table td, .table th {
     vertical-align: middle;
   }
+  
+  .tabela-zebrada tr:nth-child(odd) td,
+  .tabela-zebrada tr:nth-child(odd) th {
+    background-color: #f8f9fa !important;
+  }
+  
+  .tabela-zebrada tr:nth-child(even) td,
+  .tabela-zebrada tr:nth-child(even) th {
+    background-color: #dee2e6 !important;
+  }
+  
+  
   h5 {
     text-align: center;
   }
@@ -19,4 +31,8 @@
 
   .vo {
     background-color: #e6e7f8;
+  }
+
+  .clientInfo {
+    background-color: #f8f7a3;
   }

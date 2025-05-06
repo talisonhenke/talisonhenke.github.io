@@ -278,17 +278,36 @@
         </div>
       </form>      
     </div>
+    <div class="col-md-12 clientInfo">
+      <div class="section-title text-center">Informações para o cliente</div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="mostrarDocCliente">
+        <label class="form-check-label" for="mostrarDocCliente">Mostrar Documentação</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="mostrarParcelasCliente">
+        <label class="form-check-label" for="mostrarParcelasCliente">Mostrar Nº de parcelas</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="mostrarDifImpostoCliente">
+        <label class="form-check-label" for="mostrarDifImpostoCliente">Mostrar Dif. Imposto</label>
+      </div>
+      
+    </div>
   </div>
 
   <!-- Botão Calcular -->
+  
   <div class="text-center mt-4 col-12">
-    <button class="btn btn-primary col-8 fw-bold" id="btnCalcular" onclick="calcularTudo()">Calcular</button>
+    <a href="#inicioTabelas">
+      <button class="btn btn-primary col-8 fw-bold" id="btnCalcular" onclick="calcularTudo()">Calcular</button>
+    </a>
   </div>
 
   <hr>
 
   <!-- Tabelas do Corretor e Cliente -->
-  <div class="section-title">Tabelas do Corretor</div>
+  <div class="section-title" id="inicioTabelas">Tabelas do Corretor</div>
   <div id="tabelaCorretor"></div>
 
   <div class="section-title">Tabelas do Cliente</div>
