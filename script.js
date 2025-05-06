@@ -57,7 +57,7 @@ function formatCurrency(value) {
     const ValorDifImposto = ((valorTerrenoOver - valorTerrenoPadrao) * porcentagemDifImposto) /100;
   
     // ===== Seção: Dados do Cliente =====
-    const creditoMaximo = parseCurrency(document.getElementById("creditoMaximo").value);
+    // const creditoMaximo = parseCurrency(document.getElementById("creditoMaximo").value);
     const subsidio = parseCurrency(document.getElementById("subsidio").value);
     const parcelasPadrao = parseCurrency(document.getElementById("parcelasPadrao").value);
     const parcelasOver = parseCurrency(document.getElementById("parcelasOver").value);
@@ -187,10 +187,10 @@ function formatCurrency(value) {
 
   function copiarTabelaFacilitada(idTabela) {
     const tabela = document.getElementById(idTabela);
-    const nomeCliente = document.getElementById("nomeCliente").value; 
+    const nomeCliente = document.getElementById("nomeCliente").value.trim(); 
     if (!tabela) return;
   
-    let texto = `*Condição facilitada* *- ${nomeCliente}* \n`;
+    let texto = `*Condição facilitada* *- ${nomeCliente}*\n`;
     const linhas = tabela.querySelectorAll("tr");
     linhas.forEach((linha) => {
       const th = linha.querySelector("th")?.innerText || "";
@@ -207,10 +207,10 @@ function formatCurrency(value) {
 
   function copiarTabelaPadrao(idTabela) {
     const tabela = document.getElementById(idTabela);
-    const nomeCliente = document.getElementById("nomeCliente").value; 
+    const nomeCliente = document.getElementById("nomeCliente").value.trim();
     if (!tabela) return;
   
-    let texto = `*Condição padrão* *- ${nomeCliente}* \n`;
+    let texto = `*Condição padrão* *- ${nomeCliente}*\n`;
     const linhas = tabela.querySelectorAll("tr");
     linhas.forEach((linha) => {
       const th = linha.querySelector("th")?.innerText || "";

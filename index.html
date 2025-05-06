@@ -144,7 +144,7 @@
           <input type="text" class="form-control" id="nomeCliente">
         </div>
       
-        <div class="mb-3">
+        <!-- <div class="mb-3">
           <label for="creditoMaximo" class="form-label">
             Crédito máximo
             <span data-bs-toggle="tooltip" title="Limite de crédito que o cliente pode financiar.">
@@ -152,7 +152,7 @@
             </span>
           </label>
           <input type="text" class="form-control money" id="creditoMaximo">
-        </div>
+        </div> -->
       
         <div class="mb-3">
           <label for="subsidio" class="form-label">
@@ -165,26 +165,6 @@
         </div>
       
         <div class="mb-3">
-          <label for="parcelasPadrao" class="form-label">
-            Parcelas padrão
-            <span data-bs-toggle="tooltip" title="Valor mensal das parcelas para o financiamento padrão.">
-              <i class="bi bi-question-circle-fill text-primary"></i>
-            </span>
-          </label>
-          <input type="text" class="form-control money" id="parcelasPadrao">
-        </div>
-      
-        <div class="mb-3">
-          <label for="parcelasOver" class="form-label">
-            Parcelas overprice
-            <span data-bs-toggle="tooltip" title="Valor mensal das parcelas considerando o acréscimo simulado.">
-              <i class="bi bi-question-circle-fill text-primary"></i>
-            </span>
-          </label>
-          <input type="text" class="form-control money" id="parcelasOver">
-        </div>
-      
-        <div class="mb-3">
           <label for="qtdParcelas" class="form-label">
             Quantidade de parcelas
             <span data-bs-toggle="tooltip" title="Número total de parcelas a serem pagas no financiamento.">
@@ -193,26 +173,63 @@
           </label>
           <input type="text" class="form-control" id="qtdParcelas">
         </div>
-      
-        <div class="mb-3">
-          <label for="jurosPadrao" class="form-label">
-            Taxa de juros padrão
-            <span data-bs-toggle="tooltip" title="Taxa de juros anual aplicada no financiamento padrão.">
-              <i class="bi bi-question-circle-fill text-primary"></i>
-            </span>
-          </label>
-          <input type="text" class="form-control" id="jurosPadrao">
-        </div>
-      
-        <div class="mb-3">
-          <label for="jurosOver" class="form-label">
-            Taxa de juros overprice
-            <span data-bs-toggle="tooltip" title="Taxa de juros anual aplicada na simulação overprice.">
-              <i class="bi bi-question-circle-fill text-primary"></i>
-            </span>
-          </label>
-          <input type="text" class="form-control" id="jurosOver">
-        </div>
+
+        <!-- Seção: Condição Padrão -->
+<div class="d-flex align-items-center my-4">
+  <hr class="flex-grow-1">
+  <h6 class="mx-3 mb-0 text-center fw-bold">Condição Padrão</h6>
+  <hr class="flex-grow-1">
+</div>
+
+<div class="mb-3">
+  <label for="parcelasPadrao" class="form-label">
+    Parcelas padrão
+    <span data-bs-toggle="tooltip" title="Valor mensal das parcelas para o financiamento padrão.">
+      <i class="bi bi-question-circle-fill text-primary"></i>
+    </span>
+  </label>
+  <input type="text" class="form-control money" id="parcelasPadrao">
+</div>
+
+<div class="mb-3">
+  <label for="jurosPadrao" class="form-label">
+    Taxa de juros padrão
+    <span data-bs-toggle="tooltip" title="Taxa de juros anual aplicada no financiamento padrão.">
+      <i class="bi bi-question-circle-fill text-primary"></i>
+    </span>
+  </label>
+  <input type="text" class="form-control" id="jurosPadrao">
+</div>
+
+<!-- Seção: Condição Overprice -->
+<div class="d-flex align-items-center my-4">
+  <hr class="flex-grow-1">
+  <h6 class="mx-3 mb-0 text-center fw-bold">Condição Overprice</h6>
+  <hr class="flex-grow-1">
+</div>
+
+<div class="mb-3">
+  <label for="parcelasOver" class="form-label">
+    Parcelas overprice
+    <span data-bs-toggle="tooltip" title="Valor mensal das parcelas considerando o acréscimo simulado.">
+      <i class="bi bi-question-circle-fill text-primary"></i>
+    </span>
+  </label>
+  <input type="text" class="form-control money" id="parcelasOver">
+</div>
+
+<div class="mb-3">
+  <label for="jurosOver" class="form-label">
+    Taxa de juros overprice
+    <span data-bs-toggle="tooltip" title="Taxa de juros anual aplicada na simulação overprice.">
+      <i class="bi bi-question-circle-fill text-primary"></i>
+    </span>
+  </label>
+  <input type="text" class="form-control" id="jurosOver">
+</div>
+
+
+        
       </form>      
     </div>
 
