@@ -51,8 +51,9 @@ function formatCurrency(value) {
   
     const construcaoOver = valorM2Over * (qtdM2Over + medidaAba);
     const construcaoOver80 = construcaoOver * 0.8;
-    const financiamentoOver = construcaoOver80 + terreno80over;
-    const entradaOver = (construcaoOver + valorTerrenoOver) - financiamentoOver;
+    const financiamentoOver = construcaoOver + valorTerrenoOver;
+    const financiamentoOver80 = construcaoOver80 + terreno80over;
+    const entradaOver = (construcaoOver + valorTerrenoOver) - financiamentoOver80;
     const ValorDifImposto = ((valorTerrenoOver - valorTerrenoPadrao) * porcentagemDifImposto) /100;
   
     // ===== Seção: Dados do Cliente =====
@@ -64,7 +65,7 @@ function formatCurrency(value) {
     const jurosPadrao = parseFloat(document.getElementById("jurosPadrao").value) || 0;
     const jurosOver = parseFloat(document.getElementById("jurosOver").value) || 0;
   
-    const recursoTotal = subsidio + financiamentoOver;
+    const recursoTotal = subsidio + financiamentoOver80;
   
     // ===== Seção: Documentação =====
     const registroImoveis = parseCurrency(document.getElementById("registroImoveis").value);
@@ -73,7 +74,7 @@ function formatCurrency(value) {
     const porcentagemFinanciamentoItbi = parseFloat(document.getElementById("porcentagemFinanciamentoItbi").value) / 100;
   
     const itbiPadrao = (entrada * porcentagemEntradaItbi) + (financiamento * porcentagemFinanciamentoItbi);
-    const itbiOver = (entradaOver * porcentagemEntradaItbi) + (financiamentoOver * porcentagemFinanciamentoItbi);
+    const itbiOver = (entradaOver * porcentagemEntradaItbi) + (financiamentoOver80 * porcentagemFinanciamentoItbi);
   
     const totalDocPadrao = itbiPadrao + registroImoveis + taxasCaixa;
     const totalDocOver = itbiOver + registroImoveis + taxasCaixa;
@@ -83,10 +84,12 @@ function formatCurrency(value) {
     const entradaFacilitadaCorretor = (valorReal - recursoTotal) + valorAba + totalDocOver;
     const entradaPadraoCorretor = (valorReal - financiamento) + totalDocPadrao;
   
+    //TODO: Exibir o subsídio de forma isolada na linha Entrada (tabela corretor)
+    //TODO: Testar 10 financiamentos e buscar a relação de valres para entender a fórmula do cálculo da CAIXA
     const tabelaCorretor = `
   <h5>${nomeCliente} - CONDIÇÃO DE FINANCIAMENTO FACILITADA</h5>
   <table class="table table-bordered tabela-zebrada" id="tabelaFacilitadaCorretor">
-    <tr><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
+    <tr><th>Valor</th><td><b>${formatCurrency(valorReal)}</b> (${formatCurrency(financiamentoOver)}) => Overprice (${formatCurrency(financiamentoOver80)}) => Overprice 80%</td></tr>
     <tr><th>Documentação</th><td>${formatCurrency(totalDocOver)}</td></tr>
     <tr><th>Dif. imposto terreno</th><td>${formatCurrency(ValorDifImposto)}</td></tr>
     <tr><th>Entrada</th><td>${formatCurrency(valorReal)} (Construção) - ${formatCurrency(recursoTotal)} (Financiamento) + ${formatCurrency(valorAba)} (Aba) = ${formatCurrency((valorReal - recursoTotal) + valorAba)} (Total)</td></tr>
@@ -102,7 +105,7 @@ function formatCurrency(value) {
   <table class="table table-bordered tabela-zebrada" id="tabelaPadraoCorretor">
     <tr><th>Valor</th><td>${formatCurrency(valorReal)}</td></tr>
     <tr><th>Documentação</th><td>${formatCurrency(totalDocPadrao)}</td></tr>
-    <tr><th>Entrada</th><td>${formatCurrency(valorReal)} (Construção) - ${formatCurrency(financiamento)} (Financiamento) - ${formatCurrency(subsidio)} (Subsídio) = ${formatCurrency((valorReal - financiamento) - subsidio)} (Total)</td></tr>
+    <tr><th>Entrada</th><td>${formatCurrency(valorReal)}(Construção) - ${formatCurrency(financiamentoOver80)} (Financiamento) - ${formatCurrency(subsidio)} (Subsídio) = ${formatCurrency((valorReal - financiamento) - subsidio)} (Total)</td></tr>
     <tr><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)}</td></tr>
     ${(jurosPadrao && parseFloat(jurosPadrao) !== 0) ? `
       <tr>
@@ -210,6 +213,12 @@ function formatCurrency(value) {
       //salvar sugestões de autopreenchimento
       salvarValorTerreno(document.getElementById('valorTerrenoPadrao').value);
       salvarSugestoesValorTerrenoOverPrice(document.getElementById('valorTerrenoOver').value);
+      salvarSugestoesM2Padrao(document.getElementById('valorM2Padrao').value);
+      salvarSugestoesM2Over(document.getElementById('valorM2Over').value);
+      salvarSugestoesQtdM2Padrao(document.getElementById('qtdM2Padrao').value);
+      salvarSugestoesQtdM2Over(document.getElementById('qtdM2Over').value);
+      salvarSugestoesMedidaAba(document.getElementById('medidaAba').value);
+      medidaAba
   } 
 
   // explicação dos campos
