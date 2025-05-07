@@ -24,7 +24,6 @@ function formatCurrency(value) {
   }
   
   // Calcular
-
   function calcularTudo() {
     const nomeCliente = document.getElementById("nomeCliente").value;
   
@@ -203,6 +202,14 @@ function formatCurrency(value) {
     `;
   
     document.getElementById("tabelaCliente").innerHTML = tabelaCliente;
+
+    // Salvar sugestões de autopreenchimento
+      // localStorage.setItem('valorTerrenoPadrao', document.getElementById('valorTerrenoPadrao').value);
+      // localStorage.clear();
+
+      //salvar sugestões de autopreenchimento
+      salvarValorTerreno(document.getElementById('valorTerrenoPadrao').value);
+      salvarSugestoesValorTerrenoOverPrice(document.getElementById('valorTerrenoOver').value);
   } 
 
   // explicação dos campos

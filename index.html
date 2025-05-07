@@ -28,7 +28,8 @@
                title="Informe o valor total do terreno que será financiado.">
             </i>
           </label>
-          <input type="text" class="form-control money" id="valorTerrenoPadrao">
+          <input type="text" class="form-control money" list="sugestoesValorTerrenoPadrao" id="valorTerrenoPadrao">
+          <datalist id="sugestoesValorTerrenoPadrao"></datalist>
         </div>
       
         <div class="mb-3">
@@ -81,7 +82,8 @@
               <i class="bi bi-question-circle-fill text-primary"></i>
             </span>
           </label>
-          <input type="text" class="form-control money" id="valorTerrenoOver">
+          <input type="text" class="form-control money" list="sugestoesValorTerrenoOver" id="valorTerrenoOver">
+          <datalist id="sugestoesValorTerrenoOver"></datalist>
         </div>
       
         <div class="mb-3">
@@ -345,6 +347,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="autosuggest.js"></script>
   <script src="script.js"></script>
   <script src="format_money.js"></script>
 </body>
