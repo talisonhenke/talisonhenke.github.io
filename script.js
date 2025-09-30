@@ -22,6 +22,28 @@ function formatCurrency(value) {
          .replace(',', '.')            // troca vírgula por ponto
     ) || 0;
   }
+
+  function formatarValorReal(input) {
+    let valor = input.value;
+  
+    // Remove tudo que não for número
+    let numeros = valor.replace(/\D/g, '');
+  
+    // Se não houver número, limpa o campo
+    if (!numeros) {
+      input.value = '';
+      return;
+    }
+  
+    // Converte para número e formata como BRL
+    let valorFormatado = (parseInt(numeros) / 100).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    });
+  
+    input.value = valorFormatado;
+  }
+  
   
   // Calcular
   function calcularTudo() {
@@ -86,6 +108,7 @@ function formatCurrency(value) {
   
     //TODO: Exibir o subsídio de forma isolada na linha Entrada (tabela corretor)
     //TODO: Testar 10 financiamentos e buscar a relação de valres para entender a fórmula do cálculo da CAIXA
+    //TODO: Se a lógica dos cálculos aplicados pelo banco seja compreendida devemos criar um campo para a taxa de juros um para subsídio e um para parcelas em baixo de cada campo criar um botão calcular para descobrir os valores baseado na renda do usuário.
     const tabelaCorretor = `
   <h5>${nomeCliente} - CONDIÇÃO DE FINANCIAMENTO FACILITADA</h5>
   <table class="table table-bordered tabela-zebrada" id="tabelaFacilitadaCorretor">
@@ -218,7 +241,6 @@ function formatCurrency(value) {
       salvarSugestoesQtdM2Padrao(document.getElementById('qtdM2Padrao').value);
       salvarSugestoesQtdM2Over(document.getElementById('qtdM2Over').value);
       salvarSugestoesMedidaAba(document.getElementById('medidaAba').value);
-      medidaAba
   } 
 
   // explicação dos campos
@@ -288,3 +310,4 @@ function formatCurrency(value) {
 
   //Mostrar quantidade de parcelas
   //<tr><th>Parcelas</th><td>${formatCurrency(parcelasPadrao)} (${qtdParcelas} vezes)</td></tr>
+
