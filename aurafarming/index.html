@@ -1,55 +1,55 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
 
-    <meta charset="UTF-8">
+```
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no"
+>
 
-    <title>Farm Aura — Prototype</title>
+<title>Farm Aura — Prototype</title>
 
-    <style>
+<style>
 
-        html,
-        body {
+    html,
+    body {
 
-            margin: 0;
-            padding: 0;
+        margin: 0;
+        padding: 0;
 
-            width: 100%;
-            height: 100%;
+        width: 100%;
+        height: 100%;
 
-            overflow: hidden;
+        overflow: hidden;
 
-            background: #090b14;
+        background: #090b14;
 
-            touch-action: manipulation;
+        touch-action: manipulation;
 
-            -webkit-user-select: none;
-            user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
 
-        }
+    }
 
-        canvas {
+    canvas {
 
-            display: block;
+        display: block;
 
-        }
+    }
 
-    </style>
+</style>
+```
 
 </head>
 
-
 <body>
 
-
 <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
-
 
 <script>
 
@@ -66,13 +66,11 @@ const GAME_CONFIG = {
 
     BASE_DRAIN_PER_SECOND: 7,
 
-    DIFFICULTY_INTERVAL: 3000,
+    DIFFICULTY_INTERVAL: 5000,
 
     DRAIN_INCREASE: 0.10,
 
-
     BASE_SCORE_PER_HIT: 10,
-
 
     SCORE_TIERS: [
 
@@ -87,7 +85,6 @@ const GAME_CONFIG = {
 
     ],
 
-
     RANDOM_BONUS_MIN: 1,
 
     RANDOM_BONUS_MAX_BY_AURA: [
@@ -98,11 +95,9 @@ const GAME_CONFIG = {
         100
     ],
 
-
     AURA_GAIN_PER_HIT: 2,
 
     AURA_RESET_AFTER_LEVEL_UP: 50,
-
 
     HIT_COMBO_MILESTONE: 30,
 
@@ -118,13 +113,95 @@ const GAME_CONFIG = {
 
     EGO_MULTIPLIER: 2,
 
-
     CHARACTER_SCALE: 1.05,
 
-    EGO_CHARACTER_SCALE: 1.16
+    EGO_CHARACTER_SCALE: 1.16,
+
+
+    // ------------------------------------------------------------
+    // EFEITOS VISUAIS DA AURA
+    // ------------------------------------------------------------
+
+    AURA_BACKGROUND_SPEED: [
+        18,
+        32,
+        50,
+        72,
+        100
+    ],
+
+    AURA_GLOW_RADIUS: [
+        0,
+        72,
+        82,
+        94,
+        108
+    ],
+
+    AURA_GLOW_ALPHA: [
+        0,
+        0.16,
+        0.20,
+        0.25,
+        0.30
+    ],
+
+
+    // ------------------------------------------------------------
+    // MÚSICA
+    // ------------------------------------------------------------
+
+    MUSIC_ENABLED_BY_DEFAULT: true
 
 };
 
+
+// ============================================================
+// ARQUIVOS DE ÁUDIO EXTERNOS
+// ============================================================
+//
+// Todos os arquivos personalizados ficam dentro da pasta:
+//
+//     BGM/
+//
+// Estrutura esperada:
+//
+//     BGM/
+//         background_music.mp3
+//         aura_level_up.ogg
+//         ego_activate.ogg
+//
+// A música de fundo pode ser substituída por qualquer arquivo
+// de áudio compatível com o navegador.
+//
+// Formatos recomendados:
+//     .mp3
+//     .ogg
+//     .wav
+//
+// ============================================================
+
+const AUDIO_FILES = {
+
+    // --------------------------------------------------------
+    // MÚSICA DE FUNDO
+    // --------------------------------------------------------
+
+    BACKGROUND_MUSIC:
+        "BGM/background_music.ogg",
+
+
+    // --------------------------------------------------------
+    // EFEITOS SONOROS PERSONALIZADOS
+    // --------------------------------------------------------
+
+    AURA_LEVEL_UP:
+        "BGM/aura_level_up.ogg",
+
+    EGO_ACTIVATE:
+        "BGM/ego_activate.ogg"
+
+};
 
 
 // ============================================================
@@ -166,17 +243,13 @@ const AURA_LEVELS = [
 ];
 
 
-
 // ============================================================
 // DETECÇÃO MOBILE
 // ============================================================
 
 const IS_MOBILE =
-    window.matchMedia(
-        "(max-width: 700px)"
-    ).matches ||
+    window.matchMedia("(max-width: 700px)").matches ||
     "ontouchstart" in window;
-
 
 
 // ============================================================
@@ -185,13 +258,35 @@ const IS_MOBILE =
 
 class AudioSystem {
 
-
     constructor() {
 
         this.audioContext = null;
 
+
+        // ----------------------------------------------------
+        // CONTROLE DA MÚSICA
+        // ----------------------------------------------------
+
+        this.musicEnabled =
+            GAME_CONFIG.MUSIC_ENABLED_BY_DEFAULT;
+
+        this.music = null;
+
+
+        // ----------------------------------------------------
+        // ÁUDIOS EXTERNOS
+        // ----------------------------------------------------
+
+        this.customSounds = {};
+
+        this.customSoundsLoaded = false;
+
     }
 
+
+    // ========================================================
+    // INICIALIZA AUDIO
+    // ========================================================
 
     init() {
 
@@ -204,6 +299,13 @@ class AudioSystem {
                 )();
 
         }
+
+
+        // ----------------------------------------------------
+        // PREPARA OS ÁUDIOS EXTERNOS
+        // ----------------------------------------------------
+
+        this.loadCustomSounds();
 
 
         if (
@@ -220,6 +322,190 @@ class AudioSystem {
     }
 
 
+    // ========================================================
+    // CARREGA SONS EXTERNOS
+    // ========================================================
+
+    loadCustomSounds() {
+
+        if (this.customSoundsLoaded) {
+            return;
+        }
+
+
+        this.customSoundsLoaded = true;
+
+
+        // ----------------------------------------------------
+        // CARREGA OS EFEITOS PERSONALIZADOS
+        // ----------------------------------------------------
+
+        Object.keys(AUDIO_FILES).forEach(
+            key => {
+
+                if (
+                    key === "BACKGROUND_MUSIC"
+                ) {
+
+                    return;
+
+                }
+
+
+                const audio =
+                    new Audio(
+                        AUDIO_FILES[key]
+                    );
+
+
+                audio.preload = "auto";
+
+
+                audio.volume = 1.0;
+
+
+                audio.addEventListener(
+                    "error",
+                    () => {
+
+                        console.warn(
+                            "[AudioSystem] Não foi possível carregar:",
+                            AUDIO_FILES[key]
+                        );
+
+                    }
+                );
+
+
+                this.customSounds[key] =
+                    audio;
+
+            }
+        );
+
+
+        // ----------------------------------------------------
+        // CARREGA A MÚSICA DE FUNDO
+        // ----------------------------------------------------
+
+        this.music =
+            new Audio(
+                AUDIO_FILES.BACKGROUND_MUSIC
+            );
+
+
+        this.music.preload = "auto";
+
+
+        this.music.loop = true;
+
+
+        // Volume inicial da música.
+        //
+        // O volume da música fica controlado aqui,
+        // diretamente na configuração do objeto de áudio.
+
+        this.music.volume = 0.35;
+
+
+        this.music.addEventListener(
+            "error",
+            () => {
+
+                console.warn(
+                    "[AudioSystem] Não foi possível carregar a música:",
+                    AUDIO_FILES.BACKGROUND_MUSIC
+                );
+
+            }
+        );
+
+    }
+
+
+    // ========================================================
+    // TOCA SOM EXTERNO
+    // ========================================================
+
+    playCustomSound(
+        soundKey,
+        volume = 1.0
+    ) {
+
+        const audio =
+            this.customSounds[soundKey];
+
+
+        if (!audio) {
+
+            console.warn(
+                "[AudioSystem] Som não encontrado:",
+                soundKey
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            // Permite que o mesmo efeito seja
+            // executado novamente rapidamente.
+
+            audio.pause();
+
+            audio.currentTime = 0;
+
+
+            audio.volume =
+                Phaser.Math.Clamp(
+                    volume,
+                    0,
+                    1
+                );
+
+
+            const playPromise =
+                audio.play();
+
+
+            if (
+                playPromise &&
+                typeof playPromise.catch === "function"
+            ) {
+
+                playPromise.catch(
+                    error => {
+
+                        console.warn(
+                            "[AudioSystem] Reprodução bloqueada:",
+                            error
+                        );
+
+                    }
+                );
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.warn(
+                "[AudioSystem] Erro ao tocar som:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // ========================================================
+    // TOM
+    // ========================================================
+
     tone(
         frequency,
         time,
@@ -228,7 +514,9 @@ class AudioSystem {
         volume
     ) {
 
-        if (!this.audioContext) return;
+        if (!this.audioContext) {
+            return;
+        }
 
 
         const oscillator =
@@ -261,14 +549,20 @@ class AudioSystem {
         );
 
 
-        oscillator.connect(gain);
+        oscillator.connect(
+            gain
+        );
+
 
         gain.connect(
             this.audioContext.destination
         );
 
 
-        oscillator.start(time);
+        oscillator.start(
+            time
+        );
+
 
         oscillator.stop(
             time + duration
@@ -277,9 +571,15 @@ class AudioSystem {
     }
 
 
+    // ========================================================
+    // HIT
+    // ========================================================
+
     hit() {
 
-        if (!this.audioContext) return;
+        if (!this.audioContext) {
+            return;
+        }
 
 
         const now =
@@ -297,38 +597,39 @@ class AudioSystem {
     }
 
 
+    // ========================================================
+    // LEVEL UP
+    // ========================================================
+    //
+    // Este som vem de um arquivo externo.
+    //
+    // Arquivo:
+    // BGM/aura_level_up.ogg
+    //
+    // O volume continua sendo definido diretamente
+    // nesta função.
+    //
+    // ========================================================
+
     levelUp(level) {
 
-        if (!this.audioContext) return;
-
-
-        const now =
-            this.audioContext.currentTime;
-
-
-        this.tone(
-            400 + level * 60,
-            now,
-            0.08,
-            "triangle",
-            0.06
-        );
-
-
-        this.tone(
-            600 + level * 70,
-            now + 0.07,
-            0.12,
-            "triangle",
-            0.07
+        this.playCustomSound(
+            "AURA_LEVEL_UP",
+            1.0
         );
 
     }
 
 
+    // ========================================================
+    // EGO GAIN
+    // ========================================================
+
     egoGain() {
 
-        if (!this.audioContext) return;
+        if (!this.audioContext) {
+            return;
+        }
 
 
         const now =
@@ -355,9 +656,15 @@ class AudioSystem {
     }
 
 
+    // ========================================================
+    // EGO LOSS
+    // ========================================================
+
     egoLoss() {
 
-        if (!this.audioContext) return;
+        if (!this.audioContext) {
+            return;
+        }
 
 
         const now =
@@ -384,47 +691,39 @@ class AudioSystem {
     }
 
 
+    // ========================================================
+    // EGO ACTIVATE
+    // ========================================================
+    //
+    // Este som vem de um arquivo externo.
+    //
+    // Arquivo:
+    // BGM/ego_activate.ogg
+    //
+    // O volume continua sendo definido diretamente
+    // nesta função.
+    //
+    // ========================================================
+
     egoActivate() {
 
-        if (!this.audioContext) return;
-
-
-        const now =
-            this.audioContext.currentTime;
-
-
-        this.tone(
-            440,
-            now,
-            0.10,
-            "sine",
-            0.07
-        );
-
-
-        this.tone(
-            660,
-            now + 0.07,
-            0.10,
-            "sine",
-            0.08
-        );
-
-
-        this.tone(
-            880,
-            now + 0.14,
-            0.18,
-            "sine",
-            0.10
+        this.playCustomSound(
+            "EGO_ACTIVATE",
+            0.4
         );
 
     }
 
 
+    // ========================================================
+    // EGO END
+    // ========================================================
+
     egoEnd() {
 
-        if (!this.audioContext) return;
+        if (!this.audioContext) {
+            return;
+        }
 
 
         const now =
@@ -450,8 +749,149 @@ class AudioSystem {
 
     }
 
-}
 
+    // ========================================================
+    // INICIA MÚSICA DE FUNDO
+    // ========================================================
+    //
+    // A música é um arquivo de áudio comum.
+    //
+    // Ela não possui nenhuma relação com o sistema
+    // procedural de sons.
+    //
+    // O arquivo é reproduzido em loop.
+    //
+    // ========================================================
+
+    startMusic() {
+
+        if (
+            !this.musicEnabled
+        ) {
+
+            return;
+
+        }
+
+
+        // Garante que a música esteja carregada.
+
+        if (!this.music) {
+
+            this.loadCustomSounds();
+
+        }
+
+
+        if (!this.music) {
+
+            console.warn(
+                "[AudioSystem] Música de fundo não disponível."
+            );
+
+            return;
+
+        }
+
+
+        // Volume da música.
+        //
+        // Mantido diretamente nesta função,
+        // conforme a estrutura dos efeitos sonoros.
+
+        this.music.volume = 0.28;
+
+
+        try {
+
+            const playPromise =
+                this.music.play();
+
+
+            if (
+                playPromise &&
+                typeof playPromise.catch === "function"
+            ) {
+
+                playPromise.catch(
+                    error => {
+
+                        console.warn(
+                            "[AudioSystem] Reprodução da música bloqueada:",
+                            error
+                        );
+
+                    }
+                );
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.warn(
+                "[AudioSystem] Erro ao iniciar música:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // ========================================================
+    // PARA MÚSICA
+    // ========================================================
+
+    stopMusic() {
+
+        if (!this.music) {
+            return;
+        }
+
+
+        this.music.pause();
+
+
+        this.music.currentTime = 0;
+
+    }
+
+
+    // ========================================================
+    // ALTERNA MÚSICA
+    // ========================================================
+
+    toggleMusic() {
+
+        this.musicEnabled = !this.musicEnabled;
+
+
+        if (this.musicEnabled) {
+
+            this.init().then(
+                () => {
+
+                    this.startMusic();
+
+                }
+            );
+
+        }
+
+        else {
+
+            this.stopMusic();
+
+        }
+
+
+        return this.musicEnabled;
+
+    }
+
+}
 
 
 // ============================================================
@@ -460,7 +900,6 @@ class AudioSystem {
 
 class FarmAuraScene extends Phaser.Scene {
 
-
     constructor() {
 
         super("FarmAuraScene");
@@ -468,13 +907,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // CREATE
     // ========================================================
 
     create() {
-
 
         this.gameWidth =
             this.scale.width;
@@ -488,7 +925,8 @@ class FarmAuraScene extends Phaser.Scene {
         // ÁREA DE JOGO
         // ----------------------------------------------------
 
-        this.playAreaTop = 250;
+        this.playAreaTop =
+            250;
 
 
         this.playAreaBottom =
@@ -526,21 +964,16 @@ class FarmAuraScene extends Phaser.Scene {
 
         this.gameOver = false;
 
-
         this.aura =
             GAME_CONFIG.STARTING_AURA;
 
-
         this.auraLevel = 1;
-
 
         this.combo = 0;
 
         this.maxCombo = 0;
 
-
         this.score = 0;
-
 
         this.ego = 0;
 
@@ -548,13 +981,15 @@ class FarmAuraScene extends Phaser.Scene {
 
         this.egoRemainingTime = 0;
 
-
         this.difficultyLevel = 0;
 
         this.difficultyTimer = 0;
 
-
         this.lastClick = null;
+
+        this._lastAuraUpdate = null;
+
+        this._lastTimerUpdate = null;
 
 
         // ----------------------------------------------------
@@ -594,20 +1029,48 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
-        // INPUT
+        // CONTROLE DE MÚSICA
+        // ----------------------------------------------------
+
+        this.createMusicControl();
+
+
+        // ----------------------------------------------------
+        // INPUT GLOBAL
         // ----------------------------------------------------
 
         this.input.on(
             "pointerdown",
             pointer => {
 
-                this.handleClick(
-                    pointer.button
-                );
+                if (IS_MOBILE) {
+                    return;
+                }
+
+
+                if (
+                    pointer.button === 0
+                ) {
+
+                    this.handleClick("left");
+
+                }
+
+                else if (
+                    pointer.button === 2
+                ) {
+
+                    this.handleClick("right");
+
+                }
 
             }
         );
 
+
+        // ----------------------------------------------------
+        // TECLADO
+        // ----------------------------------------------------
 
         this.input.keyboard.on(
             "keydown",
@@ -622,7 +1085,7 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
-        // START
+        // START SCREEN
         // ----------------------------------------------------
 
         this.createStartScreen();
@@ -637,13 +1100,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // BACKGROUND
     // ========================================================
 
     createBackground() {
-
 
         this.background =
             this.add.rectangle(
@@ -702,12 +1163,16 @@ class FarmAuraScene extends Phaser.Scene {
         });
 
 
+        // ----------------------------------------------------
+        // CAMPO DE ESTRELAS
+        // ----------------------------------------------------
+
         this.particles = [];
 
 
         for (
             let i = 0;
-            i < 35;
+            i < 45;
             i++
         ) {
 
@@ -733,9 +1198,16 @@ class FarmAuraScene extends Phaser.Scene {
 
                     Phaser.Math.FloatBetween(
                         0.15,
-                        0.45
+                        0.50
                     )
 
+                );
+
+
+            particle.baseSpeed =
+                Phaser.Math.FloatBetween(
+                    0.75,
+                    1.35
                 );
 
 
@@ -745,8 +1217,144 @@ class FarmAuraScene extends Phaser.Scene {
 
         }
 
+
+        // ----------------------------------------------------
+        // AURA DO PERSONAGEM
+        // ----------------------------------------------------
+
+        this.characterAura =
+            this.add.circle(
+
+                this.gameWidth / 2,
+
+                this.playAreaTop +
+                this.playAreaHeight * 0.55,
+
+                0,
+
+                0xffffff,
+
+                0
+
+            );
+
+
+        this.characterAura.setDepth(1);
+
     }
 
+
+    // ========================================================
+    // VISUAL DA AURA
+    // ========================================================
+
+    updateAuraVisual() {
+
+        if (!this.characterAura) {
+            return;
+        }
+
+
+        const level =
+            Phaser.Math.Clamp(
+                this.auraLevel,
+                1,
+                5
+            );
+
+
+        const levelData =
+            AURA_LEVELS[level - 1];
+
+
+        if (level === 1) {
+
+            this.tweens.killTweensOf(
+                this.characterAura
+            );
+
+
+            this.characterAura
+                .setRadius(0)
+                .setAlpha(0);
+
+
+            return;
+
+        }
+
+
+        const radius =
+            GAME_CONFIG
+                .AURA_GLOW_RADIUS[level - 1];
+
+
+        const alpha =
+            GAME_CONFIG
+                .AURA_GLOW_ALPHA[level - 1];
+
+
+        this.characterAura.x =
+            this.character.x;
+
+
+        this.characterAura.y =
+            this.character.y;
+
+
+        this.characterAura.setFillStyle(
+            levelData.color,
+            alpha
+        );
+
+
+        this.characterAura
+            .setRadius(radius)
+            .setAlpha(alpha);
+
+
+        this.tweens.killTweensOf(
+            this.characterAura
+        );
+
+
+        const pulseDuration =
+            850 -
+            (
+                (level - 2) *
+                110
+            );
+
+
+        this.tweens.add({
+
+            targets:
+                this.characterAura,
+
+            scale:
+                1.18,
+
+            alpha:
+                Math.min(
+                    0.42,
+                    alpha + 0.10
+                ),
+
+            duration:
+                pulseDuration,
+
+            yoyo:
+                true,
+
+            repeat:
+                -1,
+
+            ease:
+                "Sine.easeInOut"
+
+        });
+
+    }
 
 
     // ========================================================
@@ -754,7 +1362,6 @@ class FarmAuraScene extends Phaser.Scene {
     // ========================================================
 
     createCharacter() {
-
 
         const characterX =
             this.gameWidth / 2;
@@ -816,20 +1423,20 @@ class FarmAuraScene extends Phaser.Scene {
 
         this.leftArm =
             this.add.rectangle(
-                -46,
-                25,
-                16,
-                72,
+                -43,
+                34,
+                14,
+                52,
                 0xf5c6a5
             );
 
 
         this.rightArm =
             this.add.rectangle(
-                46,
-                25,
-                16,
-                72,
+                43,
+                34,
+                14,
+                52,
                 0xf5c6a5
             );
 
@@ -870,13 +1477,7 @@ class FarmAuraScene extends Phaser.Scene {
 
         ]);
 
-
-        this.leftArmBaseRotation = 0;
-
-        this.rightArmBaseRotation = 0;
-
     }
-
 
 
     // ========================================================
@@ -885,48 +1486,77 @@ class FarmAuraScene extends Phaser.Scene {
 
     animateArm(side) {
 
+        const leftArm =
+            this.leftArm;
 
-        const arm =
+
+        const rightArm =
+            this.rightArm;
+
+
+        this.tweens.killTweensOf([
+
+            leftArm,
+            rightArm
+
+        ]);
+
+
+        let leftRotation;
+
+        let rightRotation;
+
+
+        if (
             side === "left"
-                ? this.leftArm
-                : this.rightArm;
+        ) {
 
+            leftRotation =
+                -0.65;
 
-        const baseRotation =
-            side === "left"
-                ? this.leftArmBaseRotation
-                : this.rightArmBaseRotation;
+            rightRotation =
+                0.25;
 
+        }
 
-        this.tweens.killTweensOf(
-            arm
-        );
+        else {
 
+            leftRotation =
+                -0.25;
 
-        arm.rotation =
-            baseRotation;
+            rightRotation =
+                0.65;
 
-
-        const direction =
-            side === "left"
-                ? -1
-                : 1;
-
-
-        arm.rotation =
-            direction * 0.55;
+        }
 
 
         this.tweens.add({
 
             targets:
-                arm,
+                leftArm,
 
             rotation:
-                baseRotation,
+                leftRotation,
 
             duration:
-                45,
+                90,
+
+            ease:
+                "Quad.easeOut"
+
+        });
+
+
+        this.tweens.add({
+
+            targets:
+                rightArm,
+
+            rotation:
+                rightRotation,
+
+            duration:
+                90,
 
             ease:
                 "Quad.easeOut"
@@ -936,13 +1566,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // INPUT TECLADO
     // ========================================================
 
     handleKeyboardInput(event) {
-
 
         if (
             event.code === "Space"
@@ -987,6 +1615,184 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
+    // ========================================================
+    // CONTROLE DE MÚSICA
+    // ========================================================
+
+    createMusicControl() {
+
+        const x =
+            this.gameWidth - 30;
+
+
+        const y =
+            30;
+
+
+        this.musicButton =
+            this.add.circle(
+                x,
+                y,
+                20,
+                0x1f2937,
+                0.90
+            );
+
+
+        this.musicButton.setStrokeStyle(
+            2,
+            0x6b7280,
+            0.70
+        );
+
+
+        this.musicIcon =
+            this.add.text(
+
+                x,
+                y,
+
+                "♪",
+
+                {
+
+                    fontFamily:
+                        "Arial",
+
+                    fontSize:
+                        "20px",
+
+                    fontStyle:
+                        "bold",
+
+                    color:
+                        "#6b7280"
+
+                }
+
+            ).setOrigin(0.5);
+
+
+        this.musicButton.setInteractive({
+
+            useHandCursor:
+                !IS_MOBILE
+
+        });
+
+
+        this.musicIcon.setInteractive({
+
+            useHandCursor:
+                !IS_MOBILE
+
+        });
+
+
+        const toggle =
+            event => {
+
+                if (
+                    event &&
+                    event.preventDefault
+                ) {
+
+                    event.preventDefault();
+
+                }
+
+
+                const enabled =
+                    this.audio.toggleMusic();
+
+
+                this.updateMusicButton(
+                    enabled
+                );
+
+            };
+
+
+        this.musicButton.on(
+            "pointerdown",
+            toggle
+        );
+
+
+        this.musicIcon.on(
+            "pointerdown",
+            toggle
+        );
+
+
+        this.updateMusicButton(
+            this.audio.musicEnabled
+        );
+
+    }
+
+
+    updateMusicButton(enabled) {
+
+        if (!this.musicButton) {
+            return;
+        }
+
+
+        if (enabled) {
+
+            this.musicButton.setFillStyle(
+                0x312e81,
+                0.95
+            );
+
+
+            this.musicButton.setStrokeStyle(
+                2,
+                0xa78bfa,
+                0.90
+            );
+
+
+            this.musicIcon.setText(
+                "♪"
+            );
+
+
+            this.musicIcon.setColor(
+                "#a78bfa"
+            );
+
+        }
+
+        else {
+
+            this.musicButton.setFillStyle(
+                0x1f2937,
+                0.90
+            );
+
+
+            this.musicButton.setStrokeStyle(
+                2,
+                0x6b7280,
+                0.70
+            );
+
+
+            this.musicIcon.setText(
+                "♪"
+            );
+
+
+            this.musicIcon.setColor(
+                "#6b7280"
+            );
+
+        }
+
+    }
+
 
     // ========================================================
     // CONTROLES MOBILE
@@ -994,55 +1800,65 @@ class FarmAuraScene extends Phaser.Scene {
 
     createMobileControls() {
 
-
         this.mobileControls = [];
 
 
         if (!IS_MOBILE) {
-
             return;
-
         }
+
+
+        const buttonSize =
+            Math.min(
+
+                100,
+
+                Math.max(
+                    76,
+                    this.gameWidth * 0.20
+                )
+
+            );
+
+
+        const buttonRadius =
+            buttonSize / 2;
+
+
+        const hitRadius =
+            buttonRadius + 12;
+
+
+        const sideMargin =
+            Math.max(
+                20,
+                this.gameWidth * 0.07
+            );
 
 
         const buttonY =
             this.gameHeight * 0.78;
 
 
-        const buttonSize =
-            Math.min(
-                100,
-                Math.max(
-                    72,
-                    this.gameWidth * 0.20
-                )
-            );
-
-
-        const sideMargin =
-            Math.max(
-                24,
-                this.gameWidth * 0.08
-            );
-
-
         // ----------------------------------------------------
-        // BOTÃO ESQUERDO
+        // ESQUERDO
         // ----------------------------------------------------
+
+        const leftX =
+            sideMargin +
+            buttonRadius;
+
 
         this.mobileLeftButton =
             this.add.circle(
 
-                sideMargin +
-                buttonSize / 2,
-
+                leftX,
                 buttonY,
 
-                buttonSize / 2,
+                buttonRadius,
 
                 0x1f2937,
-
-                0.85
+                0.90
 
             );
 
@@ -1050,22 +1866,40 @@ class FarmAuraScene extends Phaser.Scene {
         this.mobileLeftButton.setStrokeStyle(
             3,
             0x60a5fa,
-            0.75
+            0.80
         );
 
 
-        this.mobileLeftButton.setInteractive({
-            useHandCursor: false
-        });
+        this.mobileLeftButton.setInteractive(
+
+            new Phaser.Geom.Circle(
+                0,
+                0,
+                hitRadius
+            ),
+
+            Phaser.Geom.Circle.Contains,
+
+            {
+                useHandCursor: false
+            }
+
+        );
 
 
         this.mobileLeftButton.on(
             "pointerdown",
             pointer => {
 
-                pointer.event.preventDefault();
+                if (
+                    pointer.event &&
+                    pointer.event.preventDefault
+                ) {
 
-                this.audio.init();
+                    pointer.event.preventDefault();
+
+                }
+
 
                 this.handleClick("left");
 
@@ -1073,74 +1907,58 @@ class FarmAuraScene extends Phaser.Scene {
         );
 
 
-        this.mobileLeftButton.on(
-            "pointerup",
-            pointer => {
+        this.mobileLeftLabel =
+            this.add.text(
 
-                pointer.event.preventDefault();
+                leftX,
+                buttonY,
 
-            }
-        );
+                "←",
+
+                {
+
+                    fontFamily:
+                        "Arial",
+
+                    fontSize:
+                        Math.round(
+                            buttonSize * 0.42
+                        ) + "px",
+
+                    fontStyle:
+                        "bold",
+
+                    color:
+                        "#60a5fa"
+
+                }
+
+            );
 
 
-        this.mobileLeftButton.on(
-            "pointerout",
-            pointer => {
-
-                pointer.event.preventDefault();
-
-            }
-        );
-
-
-        this.add.text(
-
-            sideMargin +
-            buttonSize / 2,
-
-            buttonY,
-
-            "←",
-
-            {
-
-                fontFamily:
-                    "Arial",
-
-                fontSize:
-                    Math.round(
-                        buttonSize * 0.42
-                    ) + "px",
-
-                fontStyle:
-                    "bold",
-
-                color:
-                    "#60a5fa"
-
-            }
-
-        ).setOrigin(0.5);
+        this.mobileLeftLabel.setOrigin(0.5);
 
 
         // ----------------------------------------------------
-        // BOTÃO DIREITO
+        // DIREITO
         // ----------------------------------------------------
+
+        const rightX =
+            this.gameWidth -
+            sideMargin -
+            buttonRadius;
+
 
         this.mobileRightButton =
             this.add.circle(
 
-                this.gameWidth -
-                sideMargin -
-                buttonSize / 2,
-
+                rightX,
                 buttonY,
 
-                buttonSize / 2,
+                buttonRadius,
 
                 0x1f2937,
-
-                0.85
+                0.90
 
             );
 
@@ -1148,22 +1966,40 @@ class FarmAuraScene extends Phaser.Scene {
         this.mobileRightButton.setStrokeStyle(
             3,
             0x34d399,
-            0.75
+            0.80
         );
 
 
-        this.mobileRightButton.setInteractive({
-            useHandCursor: false
-        });
+        this.mobileRightButton.setInteractive(
+
+            new Phaser.Geom.Circle(
+                0,
+                0,
+                hitRadius
+            ),
+
+            Phaser.Geom.Circle.Contains,
+
+            {
+                useHandCursor: false
+            }
+
+        );
 
 
         this.mobileRightButton.on(
             "pointerdown",
             pointer => {
 
-                pointer.event.preventDefault();
+                if (
+                    pointer.event &&
+                    pointer.event.preventDefault
+                ) {
 
-                this.audio.init();
+                    pointer.event.preventDefault();
+
+                }
+
 
                 this.handleClick("right");
 
@@ -1171,64 +2007,48 @@ class FarmAuraScene extends Phaser.Scene {
         );
 
 
-        this.mobileRightButton.on(
-            "pointerup",
-            pointer => {
+        this.mobileRightLabel =
+            this.add.text(
 
-                pointer.event.preventDefault();
+                rightX,
+                buttonY,
 
-            }
-        );
+                "→",
+
+                {
+
+                    fontFamily:
+                        "Arial",
+
+                    fontSize:
+                        Math.round(
+                            buttonSize * 0.42
+                        ) + "px",
+
+                    fontStyle:
+                        "bold",
+
+                    color:
+                        "#34d399"
+
+                }
+
+            );
 
 
-        this.mobileRightButton.on(
-            "pointerout",
-            pointer => {
-
-                pointer.event.preventDefault();
-
-            }
-        );
-
-
-        this.add.text(
-
-            this.gameWidth -
-            sideMargin -
-            buttonSize / 2,
-
-            buttonY,
-
-            "→",
-
-            {
-
-                fontFamily:
-                    "Arial",
-
-                fontSize:
-                    Math.round(
-                        buttonSize * 0.42
-                    ) + "px",
-
-                fontStyle:
-                    "bold",
-
-                color:
-                    "#34d399"
-
-            }
-
-        ).setOrigin(0.5);
+        this.mobileRightLabel.setOrigin(0.5);
 
 
         this.mobileControls.push(
+
             this.mobileLeftButton,
-            this.mobileRightButton
+            this.mobileRightButton,
+            this.mobileLeftLabel,
+            this.mobileRightLabel
+
         );
 
     }
-
 
 
     // ========================================================
@@ -1236,7 +2056,6 @@ class FarmAuraScene extends Phaser.Scene {
     // ========================================================
 
     handleClick(input) {
-
 
         if (
             !this.gameStarted ||
@@ -1254,25 +2073,33 @@ class FarmAuraScene extends Phaser.Scene {
         let side = null;
 
 
-        if (input === 0) {
+        if (
+            input === 0
+        ) {
 
             side = "left";
 
         }
 
-        else if (input === 2) {
+        else if (
+            input === 2
+        ) {
 
             side = "right";
 
         }
 
-        else if (input === "left") {
+        else if (
+            input === "left"
+        ) {
 
             side = "left";
 
         }
 
-        else if (input === "right") {
+        else if (
+            input === "right"
+        ) {
 
             side = "right";
 
@@ -1280,14 +2107,12 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         if (!side) {
-
             return;
-
         }
 
 
         // ----------------------------------------------------
-        // ERRO DE ALTERNÂNCIA
+        // MESMO LADO NOVAMENTE = MISS
         // ----------------------------------------------------
 
         if (
@@ -1310,6 +2135,7 @@ class FarmAuraScene extends Phaser.Scene {
         // ----------------------------------------------------
 
         this.combo++;
+
 
         this.maxCombo =
             Math.max(
@@ -1365,7 +2191,7 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
-        // SOM
+        // SOM DO HIT
         // ----------------------------------------------------
 
         this.audio.hit();
@@ -1375,7 +2201,9 @@ class FarmAuraScene extends Phaser.Scene {
         // FEEDBACK
         // ----------------------------------------------------
 
-        this.showScorePopup(points);
+        this.showScorePopup(
+            points
+        );
 
 
         // ----------------------------------------------------
@@ -1387,13 +2215,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // SCORE
     // ========================================================
 
     calculateScore() {
-
 
         let points =
             GAME_CONFIG.BASE_SCORE_PER_HIT;
@@ -1447,13 +2273,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // AURA
     // ========================================================
 
     addAuraHP() {
-
 
         this.aura +=
             GAME_CONFIG.AURA_GAIN_PER_HIT;
@@ -1464,21 +2288,28 @@ class FarmAuraScene extends Phaser.Scene {
             GAME_CONFIG.MAX_AURA
         ) {
 
-
             if (
                 this.auraLevel < 5
             ) {
 
                 this.auraLevel++;
 
+
                 this.aura =
                     GAME_CONFIG.AURA_RESET_AFTER_LEVEL_UP;
+
+
+                this.updateAuraVisual();
 
 
                 this.showLevelUp(
                     this.auraLevel
                 );
 
+
+                // ------------------------------------------------
+                // SOM PERSONALIZADO DE LEVEL UP
+                // ------------------------------------------------
 
                 this.audio.levelUp(
                     this.auraLevel
@@ -1498,13 +2329,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // MISS
     // ========================================================
 
     miss() {
-
 
         if (
             this.gameOver
@@ -1519,6 +2348,10 @@ class FarmAuraScene extends Phaser.Scene {
 
         this.lastClick = null;
 
+
+        // ----------------------------------------------------
+        // EGO
+        // ----------------------------------------------------
 
         if (
             this.ego > 0
@@ -1540,6 +2373,10 @@ class FarmAuraScene extends Phaser.Scene {
         }
 
 
+        // ----------------------------------------------------
+        // PERDA DE NÍVEL
+        // ----------------------------------------------------
+
         if (
             this.auraLevel > 1
         ) {
@@ -1551,9 +2388,14 @@ class FarmAuraScene extends Phaser.Scene {
                 GAME_CONFIG.AURA_RESET_AFTER_LEVEL_UP;
 
 
+            this.updateAuraVisual();
+
+
             this.showFeedback(
+
                 "NÍVEL " +
                 this.auraLevel
+
             );
 
         }
@@ -1582,13 +2424,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // EGO
     // ========================================================
 
     checkEgoGain() {
-
 
         if (
             this.combo <= 0
@@ -1641,15 +2481,14 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // ATIVAR EGO
     // ========================================================
 
     activateEgo() {
 
-
         if (
+            !this.gameStarted ||
             this.gameOver ||
             this.egoActive
         ) {
@@ -1683,12 +2522,17 @@ class FarmAuraScene extends Phaser.Scene {
 
         this.egoActive = true;
 
+
         this.egoRemainingTime =
             duration;
 
 
         this.ego = 0;
 
+
+        // ----------------------------------------------------
+        // SOM PERSONALIZADO DO EGO
+        // ----------------------------------------------------
 
         this.audio.egoActivate();
 
@@ -1706,13 +2550,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // VISUAL EGO
     // ========================================================
 
     startEgoVisual() {
-
 
         this.character.setScale(
             GAME_CONFIG.EGO_CHARACTER_SCALE
@@ -1732,6 +2574,9 @@ class FarmAuraScene extends Phaser.Scene {
                 0.06
 
             ).setOrigin(0, 0);
+
+
+        this.egoOverlay.setDepth(0);
 
 
         this.tweens.add({
@@ -1765,10 +2610,12 @@ class FarmAuraScene extends Phaser.Scene {
                 90,
 
                 0xa78bfa,
-
                 0.10
 
             );
+
+
+        this.egoGlow.setDepth(1);
 
 
         this.tweens.add({
@@ -1796,13 +2643,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // FINALIZAR EGO
     // ========================================================
 
     endEgo() {
-
 
         this.egoActive = false;
 
@@ -1825,7 +2670,9 @@ class FarmAuraScene extends Phaser.Scene {
                 this.egoOverlay
             );
 
+
             this.egoOverlay.destroy();
+
 
             this.egoOverlay = null;
 
@@ -1840,7 +2687,9 @@ class FarmAuraScene extends Phaser.Scene {
                 this.egoGlow
             );
 
+
             this.egoGlow.destroy();
+
 
             this.egoGlow = null;
 
@@ -1852,13 +2701,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // SCORE POPUP
     // ========================================================
 
     showScorePopup(points) {
-
 
         const safeTop =
             this.playAreaTop + 20;
@@ -1880,21 +2727,28 @@ class FarmAuraScene extends Phaser.Scene {
         let randomY =
             this.playAreaTop +
             Phaser.Math.Between(
+
                 35,
+
                 Math.max(
                     40,
                     Math.floor(
                         this.playAreaHeight * 0.48
                     )
                 )
+
             );
 
 
         randomY =
             Phaser.Math.Clamp(
+
                 randomY,
+
                 safeTop,
+
                 safeBottom
+
             );
 
 
@@ -1986,13 +2840,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // LEVEL UP
     // ========================================================
 
     showLevelUp(level) {
-
 
         const levelData =
             AURA_LEVELS[
@@ -2060,7 +2912,15 @@ class FarmAuraScene extends Phaser.Scene {
 
             onComplete: () => {
 
-                this.levelFeedback.destroy();
+                if (
+                    this.levelFeedback
+                ) {
+
+                    this.levelFeedback.destroy();
+
+                    this.levelFeedback = null;
+
+                }
 
             }
 
@@ -2101,12 +2961,15 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // FEEDBACK
     // ========================================================
 
     showFeedback(text) {
+
+        if (!this.feedbackText) {
+            return;
+        }
 
 
         this.feedbackText.setText(
@@ -2147,13 +3010,15 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // HUD
     // ========================================================
 
     createHUD() {
 
+        // ----------------------------------------------------
+        // SCORE
+        // ----------------------------------------------------
 
         this.scoreText =
             this.add.text(
@@ -2217,6 +3082,10 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0.5);
 
 
+        // ----------------------------------------------------
+        // COMBO
+        // ----------------------------------------------------
+
         this.comboText =
             this.add.text(
 
@@ -2245,10 +3114,15 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0.5);
 
 
+        // ----------------------------------------------------
+        // CINCO PIPS DE AURA
+        // ----------------------------------------------------
+
         this.auraDots = [];
 
 
-        const dotSpacing = 34;
+        const dotSpacing =
+            34;
 
 
         const startX =
@@ -2284,27 +3158,42 @@ class FarmAuraScene extends Phaser.Scene {
 
 
             dot.setStrokeStyle(
+
                 2,
+
                 levelData.color,
+
                 0.35
+
             );
 
 
-            this.auraDots.push(dot);
+            this.auraDots.push(
+                dot
+            );
 
         }
 
+
+        // ----------------------------------------------------
+        // BARRA AURA
+        // ----------------------------------------------------
 
         this.hpX =
             this.gameWidth / 2 -
             180;
 
 
-        this.hpY = 185;
+        this.hpY =
+            185;
 
-        this.hpWidth = 360;
 
-        this.hpHeight = 18;
+        this.hpWidth =
+            360;
+
+
+        this.hpHeight =
+            18;
 
 
         this.hpBackground =
@@ -2371,12 +3260,17 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0.5);
 
 
+        // ----------------------------------------------------
+        // EGO
+        // ----------------------------------------------------
+
         this.egoX =
             this.gameWidth / 2 -
             180;
 
 
-        this.egoY = 220;
+        this.egoY =
+            220;
 
 
         this.egoBackground =
@@ -2439,6 +3333,10 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0.5);
 
 
+        // ----------------------------------------------------
+        // DIFICULDADE
+        // ----------------------------------------------------
+
         this.difficultyText =
             this.add.text(
 
@@ -2467,6 +3365,10 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0.5);
 
 
+        // ----------------------------------------------------
+        // TIMER EGO
+        // ----------------------------------------------------
+
         this.egoTimerText =
             this.add.text(
 
@@ -2494,6 +3396,10 @@ class FarmAuraScene extends Phaser.Scene {
 
             ).setOrigin(0.5);
 
+
+        // ----------------------------------------------------
+        // FEEDBACK
+        // ----------------------------------------------------
 
         this.feedbackText =
             this.add.text(
@@ -2529,6 +3435,10 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0.5);
 
 
+        // ----------------------------------------------------
+        // CONTROLES
+        // ----------------------------------------------------
+
         this.controlsText =
             this.add.text(
 
@@ -2557,10 +3467,6 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0.5);
 
 
-        // ----------------------------------------------------
-        // NO CELULAR
-        // ----------------------------------------------------
-
         if (IS_MOBILE) {
 
             this.controlsText.setText(
@@ -2572,13 +3478,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // ATUALIZAÇÃO DO HUD
     // ========================================================
 
     updateHUD(force = false) {
-
 
         // ----------------------------------------------------
         // SCORE
@@ -2590,8 +3494,13 @@ class FarmAuraScene extends Phaser.Scene {
         ) {
 
             this.scoreText.setText(
-                this.score.toLocaleString("pt-BR")
+
+                this.score.toLocaleString(
+                    "pt-BR"
+                )
+
             );
+
 
             this._hudScore =
                 this.score;
@@ -2609,9 +3518,12 @@ class FarmAuraScene extends Phaser.Scene {
         ) {
 
             this.comboText.setText(
+
                 "COMBO " +
                 this.combo
+
             );
+
 
             this._hudCombo =
                 this.combo;
@@ -2620,7 +3532,7 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
-        // NÍVEL / AURA
+        // AURA
         // ----------------------------------------------------
 
         const levelData =
@@ -2630,8 +3542,15 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         const auraPercent =
-            this.aura /
-            GAME_CONFIG.MAX_AURA;
+            Phaser.Math.Clamp(
+
+                this.aura /
+                GAME_CONFIG.MAX_AURA,
+
+                0,
+                1
+
+            );
 
 
         const auraRounded =
@@ -2657,13 +3576,16 @@ class FarmAuraScene extends Phaser.Scene {
 
 
             this.hpText.setText(
+
                 "AURA " +
                 auraRounded +
                 "%"
+
             );
 
 
             this.auraDots.forEach(
+
                 (dot, index) => {
 
                     const active =
@@ -2699,6 +3621,7 @@ class FarmAuraScene extends Phaser.Scene {
                     );
 
                 }
+
             );
 
 
@@ -2739,8 +3662,10 @@ class FarmAuraScene extends Phaser.Scene {
             ) {
 
                 this.egoText.setText(
+
                     "EGO ATIVO ×" +
                     GAME_CONFIG.EGO_MULTIPLIER
+
                 );
 
             }
@@ -2748,9 +3673,11 @@ class FarmAuraScene extends Phaser.Scene {
             else {
 
                 this.egoText.setText(
+
                     "EGO " +
                     egoRounded +
                     "%"
+
                 );
 
             }
@@ -2777,8 +3704,10 @@ class FarmAuraScene extends Phaser.Scene {
         ) {
 
             this.difficultyText.setText(
+
                 "DIFICULDADE " +
                 this.difficultyLevel
+
             );
 
 
@@ -2840,13 +3769,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // DRENAGEM
     // ========================================================
 
     getCurrentDrain() {
-
 
         return (
 
@@ -2866,13 +3793,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // START SCREEN
     // ========================================================
 
     createStartScreen() {
-
 
         this.startOverlay =
             this.add.rectangle(
@@ -2896,7 +3821,7 @@ class FarmAuraScene extends Phaser.Scene {
 
                 this.gameHeight * 0.32,
 
-                "FARM AURA",
+                "AURA FARMING",
 
                 {
 
@@ -2932,7 +3857,7 @@ class FarmAuraScene extends Phaser.Scene {
 
                 this.gameHeight * 0.43,
 
-                "FARME SUA AURA",
+                "FARME AURA ATÉ O INFINITO",
 
                 {
 
@@ -2979,8 +3904,10 @@ class FarmAuraScene extends Phaser.Scene {
                         "center",
 
                     wordWrap: {
+
                         width:
                             this.gameWidth * 0.8
+
                     }
 
                 }
@@ -3038,26 +3965,37 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         this.startButton.on(
+
             "pointerdown",
+
             () => {
 
                 this.startGame();
 
             }
+
         );
 
 
         this.input.keyboard.once(
-            "keydown",
-            () => {
 
-                this.startGame();
+            "keydown",
+
+            event => {
+
+                if (
+                    event.code !== "Space"
+                ) {
+
+                    this.startGame();
+
+                }
 
             }
+
         );
 
     }
-
 
 
     // ========================================================
@@ -3065,7 +4003,6 @@ class FarmAuraScene extends Phaser.Scene {
     // ========================================================
 
     startGame() {
-
 
         if (
             this.gameStarted
@@ -3079,10 +4016,33 @@ class FarmAuraScene extends Phaser.Scene {
         this.gameStarted = true;
 
 
+        // ----------------------------------------------------
+        // INICIALIZA SISTEMA DE ÁUDIO
+        // ----------------------------------------------------
+
         this.audio.init();
 
 
-        if (this.startOverlay) {
+        // ----------------------------------------------------
+        // INICIA MÚSICA DE FUNDO, CASO ESTEJA ATIVADA
+        // ----------------------------------------------------
+
+        if (
+            this.audio.musicEnabled
+        ) {
+
+            this.audio.startMusic();
+
+        }
+
+
+        // ----------------------------------------------------
+        // REMOVE START SCREEN
+        // ----------------------------------------------------
+
+        if (
+            this.startOverlay
+        ) {
 
             this.startOverlay.destroy();
 
@@ -3091,7 +4051,9 @@ class FarmAuraScene extends Phaser.Scene {
         }
 
 
-        if (this.startTitle) {
+        if (
+            this.startTitle
+        ) {
 
             this.startTitle.destroy();
 
@@ -3100,7 +4062,9 @@ class FarmAuraScene extends Phaser.Scene {
         }
 
 
-        if (this.startSubtitle) {
+        if (
+            this.startSubtitle
+        ) {
 
             this.startSubtitle.destroy();
 
@@ -3109,7 +4073,9 @@ class FarmAuraScene extends Phaser.Scene {
         }
 
 
-        if (this.startInstruction) {
+        if (
+            this.startInstruction
+        ) {
 
             this.startInstruction.destroy();
 
@@ -3118,7 +4084,9 @@ class FarmAuraScene extends Phaser.Scene {
         }
 
 
-        if (this.startButton) {
+        if (
+            this.startButton
+        ) {
 
             this.startButton.destroy();
 
@@ -3137,13 +4105,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // GAME OVER
     // ========================================================
 
     endGame() {
-
 
         if (
             this.gameOver
@@ -3166,6 +4132,13 @@ class FarmAuraScene extends Phaser.Scene {
         }
 
 
+        // ----------------------------------------------------
+        // PARA A MÚSICA
+        // ----------------------------------------------------
+
+        this.audio.stopMusic();
+
+
         const overlay =
             this.add.rectangle(
 
@@ -3181,139 +4154,165 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0, 0);
 
 
-        this.add.text(
-
-            this.gameWidth / 2,
-
-            this.gameHeight * 0.29,
-
-            "GAME OVER",
-
-            {
-
-                fontFamily:
-                    "Arial",
-
-                fontSize:
-                    IS_MOBILE
-                        ? "46px"
-                        : "64px",
-
-                fontStyle:
-                    "bold",
-
-                color:
-                    "#ffffff"
-
-            }
-
-        ).setOrigin(0.5);
+        overlay.setDepth(50);
 
 
-        this.add.text(
+        const title =
+            this.add.text(
 
-            this.gameWidth / 2,
+                this.gameWidth / 2,
 
-            this.gameHeight * 0.42,
+                this.gameHeight * 0.29,
 
-            "SCORE  " +
-            this.score.toLocaleString("pt-BR"),
+                "I'TS OVER PARA O BETA",
 
-            {
+                {
 
-                fontFamily:
-                    "Arial",
+                    fontFamily:
+                        "Arial",
 
-                fontSize:
-                    "30px",
+                    fontSize:
+                        IS_MOBILE
+                            ? "46px"
+                            : "64px",
 
-                fontStyle:
-                    "bold",
+                    fontStyle:
+                        "bold",
 
-                color:
-                    "#a78bfa"
+                    color:
+                        "#ffffff"
 
-            }
-
-        ).setOrigin(0.5);
-
-
-        this.add.text(
-
-            this.gameWidth / 2,
-
-            this.gameHeight * 0.50,
-
-            "COMBO MÁXIMO  " +
-            this.maxCombo,
-
-            {
-
-                fontFamily:
-                    "Arial",
-
-                fontSize:
-                    "22px",
-
-                fontStyle:
-                    "bold",
-
-                color:
-                    "#c4b5fd"
-
-            }
-
-        ).setOrigin(0.5);
-
-
-        this.add.text(
-
-            this.gameWidth / 2,
-
-            this.gameHeight * 0.66,
-
-            IS_MOBILE
-                ? "TOQUE NA TELA PARA JOGAR NOVAMENTE"
-                : "ENTER = JOGAR NOVAMENTE",
-
-            {
-
-                fontFamily:
-                    "Arial",
-
-                fontSize:
-                    IS_MOBILE
-                        ? "15px"
-                        : "18px",
-
-                fontStyle:
-                    "bold",
-
-                color:
-                    "#ffffff",
-
-                align:
-                    "center",
-
-                wordWrap: {
-                    width:
-                        this.gameWidth * 0.8
                 }
 
-            }
+            ).setOrigin(0.5);
 
-        ).setOrigin(0.5);
+
+        title.setDepth(51);
+
+
+        const score =
+            this.add.text(
+
+                this.gameWidth / 2,
+
+                this.gameHeight * 0.42,
+
+                "PONTUAÇÃO  " +
+                this.score.toLocaleString(
+                    "pt-BR"
+                ),
+
+                {
+
+                    fontFamily:
+                        "Arial",
+
+                    fontSize:
+                        "30px",
+
+                    fontStyle:
+                        "bold",
+
+                    color:
+                        "#a78bfa"
+
+                }
+
+            ).setOrigin(0.5);
+
+
+        score.setDepth(51);
+
+
+        const combo =
+            this.add.text(
+
+                this.gameWidth / 2,
+
+                this.gameHeight * 0.50,
+
+                "COMBO MÁXIMO  " +
+                this.maxCombo,
+
+                {
+
+                    fontFamily:
+                        "Arial",
+
+                    fontSize:
+                        "22px",
+
+                    fontStyle:
+                        "bold",
+
+                    color:
+                        "#c4b5fd"
+
+                }
+
+            ).setOrigin(0.5);
+
+
+        combo.setDepth(51);
+
+
+        const restartText =
+            this.add.text(
+
+                this.gameWidth / 2,
+
+                this.gameHeight * 0.66,
+
+                IS_MOBILE
+                    ? "TOQUE NA TELA PARA JOGAR NOVAMENTE"
+                    : "ENTER = JOGAR NOVAMENTE",
+
+                {
+
+                    fontFamily:
+                        "Arial",
+
+                    fontSize:
+                        IS_MOBILE
+                            ? "15px"
+                            : "18px",
+
+                    fontStyle:
+                        "bold",
+
+                    color:
+                        "#ffffff",
+
+                    align:
+                        "center",
+
+                    wordWrap: {
+
+                        width:
+                            this.gameWidth * 0.8
+
+                    }
+
+                }
+
+            ).setOrigin(0.5);
+
+
+        restartText.setDepth(51);
 
 
         if (IS_MOBILE) {
 
             this.input.once(
+
                 "pointerdown",
+
                 () => {
 
                     this.scene.restart();
 
                 }
+
             );
 
         }
@@ -3321,12 +4320,15 @@ class FarmAuraScene extends Phaser.Scene {
         else {
 
             this.input.keyboard.once(
+
                 "keydown-ENTER",
+
                 () => {
 
                     this.scene.restart();
 
                 }
+
             );
 
         }
@@ -3334,13 +4336,11 @@ class FarmAuraScene extends Phaser.Scene {
     }
 
 
-
     // ========================================================
     // UPDATE
     // ========================================================
 
     update(time, delta) {
-
 
         if (
             !this.gameStarted ||
@@ -3409,6 +4409,87 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
+        // MOVIMENTO DO FUNDO
+        // ----------------------------------------------------
+
+        const backgroundSpeed =
+            GAME_CONFIG
+                .AURA_BACKGROUND_SPEED[
+                    this.auraLevel - 1
+                ];
+
+
+        if (
+            this.particles
+        ) {
+
+            const movement =
+                backgroundSpeed *
+                (
+                    delta /
+                    1000
+                );
+
+
+            this.particles.forEach(
+
+                particle => {
+
+                    particle.y +=
+                        movement *
+                        particle.baseSpeed;
+
+
+                    if (
+                        particle.y >
+                        this.playAreaBottom + 10
+                    ) {
+
+                        particle.y =
+                            this.playAreaTop - 10;
+
+
+                        particle.x =
+                            Phaser.Math.Between(
+                                0,
+                                this.gameWidth
+                            );
+
+
+                        particle.baseSpeed =
+                            Phaser.Math.FloatBetween(
+                                0.75,
+                                1.35
+                            );
+
+                    }
+
+                }
+
+            );
+
+        }
+
+
+        // ----------------------------------------------------
+        // POSIÇÃO DA AURA
+        // ----------------------------------------------------
+
+        if (
+            this.characterAura
+        ) {
+
+            this.characterAura.x =
+                this.character.x;
+
+
+            this.characterAura.y =
+                this.character.y;
+
+        }
+
+
+        // ----------------------------------------------------
         // EGO
         // ----------------------------------------------------
 
@@ -3436,10 +4517,6 @@ class FarmAuraScene extends Phaser.Scene {
 
         // ----------------------------------------------------
         // HUD
-        //
-        // Não atualizamos tudo a cada frame.
-        //
-        // Apenas valores que realmente mudaram.
         // ----------------------------------------------------
 
         const currentAura =
@@ -3455,10 +4532,13 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         if (
+
             currentAura !==
             this._lastAuraUpdate ||
+
             currentTimer !==
             this._lastTimerUpdate
+
         ) {
 
             this.updateHUD();
@@ -3491,7 +4571,6 @@ class FarmAuraScene extends Phaser.Scene {
 }
 
 
-
 // ============================================================
 // PHASER CONFIG
 // ============================================================
@@ -3501,22 +4580,17 @@ const config = {
     type:
         Phaser.AUTO,
 
-
     width:
         window.innerWidth,
-
 
     height:
         window.innerHeight,
 
-
     backgroundColor:
         "#090b14",
 
-
     scene:
         FarmAuraScene,
-
 
     scale: {
 
@@ -3531,7 +4605,6 @@ const config = {
 };
 
 
-
 // ============================================================
 // START
 // ============================================================
@@ -3540,7 +4613,6 @@ new Phaser.Game(config);
 
 
 </script>
-
 
 </body>
 
