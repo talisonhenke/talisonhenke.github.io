@@ -1,49 +1,50 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
 
-```
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no"
+    >
 
-<title>Farm Aura — Prototype</title>
+    <title>Farm Aura — Prototype</title>
 
-<style>
+    <style>
 
-    html,
-    body {
+        html,
+        body {
 
-        margin: 0;
-        padding: 0;
+            margin: 0;
+            padding: 0;
 
-        width: 100%;
-        height: 100%;
+            width: 100%;
+            height: 100%;
 
-        overflow: hidden;
+            overflow: hidden;
 
-        background: #090b14;
+            background: #090b14;
 
-        touch-action: manipulation;
+            touch-action: none;
 
-        -webkit-user-select: none;
-        user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
 
-    }
+            -webkit-touch-callout: none;
 
-    canvas {
+        }
 
-        display: block;
+        canvas {
 
-    }
+            display: block;
 
-</style>
-```
+            touch-action: none;
+
+        }
+
+    </style>
 
 </head>
 
@@ -52,7 +53,6 @@
 <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
 
 <script>
-
 
 // ============================================================
 // CONFIGURAÇÃO GERAL
@@ -64,11 +64,40 @@ const GAME_CONFIG = {
 
     MAX_AURA: 100,
 
-    BASE_DRAIN_PER_SECOND: 7,
+    // --------------------------------------------------------
+// DRENAGEM
+// --------------------------------------------------------
 
-    DIFFICULTY_INTERVAL: 5000,
+BASE_DRAIN_PER_SECOND: 7,
 
-    DRAIN_INCREASE: 0.10,
+// Multiplicador de drain conforme o nível da Aura
+DRAIN_BY_AURA_LEVEL: [
+    1.60,
+    2.00,
+    2.25,
+    2.50,
+    3.00
+],
+
+DIFFICULTY_INTERVAL: 5000,
+
+DRAIN_INCREASE: 0.10,
+
+    // --------------------------------------------------------
+    // RECUPERAÇÃO
+    // --------------------------------------------------------
+
+    BASE_HP_RECOVERY_PER_CLICK: 2,
+
+    EGO_50_HP_BONUS_PER_CLICK: 2,
+
+    EGO_75_HP_BONUS_PER_CLICK: 4,
+
+    EGO_100_DRAIN_RECOVERY_RATIO: 0.50,
+
+    // --------------------------------------------------------
+    // SCORE
+    // --------------------------------------------------------
 
     BASE_SCORE_PER_HIT: 10,
 
@@ -95,15 +124,21 @@ const GAME_CONFIG = {
         100
     ],
 
+    // --------------------------------------------------------
+    // AURA
+    // --------------------------------------------------------
+
     AURA_GAIN_PER_HIT: 2,
 
     AURA_RESET_AFTER_LEVEL_UP: 50,
 
     HIT_COMBO_MILESTONE: 30,
 
-    EGO_PER_MILESTONE: 10,
+    // --------------------------------------------------------
+    // EGO
+    // --------------------------------------------------------
 
-    EGO_LOSS_PER_MISS: 5,
+    EGO_PER_MILESTONE: 10,
 
     MIN_EGO_TO_ACTIVATE: 50,
 
@@ -117,10 +152,9 @@ const GAME_CONFIG = {
 
     EGO_CHARACTER_SCALE: 1.16,
 
-
-    // ------------------------------------------------------------
-    // EFEITOS VISUAIS DA AURA
-    // ------------------------------------------------------------
+    // --------------------------------------------------------
+    // VISUAIS
+    // --------------------------------------------------------
 
     AURA_BACKGROUND_SPEED: [
         18,
@@ -146,10 +180,9 @@ const GAME_CONFIG = {
         0.30
     ],
 
-
-    // ------------------------------------------------------------
-    // MÚSICA
-    // ------------------------------------------------------------
+    // --------------------------------------------------------
+    // ÁUDIO
+    // --------------------------------------------------------
 
     MUSIC_ENABLED_BY_DEFAULT: true
 
@@ -157,43 +190,13 @@ const GAME_CONFIG = {
 
 
 // ============================================================
-// ARQUIVOS DE ÁUDIO EXTERNOS
-// ============================================================
-//
-// Todos os arquivos personalizados ficam dentro da pasta:
-//
-//     BGM/
-//
-// Estrutura esperada:
-//
-//     BGM/
-//         background_music.mp3
-//         aura_level_up.ogg
-//         ego_activate.ogg
-//
-// A música de fundo pode ser substituída por qualquer arquivo
-// de áudio compatível com o navegador.
-//
-// Formatos recomendados:
-//     .mp3
-//     .ogg
-//     .wav
-//
+// ARQUIVOS DE ÁUDIO
 // ============================================================
 
 const AUDIO_FILES = {
 
-    // --------------------------------------------------------
-    // MÚSICA DE FUNDO
-    // --------------------------------------------------------
-
     BACKGROUND_MUSIC:
         "BGM/background_music.ogg",
-
-
-    // --------------------------------------------------------
-    // EFEITOS SONOROS PERSONALIZADOS
-    // --------------------------------------------------------
 
     AURA_LEVEL_UP:
         "BGM/aura_level_up.ogg",
@@ -205,7 +208,7 @@ const AUDIO_FILES = {
 
 
 // ============================================================
-// CORES
+// CORES DA AURA
 // ============================================================
 
 const AURA_LEVELS = [
@@ -262,20 +265,10 @@ class AudioSystem {
 
         this.audioContext = null;
 
-
-        // ----------------------------------------------------
-        // CONTROLE DA MÚSICA
-        // ----------------------------------------------------
-
         this.musicEnabled =
             GAME_CONFIG.MUSIC_ENABLED_BY_DEFAULT;
 
         this.music = null;
-
-
-        // ----------------------------------------------------
-        // ÁUDIOS EXTERNOS
-        // ----------------------------------------------------
 
         this.customSounds = {};
 
@@ -283,10 +276,6 @@ class AudioSystem {
 
     }
 
-
-    // ========================================================
-    // INICIALIZA AUDIO
-    // ========================================================
 
     init() {
 
@@ -300,13 +289,7 @@ class AudioSystem {
 
         }
 
-
-        // ----------------------------------------------------
-        // PREPARA OS ÁUDIOS EXTERNOS
-        // ----------------------------------------------------
-
         this.loadCustomSounds();
-
 
         if (
             this.audioContext.state === "suspended"
@@ -316,15 +299,10 @@ class AudioSystem {
 
         }
 
-
         return Promise.resolve();
 
     }
 
-
-    // ========================================================
-    // CARREGA SONS EXTERNOS
-    // ========================================================
 
     loadCustomSounds() {
 
@@ -332,13 +310,7 @@ class AudioSystem {
             return;
         }
 
-
         this.customSoundsLoaded = true;
-
-
-        // ----------------------------------------------------
-        // CARREGA OS EFEITOS PERSONALIZADOS
-        // ----------------------------------------------------
 
         Object.keys(AUDIO_FILES).forEach(
             key => {
@@ -351,18 +323,14 @@ class AudioSystem {
 
                 }
 
-
                 const audio =
                     new Audio(
                         AUDIO_FILES[key]
                     );
 
-
                 audio.preload = "auto";
 
-
                 audio.volume = 1.0;
-
 
                 audio.addEventListener(
                     "error",
@@ -376,44 +344,29 @@ class AudioSystem {
                     }
                 );
 
-
                 this.customSounds[key] =
                     audio;
 
             }
         );
 
-
-        // ----------------------------------------------------
-        // CARREGA A MÚSICA DE FUNDO
-        // ----------------------------------------------------
-
         this.music =
             new Audio(
                 AUDIO_FILES.BACKGROUND_MUSIC
             );
 
-
         this.music.preload = "auto";
-
 
         this.music.loop = true;
 
-
-        // Volume inicial da música.
-        //
-        // O volume da música fica controlado aqui,
-        // diretamente na configuração do objeto de áudio.
-
-        this.music.volume = 0.35;
-
+        this.music.volume = 0.28;
 
         this.music.addEventListener(
             "error",
             () => {
 
                 console.warn(
-                    "[AudioSystem] Não foi possível carregar a música:",
+                    "[AudioSystem] Não foi possível carregar:",
                     AUDIO_FILES.BACKGROUND_MUSIC
                 );
 
@@ -423,10 +376,6 @@ class AudioSystem {
     }
 
 
-    // ========================================================
-    // TOCA SOM EXTERNO
-    // ========================================================
-
     playCustomSound(
         soundKey,
         volume = 1.0
@@ -435,28 +384,15 @@ class AudioSystem {
         const audio =
             this.customSounds[soundKey];
 
-
         if (!audio) {
-
-            console.warn(
-                "[AudioSystem] Som não encontrado:",
-                soundKey
-            );
-
             return;
-
         }
 
-
         try {
-
-            // Permite que o mesmo efeito seja
-            // executado novamente rapidamente.
 
             audio.pause();
 
             audio.currentTime = 0;
-
 
             audio.volume =
                 Phaser.Math.Clamp(
@@ -465,25 +401,16 @@ class AudioSystem {
                     1
                 );
 
-
-            const playPromise =
+            const promise =
                 audio.play();
 
-
             if (
-                playPromise &&
-                typeof playPromise.catch === "function"
+                promise &&
+                typeof promise.catch === "function"
             ) {
 
-                playPromise.catch(
-                    error => {
-
-                        console.warn(
-                            "[AudioSystem] Reprodução bloqueada:",
-                            error
-                        );
-
-                    }
+                promise.catch(
+                    () => {}
                 );
 
             }
@@ -493,7 +420,7 @@ class AudioSystem {
         catch (error) {
 
             console.warn(
-                "[AudioSystem] Erro ao tocar som:",
+                "[AudioSystem] Erro:",
                 error
             );
 
@@ -501,10 +428,6 @@ class AudioSystem {
 
     }
 
-
-    // ========================================================
-    // TOM
-    // ========================================================
 
     tone(
         frequency,
@@ -518,51 +441,37 @@ class AudioSystem {
             return;
         }
 
-
         const oscillator =
             this.audioContext.createOscillator();
-
 
         const gain =
             this.audioContext.createGain();
 
-
         oscillator.type =
             type;
-
 
         oscillator.frequency.setValueAtTime(
             frequency,
             time
         );
 
-
         gain.gain.setValueAtTime(
             volume,
             time
         );
-
 
         gain.gain.exponentialRampToValueAtTime(
             0.001,
             time + duration
         );
 
-
-        oscillator.connect(
-            gain
-        );
-
+        oscillator.connect(gain);
 
         gain.connect(
             this.audioContext.destination
         );
 
-
-        oscillator.start(
-            time
-        );
-
+        oscillator.start(time);
 
         oscillator.stop(
             time + duration
@@ -571,25 +480,19 @@ class AudioSystem {
     }
 
 
-    // ========================================================
-    // HIT
-    // ========================================================
-
     hit() {
 
         if (!this.audioContext) {
             return;
         }
 
-
         const now =
             this.audioContext.currentTime;
-
 
         this.tone(
             420,
             now,
-            0.05,
+            0.045,
             "triangle",
             0.035
         );
@@ -597,21 +500,7 @@ class AudioSystem {
     }
 
 
-    // ========================================================
-    // LEVEL UP
-    // ========================================================
-    //
-    // Este som vem de um arquivo externo.
-    //
-    // Arquivo:
-    // BGM/aura_level_up.ogg
-    //
-    // O volume continua sendo definido diretamente
-    // nesta função.
-    //
-    // ========================================================
-
-    levelUp(level) {
+    levelUp() {
 
         this.playCustomSound(
             "AURA_LEVEL_UP",
@@ -621,20 +510,14 @@ class AudioSystem {
     }
 
 
-    // ========================================================
-    // EGO GAIN
-    // ========================================================
-
     egoGain() {
 
         if (!this.audioContext) {
             return;
         }
 
-
         const now =
             this.audioContext.currentTime;
-
 
         this.tone(
             520,
@@ -643,7 +526,6 @@ class AudioSystem {
             "triangle",
             0.08
         );
-
 
         this.tone(
             780,
@@ -656,55 +538,6 @@ class AudioSystem {
     }
 
 
-    // ========================================================
-    // EGO LOSS
-    // ========================================================
-
-    egoLoss() {
-
-        if (!this.audioContext) {
-            return;
-        }
-
-
-        const now =
-            this.audioContext.currentTime;
-
-
-        this.tone(
-            300,
-            now,
-            0.10,
-            "sawtooth",
-            0.07
-        );
-
-
-        this.tone(
-            180,
-            now + 0.06,
-            0.12,
-            "sawtooth",
-            0.06
-        );
-
-    }
-
-
-    // ========================================================
-    // EGO ACTIVATE
-    // ========================================================
-    //
-    // Este som vem de um arquivo externo.
-    //
-    // Arquivo:
-    // BGM/ego_activate.ogg
-    //
-    // O volume continua sendo definido diretamente
-    // nesta função.
-    //
-    // ========================================================
-
     egoActivate() {
 
         this.playCustomSound(
@@ -715,20 +548,14 @@ class AudioSystem {
     }
 
 
-    // ========================================================
-    // EGO END
-    // ========================================================
-
     egoEnd() {
 
         if (!this.audioContext) {
             return;
         }
 
-
         const now =
             this.audioContext.currentTime;
-
 
         this.tone(
             440,
@@ -737,7 +564,6 @@ class AudioSystem {
             "triangle",
             0.05
         );
-
 
         this.tone(
             330,
@@ -750,78 +576,34 @@ class AudioSystem {
     }
 
 
-    // ========================================================
-    // INICIA MÚSICA DE FUNDO
-    // ========================================================
-    //
-    // A música é um arquivo de áudio comum.
-    //
-    // Ela não possui nenhuma relação com o sistema
-    // procedural de sons.
-    //
-    // O arquivo é reproduzido em loop.
-    //
-    // ========================================================
-
     startMusic() {
 
-        if (
-            !this.musicEnabled
-        ) {
-
+        if (!this.musicEnabled) {
             return;
-
         }
 
-
-        // Garante que a música esteja carregada.
-
         if (!this.music) {
-
             this.loadCustomSounds();
-
         }
-
 
         if (!this.music) {
-
-            console.warn(
-                "[AudioSystem] Música de fundo não disponível."
-            );
-
             return;
-
         }
-
-
-        // Volume da música.
-        //
-        // Mantido diretamente nesta função,
-        // conforme a estrutura dos efeitos sonoros.
 
         this.music.volume = 0.28;
 
-
         try {
 
-            const playPromise =
+            const promise =
                 this.music.play();
 
-
             if (
-                playPromise &&
-                typeof playPromise.catch === "function"
+                promise &&
+                typeof promise.catch === "function"
             ) {
 
-                playPromise.catch(
-                    error => {
-
-                        console.warn(
-                            "[AudioSystem] Reprodução da música bloqueada:",
-                            error
-                        );
-
-                    }
+                promise.catch(
+                    () => {}
                 );
 
             }
@@ -840,33 +622,23 @@ class AudioSystem {
     }
 
 
-    // ========================================================
-    // PARA MÚSICA
-    // ========================================================
-
     stopMusic() {
 
         if (!this.music) {
             return;
         }
 
-
         this.music.pause();
-
 
         this.music.currentTime = 0;
 
     }
 
 
-    // ========================================================
-    // ALTERNA MÚSICA
-    // ========================================================
-
     toggleMusic() {
 
-        this.musicEnabled = !this.musicEnabled;
-
+        this.musicEnabled =
+            !this.musicEnabled;
 
         if (this.musicEnabled) {
 
@@ -885,7 +657,6 @@ class AudioSystem {
             this.stopMusic();
 
         }
-
 
         return this.musicEnabled;
 
@@ -916,22 +687,14 @@ class FarmAuraScene extends Phaser.Scene {
         this.gameWidth =
             this.scale.width;
 
-
         this.gameHeight =
             this.scale.height;
-
-
-        // ----------------------------------------------------
-        // ÁREA DE JOGO
-        // ----------------------------------------------------
 
         this.playAreaTop =
             250;
 
-
         this.playAreaBottom =
             this.gameHeight - 95;
-
 
         if (
             this.playAreaBottom <=
@@ -944,12 +707,10 @@ class FarmAuraScene extends Phaser.Scene {
                     this.gameHeight * 0.36
                 );
 
-
             this.playAreaBottom =
                 this.gameHeight - 70;
 
         }
-
 
         this.playAreaHeight =
             this.playAreaBottom -
@@ -981,19 +742,17 @@ class FarmAuraScene extends Phaser.Scene {
 
         this.egoRemainingTime = 0;
 
+        this.activeEgoTier = 0;
+
+        this.activeEgoCharge = 0;
+
         this.difficultyLevel = 0;
 
         this.difficultyTimer = 0;
 
-        this.lastClick = null;
-
-        this._lastAuraUpdate = null;
-
-        this._lastTimerUpdate = null;
-
 
         // ----------------------------------------------------
-        // AUDIO
+        // ÁUDIO
         // ----------------------------------------------------
 
         this.audio =
@@ -1015,6 +774,13 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
+        // HITBOX
+        // ----------------------------------------------------
+
+        this.createCharacterHitArea();
+
+
+        // ----------------------------------------------------
         // HUD
         // ----------------------------------------------------
 
@@ -1022,66 +788,10 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
-        // CONTROLES MOBILE
-        // ----------------------------------------------------
-
-        this.createMobileControls();
-
-
-        // ----------------------------------------------------
-        // CONTROLE DE MÚSICA
+        // MÚSICA
         // ----------------------------------------------------
 
         this.createMusicControl();
-
-
-        // ----------------------------------------------------
-        // INPUT GLOBAL
-        // ----------------------------------------------------
-
-        this.input.on(
-            "pointerdown",
-            pointer => {
-
-                if (IS_MOBILE) {
-                    return;
-                }
-
-
-                if (
-                    pointer.button === 0
-                ) {
-
-                    this.handleClick("left");
-
-                }
-
-                else if (
-                    pointer.button === 2
-                ) {
-
-                    this.handleClick("right");
-
-                }
-
-            }
-        );
-
-
-        // ----------------------------------------------------
-        // TECLADO
-        // ----------------------------------------------------
-
-        this.input.keyboard.on(
-            "keydown",
-            event => {
-
-                this.handleKeyboardInput(
-                    event
-                );
-
-            }
-        );
 
 
         // ----------------------------------------------------
@@ -1092,8 +802,59 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
-        // PRIMEIRA ATUALIZAÇÃO
+        // BOTÃO DIREITO = EGO NO PC
         // ----------------------------------------------------
+
+        this.game.canvas.addEventListener(
+            "contextmenu",
+            event => {
+
+                event.preventDefault();
+
+            }
+        );
+
+
+        this.game.canvas.addEventListener(
+            "mousedown",
+            event => {
+
+                if (
+                    event.button !== 2
+                ) {
+
+                    return;
+
+                }
+
+                if (
+                    IS_MOBILE
+                ) {
+
+                    return;
+
+                }
+
+                event.preventDefault();
+
+                this.activateEgo();
+
+            }
+        );
+
+
+        // ----------------------------------------------------
+        // RESIZE
+        // ----------------------------------------------------
+
+        this.scale.on(
+            "resize",
+            this.handleResize,
+            this
+        );
+
+
+        this.updateAuraVisual();
 
         this.updateHUD(true);
 
@@ -1108,32 +869,22 @@ class FarmAuraScene extends Phaser.Scene {
 
         this.background =
             this.add.rectangle(
-
                 0,
                 0,
-
                 this.gameWidth,
                 this.gameHeight,
-
                 0x090b14
-
             ).setOrigin(0, 0);
 
 
         this.centerGlow =
             this.add.circle(
-
                 this.gameWidth / 2,
-
                 this.playAreaTop +
                 this.playAreaHeight * 0.52,
-
                 280,
-
                 0x6366f1,
-
                 0.035
-
             );
 
 
@@ -1162,10 +913,6 @@ class FarmAuraScene extends Phaser.Scene {
 
         });
 
-
-        // ----------------------------------------------------
-        // CAMPO DE ESTRELAS
-        // ----------------------------------------------------
 
         this.particles = [];
 
@@ -1218,10 +965,6 @@ class FarmAuraScene extends Phaser.Scene {
         }
 
 
-        // ----------------------------------------------------
-        // AURA DO PERSONAGEM
-        // ----------------------------------------------------
-
         this.characterAura =
             this.add.circle(
 
@@ -1233,7 +976,6 @@ class FarmAuraScene extends Phaser.Scene {
                 0,
 
                 0xffffff,
-
                 0
 
             );
@@ -1477,585 +1219,124 @@ class FarmAuraScene extends Phaser.Scene {
 
         ]);
 
-    }
 
-
-    // ========================================================
-    // BRAÇOS
-    // ========================================================
-
-    animateArm(side) {
-
-        const leftArm =
-            this.leftArm;
-
-
-        const rightArm =
-            this.rightArm;
-
-
-        this.tweens.killTweensOf([
-
-            leftArm,
-            rightArm
-
-        ]);
-
-
-        let leftRotation;
-
-        let rightRotation;
-
-
-        if (
-            side === "left"
-        ) {
-
-            leftRotation =
-                -0.65;
-
-            rightRotation =
-                0.25;
-
-        }
-
-        else {
-
-            leftRotation =
-                -0.25;
-
-            rightRotation =
-                0.65;
-
-        }
-
-
-        this.tweens.add({
-
-            targets:
-                leftArm,
-
-            rotation:
-                leftRotation,
-
-            duration:
-                90,
-
-            ease:
-                "Quad.easeOut"
-
-        });
-
-
-        this.tweens.add({
-
-            targets:
-                rightArm,
-
-            rotation:
-                rightRotation,
-
-            duration:
-                90,
-
-            ease:
-                "Quad.easeOut"
-
-        });
+        this.setCharacterArm(
+            "right"
+        );
 
     }
 
 
     // ========================================================
-    // INPUT TECLADO
+    // HITBOX
     // ========================================================
 
-    handleKeyboardInput(event) {
+    createCharacterHitArea() {
 
-        if (
-            event.code === "Space"
-        ) {
-
-            event.preventDefault();
-
-            this.activateEgo();
-
-            return;
-
-        }
+        const hitWidth =
+            IS_MOBILE
+                ? 190
+                : 175;
 
 
-        if (
-            event.code === "KeyA" ||
-            event.code === "ArrowLeft"
-        ) {
-
-            event.preventDefault();
-
-            this.handleClick("left");
-
-            return;
-
-        }
+        const hitHeight =
+            IS_MOBILE
+                ? 285
+                : 265;
 
 
-        if (
-            event.code === "KeyD" ||
-            event.code === "ArrowRight"
-        ) {
+        this.characterHitArea =
+            this.add.rectangle(
 
-            event.preventDefault();
+                this.character.x,
 
-            this.handleClick("right");
+                this.character.y + 35,
 
-            return;
+                hitWidth,
 
-        }
+                hitHeight,
 
-    }
+                0xffffff,
+                0
 
-
-    // ========================================================
-    // CONTROLE DE MÚSICA
-    // ========================================================
-
-    createMusicControl() {
-
-        const x =
-            this.gameWidth - 30;
-
-
-        const y =
-            30;
-
-
-        this.musicButton =
-            this.add.circle(
-                x,
-                y,
-                20,
-                0x1f2937,
-                0.90
             );
 
 
-        this.musicButton.setStrokeStyle(
+        this.characterHitArea.setDepth(10);
+
+
+        this.characterHitArea.setInteractive({
+
+            useHandCursor:
+                !IS_MOBILE
+
+        });
+
+
+        this.characterHitArea.on(
+
+            "pointerdown",
+
+            pointer => {
+
+                if (
+                    pointer.button !== 0
+                ) {
+
+                    return;
+
+                }
+
+
+                if (
+                    pointer.event &&
+                    pointer.event.preventDefault
+                ) {
+
+                    pointer.event.preventDefault();
+
+                }
+
+
+                this.handleCharacterClick();
+
+            }
+
+        );
+
+
+        this.clickRing =
+            this.add.circle(
+
+                this.character.x,
+
+                this.character.y + 20,
+
+                70,
+
+                0xffffff,
+                0
+
+            );
+
+
+        this.clickRing.setStrokeStyle(
             2,
-            0x6b7280,
-            0.70
+            0xffffff,
+            0
         );
 
 
-        this.musicIcon =
-            this.add.text(
-
-                x,
-                y,
-
-                "♪",
-
-                {
-
-                    fontFamily:
-                        "Arial",
-
-                    fontSize:
-                        "20px",
-
-                    fontStyle:
-                        "bold",
-
-                    color:
-                        "#6b7280"
-
-                }
-
-            ).setOrigin(0.5);
-
-
-        this.musicButton.setInteractive({
-
-            useHandCursor:
-                !IS_MOBILE
-
-        });
-
-
-        this.musicIcon.setInteractive({
-
-            useHandCursor:
-                !IS_MOBILE
-
-        });
-
-
-        const toggle =
-            event => {
-
-                if (
-                    event &&
-                    event.preventDefault
-                ) {
-
-                    event.preventDefault();
-
-                }
-
-
-                const enabled =
-                    this.audio.toggleMusic();
-
-
-                this.updateMusicButton(
-                    enabled
-                );
-
-            };
-
-
-        this.musicButton.on(
-            "pointerdown",
-            toggle
-        );
-
-
-        this.musicIcon.on(
-            "pointerdown",
-            toggle
-        );
-
-
-        this.updateMusicButton(
-            this.audio.musicEnabled
-        );
-
-    }
-
-
-    updateMusicButton(enabled) {
-
-        if (!this.musicButton) {
-            return;
-        }
-
-
-        if (enabled) {
-
-            this.musicButton.setFillStyle(
-                0x312e81,
-                0.95
-            );
-
-
-            this.musicButton.setStrokeStyle(
-                2,
-                0xa78bfa,
-                0.90
-            );
-
-
-            this.musicIcon.setText(
-                "♪"
-            );
-
-
-            this.musicIcon.setColor(
-                "#a78bfa"
-            );
-
-        }
-
-        else {
-
-            this.musicButton.setFillStyle(
-                0x1f2937,
-                0.90
-            );
-
-
-            this.musicButton.setStrokeStyle(
-                2,
-                0x6b7280,
-                0.70
-            );
-
-
-            this.musicIcon.setText(
-                "♪"
-            );
-
-
-            this.musicIcon.setColor(
-                "#6b7280"
-            );
-
-        }
+        this.clickRing.setDepth(9);
 
     }
 
 
     // ========================================================
-    // CONTROLES MOBILE
+    // CLIQUE NO PERSONAGEM
     // ========================================================
 
-    createMobileControls() {
-
-        this.mobileControls = [];
-
-
-        if (!IS_MOBILE) {
-            return;
-        }
-
-
-        const buttonSize =
-            Math.min(
-
-                100,
-
-                Math.max(
-                    76,
-                    this.gameWidth * 0.20
-                )
-
-            );
-
-
-        const buttonRadius =
-            buttonSize / 2;
-
-
-        const hitRadius =
-            buttonRadius + 12;
-
-
-        const sideMargin =
-            Math.max(
-                20,
-                this.gameWidth * 0.07
-            );
-
-
-        const buttonY =
-            this.gameHeight * 0.78;
-
-
-        // ----------------------------------------------------
-        // ESQUERDO
-        // ----------------------------------------------------
-
-        const leftX =
-            sideMargin +
-            buttonRadius;
-
-
-        this.mobileLeftButton =
-            this.add.circle(
-
-                leftX,
-                buttonY,
-
-                buttonRadius,
-
-                0x1f2937,
-                0.90
-
-            );
-
-
-        this.mobileLeftButton.setStrokeStyle(
-            3,
-            0x60a5fa,
-            0.80
-        );
-
-
-        this.mobileLeftButton.setInteractive(
-
-            new Phaser.Geom.Circle(
-                0,
-                0,
-                hitRadius
-            ),
-
-            Phaser.Geom.Circle.Contains,
-
-            {
-                useHandCursor: false
-            }
-
-        );
-
-
-        this.mobileLeftButton.on(
-            "pointerdown",
-            pointer => {
-
-                if (
-                    pointer.event &&
-                    pointer.event.preventDefault
-                ) {
-
-                    pointer.event.preventDefault();
-
-                }
-
-
-                this.handleClick("left");
-
-            }
-        );
-
-
-        this.mobileLeftLabel =
-            this.add.text(
-
-                leftX,
-                buttonY,
-
-                "←",
-
-                {
-
-                    fontFamily:
-                        "Arial",
-
-                    fontSize:
-                        Math.round(
-                            buttonSize * 0.42
-                        ) + "px",
-
-                    fontStyle:
-                        "bold",
-
-                    color:
-                        "#60a5fa"
-
-                }
-
-            );
-
-
-        this.mobileLeftLabel.setOrigin(0.5);
-
-
-        // ----------------------------------------------------
-        // DIREITO
-        // ----------------------------------------------------
-
-        const rightX =
-            this.gameWidth -
-            sideMargin -
-            buttonRadius;
-
-
-        this.mobileRightButton =
-            this.add.circle(
-
-                rightX,
-                buttonY,
-
-                buttonRadius,
-
-                0x1f2937,
-                0.90
-
-            );
-
-
-        this.mobileRightButton.setStrokeStyle(
-            3,
-            0x34d399,
-            0.80
-        );
-
-
-        this.mobileRightButton.setInteractive(
-
-            new Phaser.Geom.Circle(
-                0,
-                0,
-                hitRadius
-            ),
-
-            Phaser.Geom.Circle.Contains,
-
-            {
-                useHandCursor: false
-            }
-
-        );
-
-
-        this.mobileRightButton.on(
-            "pointerdown",
-            pointer => {
-
-                if (
-                    pointer.event &&
-                    pointer.event.preventDefault
-                ) {
-
-                    pointer.event.preventDefault();
-
-                }
-
-
-                this.handleClick("right");
-
-            }
-        );
-
-
-        this.mobileRightLabel =
-            this.add.text(
-
-                rightX,
-                buttonY,
-
-                "→",
-
-                {
-
-                    fontFamily:
-                        "Arial",
-
-                    fontSize:
-                        Math.round(
-                            buttonSize * 0.42
-                        ) + "px",
-
-                    fontStyle:
-                        "bold",
-
-                    color:
-                        "#34d399"
-
-                }
-
-            );
-
-
-        this.mobileRightLabel.setOrigin(0.5);
-
-
-        this.mobileControls.push(
-
-            this.mobileLeftButton,
-            this.mobileRightButton,
-            this.mobileLeftLabel,
-            this.mobileRightLabel
-
-        );
-
-    }
-
-
-    // ========================================================
-    // CLICK
-    // ========================================================
-
-    handleClick(input) {
+    handleCharacterClick() {
 
         if (
             !this.gameStarted ||
@@ -2068,66 +1349,6 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         this.audio.init();
-
-
-        let side = null;
-
-
-        if (
-            input === 0
-        ) {
-
-            side = "left";
-
-        }
-
-        else if (
-            input === 2
-        ) {
-
-            side = "right";
-
-        }
-
-        else if (
-            input === "left"
-        ) {
-
-            side = "left";
-
-        }
-
-        else if (
-            input === "right"
-        ) {
-
-            side = "right";
-
-        }
-
-
-        if (!side) {
-            return;
-        }
-
-
-        // ----------------------------------------------------
-        // MESMO LADO NOVAMENTE = MISS
-        // ----------------------------------------------------
-
-        if (
-            this.lastClick === side
-        ) {
-
-            this.miss();
-
-            return;
-
-        }
-
-
-        this.lastClick =
-            side;
 
 
         // ----------------------------------------------------
@@ -2170,10 +1391,29 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
-        // AURA
+        // RECUPERAÇÃO DE AURA
         // ----------------------------------------------------
 
-        this.addAuraHP();
+        this.recoverAuraOnClick();
+
+
+        // ----------------------------------------------------
+        // AURA EXTRA POR HIT
+        // ----------------------------------------------------
+
+        /*
+         * IMPORTANTE:
+         *
+         * Agora o ganho de Aura por hit passa pelo
+         * mesmo sistema central de controle.
+         *
+         * Isso garante que, se a Aura atingir 100,
+         * o level-up será processado imediatamente.
+         */
+
+        this.addAuraHP(
+            GAME_CONFIG.AURA_GAIN_PER_HIT
+        );
 
 
         // ----------------------------------------------------
@@ -2187,18 +1427,25 @@ class FarmAuraScene extends Phaser.Scene {
         // ANIMAÇÃO
         // ----------------------------------------------------
 
-        this.animateArm(side);
+        this.playHitAnimation();
 
 
         // ----------------------------------------------------
-        // SOM DO HIT
+        // FEEDBACK
+        // ----------------------------------------------------
+
+        this.createCharacterClickFeedback();
+
+
+        // ----------------------------------------------------
+        // SOM
         // ----------------------------------------------------
 
         this.audio.hit();
 
 
         // ----------------------------------------------------
-        // FEEDBACK
+        // SCORE POPUP
         // ----------------------------------------------------
 
         this.showScorePopup(
@@ -2211,6 +1458,380 @@ class FarmAuraScene extends Phaser.Scene {
         // ----------------------------------------------------
 
         this.updateHUD();
+
+    }
+
+
+    // ========================================================
+    // RECUPERAÇÃO DE HP / AURA POR CLIQUE
+    // ========================================================
+
+    recoverAuraOnClick() {
+
+        let recovery =
+            GAME_CONFIG.BASE_HP_RECOVERY_PER_CLICK;
+
+
+        // ----------------------------------------------------
+        // EGO 50%
+        // ----------------------------------------------------
+
+        if (
+            this.egoActive &&
+            this.activeEgoTier === 50
+        ) {
+
+            recovery +=
+                GAME_CONFIG
+                    .EGO_50_HP_BONUS_PER_CLICK;
+
+        }
+
+
+        // ----------------------------------------------------
+        // EGO 75%
+        // ----------------------------------------------------
+
+        else if (
+            this.egoActive &&
+            this.activeEgoTier === 75
+        ) {
+
+            recovery +=
+                GAME_CONFIG
+                    .EGO_75_HP_BONUS_PER_CLICK;
+
+        }
+
+
+        // ----------------------------------------------------
+        // EGO 100%
+        // ----------------------------------------------------
+
+        else if (
+            this.egoActive &&
+            this.activeEgoTier === 100
+        ) {
+
+            const currentDrain =
+                this.getCurrentDrain();
+
+
+            recovery +=
+                currentDrain *
+                GAME_CONFIG
+                    .EGO_100_DRAIN_RECOVERY_RATIO;
+
+        }
+
+
+        // ----------------------------------------------------
+        // APLICA RECUPERAÇÃO
+        // ----------------------------------------------------
+
+        this.addAuraHP(
+            recovery
+        );
+
+
+        return recovery;
+
+    }
+
+
+    // ========================================================
+    // SISTEMA CENTRAL DE AURA
+    // ========================================================
+    //
+    // Toda vez que a Aura aumenta, passa por aqui.
+    //
+    // Isso resolve definitivamente o problema de level-up.
+    //
+    // ========================================================
+
+    addAuraHP(amount) {
+
+        if (
+            this.gameOver ||
+            amount <= 0
+        ) {
+
+            return;
+
+        }
+
+
+        // ----------------------------------------------------
+        // NÍVEL 5
+        // ----------------------------------------------------
+        //
+        // No nível máximo não existe level-up.
+        // A Aura simplesmente fica limitada a 100.
+        // ----------------------------------------------------
+
+        if (
+            this.auraLevel >= 5
+        ) {
+
+            this.aura =
+                Math.min(
+                    GAME_CONFIG.MAX_AURA,
+                    this.aura + amount
+                );
+
+            return;
+
+        }
+
+
+        // ----------------------------------------------------
+        // ADICIONA AURA
+        // ----------------------------------------------------
+
+        this.aura += amount;
+
+
+        // ----------------------------------------------------
+        // VERIFICA LEVEL-UP
+        // ----------------------------------------------------
+
+        if (
+            this.aura >=
+            GAME_CONFIG.MAX_AURA
+        ) {
+
+            this.aura =
+                GAME_CONFIG.MAX_AURA;
+
+
+            this.levelUpAura();
+
+        }
+
+    }
+
+
+    // ========================================================
+    // SUBIDA DE NÍVEL DA AURA
+    // ========================================================
+
+    levelUpAura() {
+
+        if (
+            this.auraLevel >= 5
+        ) {
+
+            this.aura =
+                GAME_CONFIG.MAX_AURA;
+
+            return;
+
+        }
+
+
+        // ----------------------------------------------------
+        // SOBE UM NÍVEL
+        // ----------------------------------------------------
+
+        this.auraLevel++;
+
+
+        // ----------------------------------------------------
+        // RESET DA AURA
+        // ----------------------------------------------------
+
+        this.aura =
+            GAME_CONFIG
+                .AURA_RESET_AFTER_LEVEL_UP;
+
+
+        // ----------------------------------------------------
+        // VISUAL
+        // ----------------------------------------------------
+
+        this.updateAuraVisual();
+
+
+        // ----------------------------------------------------
+        // FEEDBACK
+        // ----------------------------------------------------
+
+        this.showLevelUp(
+            this.auraLevel
+        );
+
+
+        // ----------------------------------------------------
+        // SOM
+        // ----------------------------------------------------
+
+        this.audio.levelUp();
+
+
+        // ----------------------------------------------------
+        // HUD
+        // ----------------------------------------------------
+
+        this.updateHUD(true);
+
+    }
+
+
+    // ========================================================
+    // ANIMAÇÃO DO HIT
+    // ========================================================
+
+    playHitAnimation() {
+
+        this.hitAnimationSide =
+            this.hitAnimationSide === "left"
+                ? "right"
+                : "left";
+
+
+        this.setCharacterArm(
+            this.hitAnimationSide
+        );
+
+
+        this.tweens.killTweensOf(
+            this.character
+        );
+
+
+        this.character.setScale(
+            this.egoActive
+                ? GAME_CONFIG.EGO_CHARACTER_SCALE
+                : GAME_CONFIG.CHARACTER_SCALE
+        );
+
+
+        this.tweens.add({
+
+            targets:
+                this.character,
+
+            scaleX:
+                this.egoActive
+                    ? GAME_CONFIG.EGO_CHARACTER_SCALE * 1.035
+                    : GAME_CONFIG.CHARACTER_SCALE * 1.035,
+
+            scaleY:
+                this.egoActive
+                    ? GAME_CONFIG.EGO_CHARACTER_SCALE * 1.035
+                    : GAME_CONFIG.CHARACTER_SCALE * 1.035,
+
+            duration:
+                65,
+
+            yoyo:
+                true,
+
+            ease:
+                "Quad.easeOut"
+
+        });
+
+    }
+
+
+    // ========================================================
+    // FEEDBACK DO CLIQUE
+    // ========================================================
+
+    createCharacterClickFeedback() {
+
+        if (!this.clickRing) {
+            return;
+        }
+
+
+        this.clickRing.x =
+            this.character.x;
+
+
+        this.clickRing.y =
+            this.character.y + 20;
+
+
+        this.clickRing.setScale(0.72);
+
+        this.clickRing.setAlpha(0.55);
+
+
+        const levelData =
+            AURA_LEVELS[
+                this.auraLevel - 1
+            ];
+
+
+        this.clickRing.setStrokeStyle(
+
+            2,
+
+            this.egoActive
+                ? 0xfbbf24
+                : levelData.color,
+
+            0.70
+
+        );
+
+
+        this.tweens.killTweensOf(
+            this.clickRing
+        );
+
+
+        this.tweens.add({
+
+            targets:
+                this.clickRing,
+
+            scale:
+                1.45,
+
+            alpha:
+                0,
+
+            duration:
+                180,
+
+            ease:
+                "Quad.easeOut"
+
+        });
+
+    }
+
+
+    // ========================================================
+    // BRAÇOS
+    // ========================================================
+
+    setCharacterArm(side) {
+
+        if (
+            side === "left"
+        ) {
+
+            this.leftArm.rotation =
+                -0.65;
+
+            this.rightArm.rotation =
+                0.25;
+
+        }
+
+        else {
+
+            this.leftArm.rotation =
+                -0.25;
+
+            this.rightArm.rotation =
+                0.65;
+
+        }
 
     }
 
@@ -2274,69 +1895,13 @@ class FarmAuraScene extends Phaser.Scene {
 
 
     // ========================================================
-    // AURA
+    // QUEDA DE NÍVEL DA AURA
     // ========================================================
 
-    addAuraHP() {
-
-        this.aura +=
-            GAME_CONFIG.AURA_GAIN_PER_HIT;
-
+    handleAuraDepletion() {
 
         if (
-            this.aura >=
-            GAME_CONFIG.MAX_AURA
-        ) {
-
-            if (
-                this.auraLevel < 5
-            ) {
-
-                this.auraLevel++;
-
-
-                this.aura =
-                    GAME_CONFIG.AURA_RESET_AFTER_LEVEL_UP;
-
-
-                this.updateAuraVisual();
-
-
-                this.showLevelUp(
-                    this.auraLevel
-                );
-
-
-                // ------------------------------------------------
-                // SOM PERSONALIZADO DE LEVEL UP
-                // ------------------------------------------------
-
-                this.audio.levelUp(
-                    this.auraLevel
-                );
-
-            }
-
-            else {
-
-                this.aura =
-                    GAME_CONFIG.MAX_AURA;
-
-            }
-
-        }
-
-    }
-
-
-    // ========================================================
-    // MISS
-    // ========================================================
-
-    miss() {
-
-        if (
-            this.gameOver
+            this.aura > 0
         ) {
 
             return;
@@ -2344,37 +1909,11 @@ class FarmAuraScene extends Phaser.Scene {
         }
 
 
-        this.combo = 0;
-
-        this.lastClick = null;
+        this.aura = 0;
 
 
         // ----------------------------------------------------
-        // EGO
-        // ----------------------------------------------------
-
-        if (
-            this.ego > 0
-        ) {
-
-            this.ego =
-                Math.max(
-
-                    0,
-
-                    this.ego -
-                    GAME_CONFIG.EGO_LOSS_PER_MISS
-
-                );
-
-
-            this.audio.egoLoss();
-
-        }
-
-
-        // ----------------------------------------------------
-        // PERDA DE NÍVEL
+        // NÍVEL ANTERIOR
         // ----------------------------------------------------
 
         if (
@@ -2385,41 +1924,124 @@ class FarmAuraScene extends Phaser.Scene {
 
 
             this.aura =
-                GAME_CONFIG.AURA_RESET_AFTER_LEVEL_UP;
+                GAME_CONFIG
+                    .AURA_RESET_AFTER_LEVEL_UP;
 
 
             this.updateAuraVisual();
 
 
-            this.showFeedback(
-
-                "NÍVEL " +
+            this.showLevelDown(
                 this.auraLevel
-
             );
 
-        }
 
-        else {
-
-            this.aura -= 10;
+            this.updateHUD(true);
 
 
-            this.aura =
-                Math.max(
-                    0,
-                    this.aura
-                );
-
-
-            this.showFeedback(
-                "MISS"
-            );
+            return;
 
         }
 
 
-        this.updateHUD();
+        // ----------------------------------------------------
+        // NÍVEL 1 = GAME OVER
+        // ----------------------------------------------------
+
+        this.aura = 0;
+
+        this.endGame();
+
+    }
+
+
+    // ========================================================
+    // FEEDBACK DE QUEDA DE NÍVEL
+    // ========================================================
+
+    showLevelDown(level) {
+
+        const levelData =
+            AURA_LEVELS[
+                level - 1
+            ];
+
+
+        const feedbackY =
+            this.playAreaTop + 45;
+
+
+        this.levelFeedback =
+            this.add.text(
+
+                this.gameWidth / 2,
+
+                feedbackY,
+
+                "NÍVEL " + level,
+
+                {
+
+                    fontFamily:
+                        "Arial",
+
+                    fontSize:
+                        "38px",
+
+                    fontStyle:
+                        "bold",
+
+                    color:
+                        levelData.hex,
+
+                    stroke:
+                        "#090b14",
+
+                    strokeThickness:
+                        5
+
+                }
+
+            );
+
+
+        this.levelFeedback.setOrigin(0.5);
+
+        this.levelFeedback.setDepth(25);
+
+
+        this.tweens.add({
+
+            targets:
+                this.levelFeedback,
+
+            scale:
+                1.18,
+
+            alpha:
+                0,
+
+            duration:
+                800,
+
+            ease:
+                "Quad.easeOut",
+
+            onComplete: () => {
+
+                if (
+                    this.levelFeedback
+                ) {
+
+                    this.levelFeedback.destroy();
+
+                    this.levelFeedback = null;
+
+                }
+
+            }
+
+        });
 
     }
 
@@ -2476,7 +2098,316 @@ class FarmAuraScene extends Phaser.Scene {
                 "+10% EGO"
             );
 
+
+            this.updateEgoButton();
+
         }
+
+    }
+
+
+    // ========================================================
+    // BOTÃO EGO
+    // ========================================================
+
+    createEgoButton() {
+
+        if (
+            this.egoButton
+        ) {
+
+            return;
+
+        }
+
+
+        this.egoButton =
+            this.add.container(
+
+                this.character.x + 70,
+
+                this.character.y - 72
+
+            );
+
+
+        this.egoButton.setDepth(30);
+
+
+        const glow =
+            this.add.circle(
+
+                0,
+                0,
+
+                34,
+
+                0xfbbf24,
+                0.10
+
+            );
+
+
+        this.egoButtonGlow =
+            glow;
+
+
+        const button =
+            this.add.circle(
+
+                0,
+                0,
+
+                27,
+
+                0x7c3aed,
+                0.95
+
+            );
+
+
+        button.setStrokeStyle(
+            3,
+            0xfbbf24,
+            0.95
+        );
+
+
+        const icon =
+            this.add.text(
+
+                0,
+                0,
+
+                "✦",
+
+                {
+
+                    fontFamily:
+                        "Arial",
+
+                    fontSize:
+                        "24px",
+
+                    fontStyle:
+                        "bold",
+
+                    color:
+                        "#fef3c7"
+
+                }
+
+            ).setOrigin(0.5);
+
+
+        const label =
+            this.add.text(
+
+                0,
+                39,
+
+                "EGO",
+
+                {
+
+                    fontFamily:
+                        "Arial",
+
+                    fontSize:
+                        "10px",
+
+                    fontStyle:
+                        "bold",
+
+                    color:
+                        "#fbbf24",
+
+                    stroke:
+                        "#090b14",
+
+                    strokeThickness:
+                        3
+
+                }
+
+            ).setOrigin(0.5);
+
+
+        this.egoButton.add([
+
+            glow,
+            button,
+            icon,
+            label
+
+        ]);
+
+
+        this.egoButton.setInteractive(
+
+            new Phaser.Geom.Circle(
+                0,
+                0,
+                31
+            ),
+
+            Phaser.Geom.Circle.Contains,
+
+            {
+
+                useHandCursor:
+                    !IS_MOBILE
+
+            }
+
+        );
+
+
+        this.egoButton.on(
+
+            "pointerdown",
+
+            pointer => {
+
+                if (
+                    pointer.event &&
+                    pointer.event.preventDefault
+                ) {
+
+                    pointer.event.preventDefault();
+
+                }
+
+
+                this.activateEgo();
+
+            }
+
+        );
+
+
+        this.tweens.add({
+
+            targets:
+                this.egoButton,
+
+            scale:
+                1.10,
+
+            duration:
+                650,
+
+            yoyo:
+                true,
+
+            repeat:
+                -1,
+
+            ease:
+                "Sine.easeInOut"
+
+        });
+
+
+        this.tweens.add({
+
+            targets:
+                glow,
+
+            scale:
+                1.35,
+
+            alpha:
+                0.02,
+
+            duration:
+                650,
+
+            yoyo:
+                true,
+
+            repeat:
+                -1,
+
+            ease:
+                "Sine.easeInOut"
+
+        });
+
+    }
+
+
+    // ========================================================
+    // ATUALIZA BOTÃO EGO
+    // ========================================================
+
+    updateEgoButton() {
+
+        if (
+            this.egoActive
+        ) {
+
+            this.destroyEgoButton();
+
+            return;
+
+        }
+
+
+        if (
+            this.ego >=
+            GAME_CONFIG.MIN_EGO_TO_ACTIVATE
+        ) {
+
+            this.createEgoButton();
+
+        }
+
+        else {
+
+            this.destroyEgoButton();
+
+        }
+
+    }
+
+
+    // ========================================================
+    // REMOVE BOTÃO EGO
+    // ========================================================
+
+    destroyEgoButton() {
+
+        if (
+            !this.egoButton
+        ) {
+
+            return;
+
+        }
+
+
+        this.tweens.killTweensOf(
+            this.egoButton
+        );
+
+
+        if (
+            this.egoButtonGlow
+        ) {
+
+            this.tweens.killTweensOf(
+                this.egoButtonGlow
+            );
+
+        }
+
+
+        this.egoButton.destroy();
+
+        this.egoButton = null;
+
+        this.egoButtonGlow = null;
 
     }
 
@@ -2503,21 +2434,48 @@ class FarmAuraScene extends Phaser.Scene {
             GAME_CONFIG.MIN_EGO_TO_ACTIVATE
         ) {
 
-            this.showFeedback(
-                "EGO INSUFICIENTE"
-            );
-
             return;
 
         }
 
 
+        const activationCharge =
+            this.ego;
+
+
         const duration =
             (
-                this.ego /
+                activationCharge /
                 GAME_CONFIG.MAX_EGO
             ) *
             GAME_CONFIG.EGO_MAX_DURATION;
+
+
+        if (
+            activationCharge >= 100
+        ) {
+
+            this.activeEgoTier = 100;
+
+        }
+
+        else if (
+            activationCharge >= 75
+        ) {
+
+            this.activeEgoTier = 75;
+
+        }
+
+        else {
+
+            this.activeEgoTier = 50;
+
+        }
+
+
+        this.activeEgoCharge =
+            activationCharge;
 
 
         this.egoActive = true;
@@ -2530,9 +2488,8 @@ class FarmAuraScene extends Phaser.Scene {
         this.ego = 0;
 
 
-        // ----------------------------------------------------
-        // SOM PERSONALIZADO DO EGO
-        // ----------------------------------------------------
+        this.destroyEgoButton();
+
 
         this.audio.egoActivate();
 
@@ -2541,17 +2498,17 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         this.showFeedback(
-            "EGO ATIVO!"
+            "AURA + EGO"
         );
 
 
-        this.updateHUD();
+        this.updateHUD(true);
 
     }
 
 
     // ========================================================
-    // VISUAL EGO
+    // VISUAL DO EGO
     // ========================================================
 
     startEgoVisual() {
@@ -2602,10 +2559,9 @@ class FarmAuraScene extends Phaser.Scene {
         this.egoGlow =
             this.add.circle(
 
-                this.gameWidth / 2,
+                this.character.x,
 
-                this.playAreaTop +
-                this.playAreaHeight * 0.55,
+                this.character.y,
 
                 90,
 
@@ -2615,7 +2571,7 @@ class FarmAuraScene extends Phaser.Scene {
             );
 
 
-        this.egoGlow.setDepth(1);
+        this.egoGlow.setDepth(2);
 
 
         this.tweens.add({
@@ -2652,6 +2608,10 @@ class FarmAuraScene extends Phaser.Scene {
         this.egoActive = false;
 
         this.egoRemainingTime = 0;
+
+        this.activeEgoTier = 0;
+
+        this.activeEgoCharge = 0;
 
 
         this.audio.egoEnd();
@@ -2698,6 +2658,9 @@ class FarmAuraScene extends Phaser.Scene {
 
         this.egoTimerText.setText("");
 
+
+        this.updateHUD(true);
+
     }
 
 
@@ -2707,48 +2670,19 @@ class FarmAuraScene extends Phaser.Scene {
 
     showScorePopup(points) {
 
-        const safeTop =
-            this.playAreaTop + 20;
-
-
-        const safeBottom =
-            this.playAreaTop +
-            this.playAreaHeight * 0.55;
-
-
         const randomX =
-            this.gameWidth / 2 +
+            this.character.x +
             Phaser.Math.Between(
-                -110,
-                110
+                -105,
+                105
             );
 
 
-        let randomY =
-            this.playAreaTop +
+        const randomY =
+            this.character.y -
             Phaser.Math.Between(
-
-                35,
-
-                Math.max(
-                    40,
-                    Math.floor(
-                        this.playAreaHeight * 0.48
-                    )
-                )
-
-            );
-
-
-        randomY =
-            Phaser.Math.Clamp(
-
-                randomY,
-
-                safeTop,
-
-                safeBottom
-
+                40,
+                125
             );
 
 
@@ -2799,12 +2733,7 @@ class FarmAuraScene extends Phaser.Scene {
 
         text.setOrigin(0.5);
 
-
-        const targetY =
-            Math.max(
-                safeTop + 10,
-                randomY - 75
-            );
+        text.setDepth(20);
 
 
         this.tweens.add({
@@ -2813,7 +2742,7 @@ class FarmAuraScene extends Phaser.Scene {
                 text,
 
             y:
-                targetY,
+                randomY - 70,
 
             alpha:
                 0,
@@ -2824,7 +2753,7 @@ class FarmAuraScene extends Phaser.Scene {
                     : 1.08,
 
             duration:
-                700,
+                650,
 
             ease:
                 "Quad.easeOut",
@@ -2891,6 +2820,8 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         this.levelFeedback.setOrigin(0.5);
+
+        this.levelFeedback.setDepth(25);
 
 
         this.tweens.add({
@@ -2967,8 +2898,12 @@ class FarmAuraScene extends Phaser.Scene {
 
     showFeedback(text) {
 
-        if (!this.feedbackText) {
+        if (
+            !this.feedbackText
+        ) {
+
             return;
+
         }
 
 
@@ -3015,10 +2950,6 @@ class FarmAuraScene extends Phaser.Scene {
     // ========================================================
 
     createHUD() {
-
-        // ----------------------------------------------------
-        // SCORE
-        // ----------------------------------------------------
 
         this.scoreText =
             this.add.text(
@@ -3082,10 +3013,6 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0.5);
 
 
-        // ----------------------------------------------------
-        // COMBO
-        // ----------------------------------------------------
-
         this.comboText =
             this.add.text(
 
@@ -3115,7 +3042,7 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
-        // CINCO PIPS DE AURA
+        // AURA LEVEL
         // ----------------------------------------------------
 
         this.auraDots = [];
@@ -3261,7 +3188,7 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
-        // EGO
+        // BARRA EGO
         // ----------------------------------------------------
 
         this.egoX =
@@ -3305,14 +3232,14 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0, 0.5);
 
 
-        this.egoText =
+        this.egoLabel =
             this.add.text(
 
-                this.gameWidth / 2,
+                this.egoX - 34,
 
-                220,
+                this.egoY,
 
-                "EGO 0%",
+                "EGO",
 
                 {
 
@@ -3320,17 +3247,17 @@ class FarmAuraScene extends Phaser.Scene {
                         "Arial",
 
                     fontSize:
-                        "11px",
+                        "10px",
 
                     fontStyle:
                         "bold",
 
                     color:
-                        "#ffffff"
+                        "#fbbf24"
 
                 }
 
-            ).setOrigin(0.5);
+            ).setOrigin(1, 0.5);
 
 
         // ----------------------------------------------------
@@ -3390,7 +3317,13 @@ class FarmAuraScene extends Phaser.Scene {
                         "bold",
 
                     color:
-                        "#fbbf24"
+                        "#fbbf24",
+
+                    stroke:
+                        "#090b14",
+
+                    strokeThickness:
+                        4
 
                 }
 
@@ -3435,8 +3368,11 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0.5);
 
 
+        this.feedbackText.setDepth(25);
+
+
         // ----------------------------------------------------
-        // CONTROLES
+        // INSTRUÇÃO
         // ----------------------------------------------------
 
         this.controlsText =
@@ -3446,7 +3382,9 @@ class FarmAuraScene extends Phaser.Scene {
 
                 this.gameHeight - 58,
 
-                "A / ←     D / →     •     ESPAÇO = EGO",
+                IS_MOBILE
+                    ? "TOQUE NO PERSONAGEM PARA FARMAR AURA"
+                    : "CLIQUE NO PERSONAGEM PARA FARMAR • BOTÃO DIREITO = EGO",
 
                 {
 
@@ -3454,7 +3392,9 @@ class FarmAuraScene extends Phaser.Scene {
                         "Arial",
 
                     fontSize:
-                        "13px",
+                        IS_MOBILE
+                            ? "11px"
+                            : "13px",
 
                     fontStyle:
                         "bold",
@@ -3466,74 +3406,31 @@ class FarmAuraScene extends Phaser.Scene {
 
             ).setOrigin(0.5);
 
-
-        if (IS_MOBILE) {
-
-            this.controlsText.setText(
-                "TOQUE NOS BOTÕES LATERAIS"
-            );
-
-        }
-
     }
 
 
     // ========================================================
-    // ATUALIZAÇÃO DO HUD
+    // ATUALIZA HUD
     // ========================================================
 
     updateHUD(force = false) {
 
-        // ----------------------------------------------------
-        // SCORE
-        // ----------------------------------------------------
+        this.scoreText.setText(
 
-        if (
-            force ||
-            this._hudScore !== this.score
-        ) {
+            this.score.toLocaleString(
+                "pt-BR"
+            )
 
-            this.scoreText.setText(
-
-                this.score.toLocaleString(
-                    "pt-BR"
-                )
-
-            );
+        );
 
 
-            this._hudScore =
-                this.score;
+        this.comboText.setText(
 
-        }
+            "COMBO " +
+            this.combo
 
+        );
 
-        // ----------------------------------------------------
-        // COMBO
-        // ----------------------------------------------------
-
-        if (
-            force ||
-            this._hudCombo !== this.combo
-        ) {
-
-            this.comboText.setText(
-
-                "COMBO " +
-                this.combo
-
-            );
-
-
-            this._hudCombo =
-                this.combo;
-
-        }
-
-
-        // ----------------------------------------------------
-        // AURA
-        // ----------------------------------------------------
 
         const levelData =
             AURA_LEVELS[
@@ -3559,212 +3456,107 @@ class FarmAuraScene extends Phaser.Scene {
             );
 
 
-        if (
-            force ||
-            this._hudAura !== auraRounded ||
-            this._hudAuraLevel !== this.auraLevel
-        ) {
-
-            this.hpBar.width =
-                this.hpWidth *
-                auraPercent;
+        this.hpBar.width =
+            this.hpWidth *
+            auraPercent;
 
 
-            this.hpBar.setFillStyle(
-                levelData.color
-            );
+        this.hpBar.setFillStyle(
+            levelData.color
+        );
 
 
-            this.hpText.setText(
+        this.hpText.setText(
 
-                "AURA " +
-                auraRounded +
-                "%"
+            "AURA " +
+            auraRounded +
+            "%"
 
-            );
-
-
-            this.auraDots.forEach(
-
-                (dot, index) => {
-
-                    const active =
-                        index <
-                        this.auraLevel;
+        );
 
 
-                    const dotData =
-                        AURA_LEVELS[index];
+        this.auraDots.forEach(
+
+            (dot, index) => {
+
+                const active =
+                    index <
+                    this.auraLevel;
 
 
-                    dot.setFillStyle(
-
-                        dotData.color,
-
-                        active
-                            ? 1
-                            : 0.12
-
-                    );
+                const dotData =
+                    AURA_LEVELS[index];
 
 
-                    dot.setStrokeStyle(
+                dot.setFillStyle(
 
-                        2,
+                    dotData.color,
 
-                        dotData.color,
+                    active
+                        ? 1
+                        : 0.12
 
-                        active
-                            ? 0.9
-                            : 0.25
-
-                    );
-
-                }
-
-            );
-
-
-            this._hudAura =
-                auraRounded;
-
-
-            this._hudAuraLevel =
-                this.auraLevel;
-
-        }
-
-
-        // ----------------------------------------------------
-        // EGO
-        // ----------------------------------------------------
-
-        const egoRounded =
-            Math.round(this.ego);
-
-
-        if (
-            force ||
-            this._hudEgo !== egoRounded ||
-            this._hudEgoActive !== this.egoActive
-        ) {
-
-            this.egoBar.width =
-                this.hpWidth *
-                (
-                    this.ego /
-                    GAME_CONFIG.MAX_EGO
                 );
 
 
-            if (
-                this.egoActive
-            ) {
+                dot.setStrokeStyle(
 
-                this.egoText.setText(
+                    2,
 
-                    "EGO ATIVO ×" +
-                    GAME_CONFIG.EGO_MULTIPLIER
+                    dotData.color,
+
+                    active
+                        ? 0.9
+                        : 0.25
 
                 );
 
             }
 
-            else {
-
-                this.egoText.setText(
-
-                    "EGO " +
-                    egoRounded +
-                    "%"
-
-                );
-
-            }
+        );
 
 
-            this._hudEgo =
-                egoRounded;
-
-
-            this._hudEgoActive =
-                this.egoActive;
-
-        }
-
-
-        // ----------------------------------------------------
-        // DIFICULDADE
-        // ----------------------------------------------------
-
-        if (
-            force ||
-            this._hudDifficulty !==
-            this.difficultyLevel
-        ) {
-
-            this.difficultyText.setText(
-
-                "DIFICULDADE " +
-                this.difficultyLevel
-
+        this.egoBar.width =
+            this.hpWidth *
+            (
+                this.ego /
+                GAME_CONFIG.MAX_EGO
             );
 
-
-            this._hudDifficulty =
-                this.difficultyLevel;
-
-        }
-
-
-        // ----------------------------------------------------
-        // TIMER EGO
-        // ----------------------------------------------------
 
         if (
             this.egoActive
         ) {
 
-            const timerValue =
+            this.egoTimerText.setText(
+
+                "AURA + EGO   " +
                 (
                     this.egoRemainingTime /
                     1000
-                ).toFixed(1);
+                ).toFixed(1) +
+                "s"
 
-
-            if (
-                force ||
-                this._hudTimer !== timerValue
-            ) {
-
-                this.egoTimerText.setText(
-
-                    "×" +
-                    GAME_CONFIG.EGO_MULTIPLIER +
-                    "  " +
-                    timerValue +
-                    "s"
-
-                );
-
-
-                this._hudTimer =
-                    timerValue;
-
-            }
+            );
 
         }
 
-        else if (
-            force ||
-            this._hudTimer !== ""
-        ) {
+        else {
 
             this.egoTimerText.setText("");
 
-            this._hudTimer = "";
-
         }
+
+
+        this.difficultyText.setText(
+
+            "DIFICULDADE " +
+            this.difficultyLevel
+
+        );
+
+
+        this.updateEgoButton();
 
     }
 
@@ -3775,20 +3567,192 @@ class FarmAuraScene extends Phaser.Scene {
 
     getCurrentDrain() {
 
-        return (
+    const auraDrainMultiplier =
+        GAME_CONFIG.DRAIN_BY_AURA_LEVEL[
+            this.auraLevel - 1
+        ];
 
-            GAME_CONFIG.BASE_DRAIN_PER_SECOND *
+    return (
 
-            Math.pow(
+        GAME_CONFIG.BASE_DRAIN_PER_SECOND *
 
-                1 +
-                GAME_CONFIG.DRAIN_INCREASE,
+        auraDrainMultiplier *
 
-                this.difficultyLevel
+        Math.pow(
+            1 + GAME_CONFIG.DRAIN_INCREASE,
+            this.difficultyLevel
+        )
 
-            )
+    );
 
+}
+
+
+    // ========================================================
+    // MÚSICA
+    // ========================================================
+
+    createMusicControl() {
+
+        const x =
+            this.gameWidth - 30;
+
+
+        const y =
+            30;
+
+
+        this.musicButton =
+            this.add.circle(
+                x,
+                y,
+                20,
+                0x1f2937,
+                0.90
+            );
+
+
+        this.musicButton.setStrokeStyle(
+            2,
+            0x6b7280,
+            0.70
         );
+
+
+        this.musicIcon =
+            this.add.text(
+
+                x,
+                y,
+
+                "♪",
+
+                {
+
+                    fontFamily:
+                        "Arial",
+
+                    fontSize:
+                        "20px",
+
+                    fontStyle:
+                        "bold",
+
+                    color:
+                        "#6b7280"
+
+                }
+
+            ).setOrigin(0.5);
+
+
+        this.musicButton.setInteractive({
+
+            useHandCursor:
+                !IS_MOBILE
+
+        });
+
+
+        this.musicIcon.setInteractive({
+
+            useHandCursor:
+                !IS_MOBILE
+
+        });
+
+
+        const toggle =
+            event => {
+
+                if (
+                    event &&
+                    event.preventDefault
+                ) {
+
+                    event.preventDefault();
+
+                }
+
+
+                const enabled =
+                    this.audio.toggleMusic();
+
+
+                this.updateMusicButton(
+                    enabled
+                );
+
+            };
+
+
+        this.musicButton.on(
+            "pointerdown",
+            toggle
+        );
+
+
+        this.musicIcon.on(
+            "pointerdown",
+            toggle
+        );
+
+
+        this.updateMusicButton(
+            this.audio.musicEnabled
+        );
+
+    }
+
+
+    updateMusicButton(enabled) {
+
+        if (!this.musicButton) {
+            return;
+        }
+
+
+        if (enabled) {
+
+            this.musicButton.setFillStyle(
+                0x312e81,
+                0.95
+            );
+
+
+            this.musicButton.setStrokeStyle(
+                2,
+                0xa78bfa,
+                0.90
+            );
+
+
+            this.musicIcon.setColor(
+                "#a78bfa"
+            );
+
+        }
+
+        else {
+
+            this.musicButton.setFillStyle(
+                0x1f2937,
+                0.90
+            );
+
+
+            this.musicButton.setStrokeStyle(
+                2,
+                0x6b7280,
+                0.70
+            );
+
+
+            this.musicIcon.setColor(
+                "#6b7280"
+            );
+
+        }
 
     }
 
@@ -3812,6 +3776,9 @@ class FarmAuraScene extends Phaser.Scene {
                 0.88
 
             ).setOrigin(0, 0);
+
+
+        this.startOverlay.setDepth(100);
 
 
         this.startTitle =
@@ -3850,6 +3817,9 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0.5);
 
 
+        this.startTitle.setDepth(101);
+
+
         this.startSubtitle =
             this.add.text(
 
@@ -3878,6 +3848,9 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0.5);
 
 
+        this.startSubtitle.setDepth(101);
+
+
         this.startInstruction =
             this.add.text(
 
@@ -3886,8 +3859,10 @@ class FarmAuraScene extends Phaser.Scene {
                 this.gameHeight * 0.51,
 
                 IS_MOBILE
-                    ? "TOQUE NOS BOTÕES LATERAIS"
-                    : "A / ← + D / → ALTERNADAMENTE",
+                    ? "TOQUE REPETIDAMENTE NO PERSONAGEM\n" +
+                      "PARA FARMAR AURA"
+                    : "CLIQUE REPETIDAMENTE NO PERSONAGEM\n" +
+                      "BOTÃO DIREITO ATIVA O EGO",
 
                 {
 
@@ -3903,6 +3878,9 @@ class FarmAuraScene extends Phaser.Scene {
                     align:
                         "center",
 
+                    lineSpacing:
+                        8,
+
                     wordWrap: {
 
                         width:
@@ -3913,6 +3891,9 @@ class FarmAuraScene extends Phaser.Scene {
                 }
 
             ).setOrigin(0.5);
+
+
+        this.startInstruction.setDepth(101);
 
 
         this.startButton =
@@ -3956,6 +3937,9 @@ class FarmAuraScene extends Phaser.Scene {
             ).setOrigin(0.5);
 
 
+        this.startButton.setDepth(101);
+
+
         this.startButton.setInteractive({
 
             useHandCursor:
@@ -3971,25 +3955,6 @@ class FarmAuraScene extends Phaser.Scene {
             () => {
 
                 this.startGame();
-
-            }
-
-        );
-
-
-        this.input.keyboard.once(
-
-            "keydown",
-
-            event => {
-
-                if (
-                    event.code !== "Space"
-                ) {
-
-                    this.startGame();
-
-                }
 
             }
 
@@ -4016,16 +3981,8 @@ class FarmAuraScene extends Phaser.Scene {
         this.gameStarted = true;
 
 
-        // ----------------------------------------------------
-        // INICIALIZA SISTEMA DE ÁUDIO
-        // ----------------------------------------------------
-
         this.audio.init();
 
-
-        // ----------------------------------------------------
-        // INICIA MÚSICA DE FUNDO, CASO ESTEJA ATIVADA
-        // ----------------------------------------------------
 
         if (
             this.audio.musicEnabled
@@ -4036,63 +3993,32 @@ class FarmAuraScene extends Phaser.Scene {
         }
 
 
-        // ----------------------------------------------------
-        // REMOVE START SCREEN
-        // ----------------------------------------------------
+        const elements = [
 
-        if (
-            this.startOverlay
-        ) {
+            "startOverlay",
+            "startTitle",
+            "startSubtitle",
+            "startInstruction",
+            "startButton"
 
-            this.startOverlay.destroy();
-
-            this.startOverlay = null;
-
-        }
+        ];
 
 
-        if (
-            this.startTitle
-        ) {
+        elements.forEach(
+            key => {
 
-            this.startTitle.destroy();
+                if (
+                    this[key]
+                ) {
 
-            this.startTitle = null;
+                    this[key].destroy();
 
-        }
+                    this[key] = null;
 
+                }
 
-        if (
-            this.startSubtitle
-        ) {
-
-            this.startSubtitle.destroy();
-
-            this.startSubtitle = null;
-
-        }
-
-
-        if (
-            this.startInstruction
-        ) {
-
-            this.startInstruction.destroy();
-
-            this.startInstruction = null;
-
-        }
-
-
-        if (
-            this.startButton
-        ) {
-
-            this.startButton.destroy();
-
-            this.startButton = null;
-
-        }
+            }
+        );
 
 
         this.showFeedback(
@@ -4132,9 +4058,8 @@ class FarmAuraScene extends Phaser.Scene {
         }
 
 
-        // ----------------------------------------------------
-        // PARA A MÚSICA
-        // ----------------------------------------------------
+        this.destroyEgoButton();
+
 
         this.audio.stopMusic();
 
@@ -4164,7 +4089,7 @@ class FarmAuraScene extends Phaser.Scene {
 
                 this.gameHeight * 0.29,
 
-                "I'TS OVER PARA O BETA",
+                "IT'S OVER PARA O BETA",
 
                 {
 
@@ -4263,9 +4188,7 @@ class FarmAuraScene extends Phaser.Scene {
 
                 this.gameHeight * 0.66,
 
-                IS_MOBILE
-                    ? "TOQUE NA TELA PARA JOGAR NOVAMENTE"
-                    : "ENTER = JOGAR NOVAMENTE",
+                "TOQUE NA TELA PARA JOGAR NOVAMENTE",
 
                 {
 
@@ -4301,35 +4224,78 @@ class FarmAuraScene extends Phaser.Scene {
         restartText.setDepth(51);
 
 
-        if (IS_MOBILE) {
+        this.input.once(
 
-            this.input.once(
+            "pointerdown",
 
-                "pointerdown",
+            () => {
 
-                () => {
+                this.scene.restart();
 
-                    this.scene.restart();
+            }
 
-                }
+        );
 
-            );
+
+        this.input.keyboard.once(
+
+            "keydown-ENTER",
+
+            () => {
+
+                this.scene.restart();
+
+            }
+
+        );
+
+    }
+
+
+    // ========================================================
+    // RESIZE
+    // ========================================================
+
+    handleResize(gameSize) {
+
+        const width =
+            gameSize.width;
+
+
+        const height =
+            gameSize.height;
+
+
+        this.gameWidth =
+            width;
+
+
+        this.gameHeight =
+            height;
+
+
+        if (
+            this.background
+        ) {
+
+            this.background.width =
+                width;
+
+            this.background.height =
+                height;
 
         }
 
-        else {
 
-            this.input.keyboard.once(
+        if (
+            this.egoOverlay
+        ) {
 
-                "keydown-ENTER",
+            this.egoOverlay.width =
+                width;
 
-                () => {
-
-                    this.scene.restart();
-
-                }
-
-            );
+            this.egoOverlay.height =
+                height;
 
         }
 
@@ -4374,7 +4340,7 @@ class FarmAuraScene extends Phaser.Scene {
 
             this.showFeedback(
 
-                "NÍVEL " +
+                "DIFICULDADE " +
                 this.difficultyLevel
 
             );
@@ -4386,7 +4352,7 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
-        // DRENAGEM
+        // DRENAGEM DA AURA
         // ----------------------------------------------------
 
         const drainPerSecond =
@@ -4401,11 +4367,19 @@ class FarmAuraScene extends Phaser.Scene {
             );
 
 
-        this.aura =
-            Math.max(
-                0,
-                this.aura
-            );
+        // ----------------------------------------------------
+        // QUEDA DE NÍVEL
+        // ----------------------------------------------------
+
+        if (
+            this.aura <= 0
+        ) {
+
+            this.aura = 0;
+
+            this.handleAuraDepletion();
+
+        }
 
 
         // ----------------------------------------------------
@@ -4472,7 +4446,7 @@ class FarmAuraScene extends Phaser.Scene {
 
 
         // ----------------------------------------------------
-        // POSIÇÃO DA AURA
+        // AURA DO PERSONAGEM
         // ----------------------------------------------------
 
         if (
@@ -4485,6 +4459,42 @@ class FarmAuraScene extends Phaser.Scene {
 
             this.characterAura.y =
                 this.character.y;
+
+        }
+
+
+        // ----------------------------------------------------
+        // HITBOX
+        // ----------------------------------------------------
+
+        if (
+            this.characterHitArea
+        ) {
+
+            this.characterHitArea.x =
+                this.character.x;
+
+
+            this.characterHitArea.y =
+                this.character.y + 35;
+
+        }
+
+
+        // ----------------------------------------------------
+        // ANEL
+        // ----------------------------------------------------
+
+        if (
+            this.clickRing
+        ) {
+
+            this.clickRing.x =
+                this.character.x;
+
+
+            this.clickRing.y =
+                this.character.y + 20;
 
         }
 
@@ -4508,63 +4518,16 @@ class FarmAuraScene extends Phaser.Scene {
 
                 this.endEgo();
 
-                this.updateHUD();
-
             }
 
         }
 
 
         // ----------------------------------------------------
-        // HUD
+        // TIMER HUD
         // ----------------------------------------------------
 
-        const currentAura =
-            Math.round(this.aura);
-
-
-        const currentTimer =
-            this.egoActive
-                ? Math.floor(
-                    this.egoRemainingTime / 100
-                )
-                : 0;
-
-
-        if (
-
-            currentAura !==
-            this._lastAuraUpdate ||
-
-            currentTimer !==
-            this._lastTimerUpdate
-
-        ) {
-
-            this.updateHUD();
-
-
-            this._lastAuraUpdate =
-                currentAura;
-
-
-            this._lastTimerUpdate =
-                currentTimer;
-
-        }
-
-
-        // ----------------------------------------------------
-        // GAME OVER
-        // ----------------------------------------------------
-
-        if (
-            this.aura <= 0
-        ) {
-
-            this.endGame();
-
-        }
+        this.updateHUD();
 
     }
 
@@ -4611,9 +4574,7 @@ const config = {
 
 new Phaser.Game(config);
 
-
 </script>
 
 </body>
-
 </html>
